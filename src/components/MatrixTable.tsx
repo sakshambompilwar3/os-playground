@@ -14,7 +14,7 @@ export function MatrixTable({ title, resources, data, editable, onChange, active
   return (
     <div className="paper-card overflow-hidden">
       <p className="border-b-2 border-foreground bg-secondary px-3 py-1.5 font-hand text-xl font-bold">{title}</p>
-      <table className="w-full font-mono text-sm">
+      <div className="max-h-[32rem] overflow-auto"><table className="w-full font-mono text-sm">
         <thead>
           <tr>
             <th className="px-2 py-1 text-left text-muted-foreground">#</th>
@@ -31,8 +31,10 @@ export function MatrixTable({ title, resources, data, editable, onChange, active
                     <input
                       type="number"
                       min={0}
+                      step={1}
+                      aria-label={`${title} P${i} ${resources[j]}`}
                       value={v}
-                      onChange={(e) => onChange?.(i, j, Math.max(0, Number(e.target.value) || 0))}
+                      onChange={(e) => onChange?.(i, j, Math.max(0, Math.floor(Number(e.target.value) || 0)))}
                       className="w-12 rounded border-2 border-input bg-background px-1 text-center focus:border-primary focus:outline-none"
                     />
                   ) : (
@@ -43,7 +45,7 @@ export function MatrixTable({ title, resources, data, editable, onChange, active
             </tr>
           ))}
         </tbody>
-      </table>
+      </table></div>
     </div>
   );
 }
@@ -56,7 +58,7 @@ export function VectorRow({ label, resources, values, onChange }: { label: strin
         <label key={j} className="flex items-center gap-1 rounded-md border-2 border-foreground bg-paper px-2 py-1">
           <span className="text-muted-foreground">{resources[j]}</span>
           {onChange ? (
-            <input type="number" min={0} value={v} onChange={(e) => onChange(j, Math.max(0, Number(e.target.value) || 0))} className="w-12 bg-transparent text-center focus:outline-none" />
+            <input type="number" min={0} step={1} aria-label={`${label} ${resources[j]}`} value={v} onChange={(e) => onChange(j, Math.max(0, Math.floor(Number(e.target.value) || 0)))} className="w-12 bg-transparent text-center focus:outline-none" />
           ) : (
             <span key={v} className="animate-cell inline-block w-6 text-center font-bold">{v}</span>
           )}

@@ -8,6 +8,8 @@ export const Route = createFileRoute("/quiz")({
       { name: "description", content: "Quick multiple-choice quiz on deadlock avoidance and the Banker's Algorithm." },
       { property: "og:title", content: "Banker's Algorithm Pop Quiz" },
       { property: "og:description", content: "Test yourself before the OS exam." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Quiz,
