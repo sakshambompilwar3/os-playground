@@ -11,12 +11,18 @@ export interface SafetyResult {
   sequence: number[];
   steps: SafetyStep[];
   need: Matrix;
+  checks: SafetyCheck[];
+}
+
+export interface SafetyCheck extends SafetyStep {
+  need: number[];
+  canFinish: boolean;
 }
 
 export const computeNeed = (max: Matrix, alloc: Matrix): Matrix =>
-  max.map((row, i) => row.map((v, j) => v - alloc[i]![j]!));
+  max.map((row, i) => row.map((v, j) => v - (alloc[i]?.[j] ?? 0)));
 
-export const leq = (a: number[], b: number[]) => a.every((v, i) => v <= b[i]!);
+export const leq = (a: number[], b: number[]) => a.every((v, i) => v <= (b[i] ?? 0));
 
 export function runSafety(available: number[], max: Matrix, alloc: Matrix): SafetyResult {
   const need = computeNeed(max, alloc);
@@ -25,21 +31,27 @@ export function runSafety(available: number[], max: Matrix, alloc: Matrix): Safe
   const finish = Array(n).fill(false);
   const sequence: number[] = [];
   const steps: SafetyStep[] = [];
+  const checks: SafetyCheck[] = [];
   let progressed = true;
   while (progressed) {
     progressed = false;
     for (let i = 0; i < n; i++) {
-      if (!finish[i] && leq(need[i]!, work)) {
-        const before = [...work];
-        alloc[i]!.forEach((a, j) => (work[j]! += a));
+      const processNeed = need[i];
+      const allocation = alloc[i];
+      if (finish[i] || !processNeed || !allocation) continue;
+      const before = [...work];
+      const canFinish = leq(processNeed, work);
+      if (canFinish) {
+        allocation.forEach((a, j) => (work[j] = (work[j] ?? 0) + a));
         finish[i] = true;
         sequence.push(i);
         steps.push({ process: i, workBefore: before, workAfter: [...work] });
         progressed = true;
       }
+      checks.push({ process: i, need: [...processNeed], workBefore: before, workAfter: [...work], canFinish });
     }
   }
-  return { safe: finish.every(Boolean), sequence, steps, need };
+  return { safe: finish.every(Boolean), sequence, steps, need, checks };
 }
 
 export type RequestOutcome =
@@ -56,10 +68,11 @@ export function requestResources(
   alloc: Matrix,
 ): RequestOutcome {
   const need = computeNeed(max, alloc);
-  if (!leq(request, need[pid]!)) return { status: "exceeds-need" };
+  const processNeed = need[pid];
+  if (!processNeed || !leq(request, processNeed)) return { status: "exceeds-need" };
   if (!leq(request, available)) return { status: "wait" };
-  const newAvail = available.map((v, j) => v - request[j]!);
-  const newAlloc = alloc.map((row, i) => (i === pid ? row.map((v, j) => v + request[j]!) : [...row]));
+  const newAvail = available.map((v, j) => v - (request[j] ?? 0));
+  const newAlloc = alloc.map((row, i) => (i === pid ? row.map((v, j) => v + (request[j] ?? 0)) : [...row]));
   const result = runSafety(newAvail, max, newAlloc);
   if (!result.safe) return { status: "unsafe", result };
   return { status: "granted", result, available: newAvail, alloc: newAlloc };
