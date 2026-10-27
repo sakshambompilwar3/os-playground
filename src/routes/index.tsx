@@ -8,6 +8,8 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "A classroom-style playground to learn Dijkstra's Banker's Algorithm for deadlock avoidance." },
       { property: "og:title", content: "Banker's Algorithm Playground — OS Class" },
       { property: "og:description", content: "Learn deadlock avoidance interactively: simulate, request resources, and quiz yourself." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Home,

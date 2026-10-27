@@ -10,6 +10,8 @@ export const Route = createFileRoute("/request")({
       { name: "description", content: "Send resource requests from a process and see if the OS grants or denies them." },
       { property: "og:title", content: "Resource Request Handler" },
       { property: "og:description", content: "Play the OS: grant or deny requests while keeping the system safe." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: RequestPage,
