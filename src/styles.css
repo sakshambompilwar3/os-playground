@@ -4,28 +4,14 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/*
- * Design system definition.
- *
- * The @theme inline block maps CSS custom properties to Tailwind utility
- * classes (e.g. --color-primary -> bg-primary, text-primary).
- *
- * The :root and .dark blocks define the actual color values using oklch.
- * All colors MUST use oklch format.
- *
- * To add a new semantic color:
- * 1. Add the variable to :root (light value) and .dark (dark value)
- * 2. Register it in @theme inline as --color-<name>: var(--<name>)
- */
-
 @theme inline {
+  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-hand: "Caveat", cursive;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
-  --radius-3xl: calc(var(--radius) + 12px);
-  --radius-4xl: calc(var(--radius) + 16px);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -42,103 +28,114 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-highlight: var(--highlight);
+  --color-chalk: var(--chalk);
+  --color-chalk-foreground: var(--chalk-foreground);
+  --color-paper: var(--paper);
+  --color-rule: var(--rule);
+  --color-margin: var(--margin);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-ring-offset-background: var(--background);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.984 0.003 247.858);
-  --sidebar-foreground: oklch(0.129 0.042 264.695);
-  --sidebar-primary: oklch(0.208 0.042 265.755);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.968 0.007 247.896);
-  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
-  --sidebar-border: oklch(0.929 0.013 255.508);
-  --sidebar-ring: oklch(0.704 0.04 256.788);
-}
-
-.dark {
-  --background: oklch(0.129 0.042 264.695);
-  --foreground: oklch(0.984 0.003 247.858);
-  --card: oklch(0.208 0.042 265.755);
-  --card-foreground: oklch(0.984 0.003 247.858);
-  --popover: oklch(0.208 0.042 265.755);
-  --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.929 0.013 255.508);
-  --primary-foreground: oklch(0.208 0.042 265.755);
-  --secondary: oklch(0.279 0.041 260.031);
-  --secondary-foreground: oklch(0.984 0.003 247.858);
-  --muted: oklch(0.279 0.041 260.031);
-  --muted-foreground: oklch(0.704 0.04 256.788);
-  --accent: oklch(0.279 0.041 260.031);
-  --accent-foreground: oklch(0.984 0.003 247.858);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.551 0.027 264.364);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.208 0.042 265.755);
-  --sidebar-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.279 0.041 260.031);
-  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.551 0.027 264.364);
+  --radius: 0.75rem;
+  /* warm parchment — not stark white, not dark */
+  --background: oklch(0.94 0.025 85);
+  --foreground: oklch(0.27 0.04 260);
+  --paper: oklch(0.965 0.02 88);
+  --card: oklch(0.965 0.02 88);
+  --card-foreground: oklch(0.27 0.04 260);
+  --popover: oklch(0.965 0.02 88);
+  --popover-foreground: oklch(0.27 0.04 260);
+  --primary: oklch(0.45 0.13 255); /* ink blue */
+  --primary-foreground: oklch(0.97 0.015 88);
+  --secondary: oklch(0.89 0.04 80);
+  --secondary-foreground: oklch(0.3 0.04 260);
+  --muted: oklch(0.9 0.03 85);
+  --muted-foreground: oklch(0.48 0.03 260);
+  --accent: oklch(0.72 0.15 50); /* pencil orange */
+  --accent-foreground: oklch(0.22 0.04 50);
+  --highlight: oklch(0.9 0.13 98); /* highlighter yellow */
+  --success: oklch(0.55 0.13 150);
+  --success-foreground: oklch(0.97 0.015 88);
+  --destructive: oklch(0.56 0.19 25);
+  --destructive-foreground: oklch(0.97 0.015 88);
+  --chalk: oklch(0.38 0.06 160); /* chalkboard green */
+  --chalk-foreground: oklch(0.95 0.02 100);
+  --rule: oklch(0.8 0.05 240 / 0.45);
+  --margin: oklch(0.65 0.16 20 / 0.5);
+  --border: oklch(0.8 0.04 80);
+  --input: oklch(0.82 0.04 80);
+  --ring: oklch(0.45 0.13 255);
+  --shadow-paper: 0 1px 0 oklch(0.8 0.04 80), 0 12px 28px -14px oklch(0.35 0.05 60 / 0.35);
+  --shadow-pop: 4px 4px 0 var(--foreground);
 }
 
 @layer base {
-  * {
-    border-color: var(--color-border);
-  }
-
+  * { border-color: var(--color-border); }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: var(--font-sans);
+    background-image: radial-gradient(oklch(0.6 0.04 80 / 0.12) 1px, transparent 1px);
+    background-size: 18px 18px;
   }
 }
+
+@utility notebook {
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(90deg, transparent 3.2rem, var(--margin) 3.2rem, var(--margin) calc(3.2rem + 2px), transparent calc(3.2rem + 2px)),
+    repeating-linear-gradient(transparent, transparent 31px, var(--rule) 31px, var(--rule) 32px);
+  box-shadow: var(--shadow-paper);
+}
+@utility chalkboard {
+  background-color: var(--chalk);
+  color: var(--chalk-foreground);
+  background-image: radial-gradient(oklch(1 0 0 / 0.05) 1px, transparent 1px);
+  background-size: 6px 6px;
+  box-shadow: inset 0 0 40px oklch(0 0 0 / 0.3), 0 0 0 10px oklch(0.55 0.08 60), 0 20px 40px -20px oklch(0.3 0.05 60 / 0.6);
+}
+@utility paper-card {
+  background-color: var(--paper);
+  border: 2px solid var(--foreground);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-pop);
+}
+@utility marker {
+  background: linear-gradient(transparent 55%, var(--highlight) 55%, var(--highlight) 90%, transparent 90%);
+}
+@utility press {
+  transition: transform .15s ease, box-shadow .15s ease;
+  &:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--foreground); }
+  &:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--foreground); }
+}
+
+@keyframes float-y { 0%,100% { transform: translateY(0) rotate(var(--r, 0deg)); } 50% { transform: translateY(-10px) rotate(var(--r, 0deg)); } }
+@keyframes write { from { stroke-dashoffset: 600; } to { stroke-dashoffset: 0; } }
+@keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+@keyframes blink { 50% { opacity: 0; } }
+@keyframes scan { from { transform: translateY(-100%); } to { transform: translateY(100%); } }
+@keyframes cell-in { from { opacity: 0; transform: scale(.4); } to { opacity: 1; transform: none; } }
+@keyframes bar { from { width: 0; } to { width: 100%; } }
+@keyframes pulse-ring { 0% { box-shadow: 0 0 0 0 var(--success); } 100% { box-shadow: 0 0 0 14px transparent; } }
+@keyframes wiggle { 0%,100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
+
+@utility animate-float { animation: float-y 5s ease-in-out infinite; }
+@utility animate-rise { animation: rise .6s cubic-bezier(.2,.8,.2,1) both; }
+@utility animate-blink { animation: blink 1s steps(1) infinite; }
+@utility animate-cell { animation: cell-in .35s cubic-bezier(.3,1.6,.5,1) both; }
+@utility animate-bar { animation: bar .8s ease-out both; }
+@utility animate-ring { animation: pulse-ring 1s ease-out infinite; }
+@utility animate-wiggle { animation: wiggle 2.5s ease-in-out infinite; }
+@utility draw { stroke-dasharray: 600; animation: write 2.2s ease forwards; }
+
+/* page transition overlays */
+@keyframes ov-in { 0% { clip-path: inset(0 0 100% 0); } 25%,75% { clip-path: inset(0 0 0 0); } 100% { clip-path: inset(100% 0 0 0); } }
+@utility overlay-anim { animation: ov-in 1.15s cubic-bezier(.7,0,.3,1) forwards; }
+@keyframes page-in { from { opacity: 0; transform: translateY(14px); filter: blur(4px); } to { opacity: 1; transform: none; filter: none; } }
+@utility page-enter { animation: page-in .55s .6s cubic-bezier(.2,.8,.2,1) both; }
