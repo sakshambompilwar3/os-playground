@@ -14,9 +14,9 @@ export interface SafetyResult {
 }
 
 export const computeNeed = (max: Matrix, alloc: Matrix): Matrix =>
-  max.map((row, i) => row.map((v, j) => v - alloc[i][j]));
+  max.map((row, i) => row.map((v, j) => v - alloc[i]![j]!));
 
-export const leq = (a: number[], b: number[]) => a.every((v, i) => v <= b[i]);
+export const leq = (a: number[], b: number[]) => a.every((v, i) => v <= b[i]!);
 
 export function runSafety(available: number[], max: Matrix, alloc: Matrix): SafetyResult {
   const need = computeNeed(max, alloc);
@@ -29,9 +29,9 @@ export function runSafety(available: number[], max: Matrix, alloc: Matrix): Safe
   while (progressed) {
     progressed = false;
     for (let i = 0; i < n; i++) {
-      if (!finish[i] && leq(need[i], work)) {
+      if (!finish[i] && leq(need[i]!, work)) {
         const before = [...work];
-        alloc[i].forEach((a, j) => (work[j] += a));
+        alloc[i]!.forEach((a, j) => (work[j]! += a));
         finish[i] = true;
         sequence.push(i);
         steps.push({ process: i, workBefore: before, workAfter: [...work] });
@@ -56,10 +56,10 @@ export function requestResources(
   alloc: Matrix,
 ): RequestOutcome {
   const need = computeNeed(max, alloc);
-  if (!leq(request, need[pid])) return { status: "exceeds-need" };
+  if (!leq(request, need[pid]!)) return { status: "exceeds-need" };
   if (!leq(request, available)) return { status: "wait" };
-  const newAvail = available.map((v, j) => v - request[j]);
-  const newAlloc = alloc.map((row, i) => (i === pid ? row.map((v, j) => v + request[j]) : [...row]));
+  const newAvail = available.map((v, j) => v - request[j]!);
+  const newAlloc = alloc.map((row, i) => (i === pid ? row.map((v, j) => v + request[j]!) : [...row]));
   const result = runSafety(newAvail, max, newAlloc);
   if (!result.safe) return { status: "unsafe", result };
   return { status: "granted", result, available: newAvail, alloc: newAlloc };

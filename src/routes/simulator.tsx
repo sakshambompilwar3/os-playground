@@ -53,7 +53,7 @@ function Simulator() {
 
   const current = step >= 0 && step < total ? result.steps[step] : null;
   const done = result.sequence.slice(0, Math.max(0, Math.min(step + 1, total)));
-  const work = current ? current.workAfter : step >= total && total ? result.steps[total - 1].workAfter : avail;
+  const work = current ? current.workAfter : step >= total && total ? result.steps[total - 1]!.workAfter : avail;
   const finished = step >= total;
 
   return (
@@ -102,7 +102,7 @@ function Simulator() {
         </div>
 
         <p key={step} className="animate-rise mt-4 font-hand text-2xl">
-          {current && <>P{current.process}: Need [{result.need[current.process].join(",")}] ≤ Work [{current.workBefore.join(",")}] ✓ — finishes and releases [{alloc[current.process].join(",")}]</>}
+          {current && <>P{current.process}: Need [{result.need[current.process]!.join(",")}] ≤ Work [{current.workBefore.join(",")}] ✓ — finishes and releases [{alloc[current.process]!.join(",")}]</>}
           {finished && (result.safe
             ? <>✅ SAFE! Sequence: ⟨{result.sequence.map((p) => `P${p}`).join(", ")}⟩</>
             : <>⚠️ UNSAFE — no process can proceed with Work [{work.join(",")}]. Stuck: {max.map((_, i) => i).filter((i) => !result.sequence.includes(i)).map((i) => `P${i}`).join(", ")}</>)}

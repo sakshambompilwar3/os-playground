@@ -45,8 +45,8 @@ function Deadlock() {
             <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="currentColor" /></marker>
           </defs>
           {P.map((p, i) => {
-            const held = Rz[(i + 2) % 3];
-            const want = Rz[i];
+            const held = Rz[(i + 2) % 3]!;
+            const want = Rz[i]!;
             return (
               <g key={i}>
                 {holding && !(banker && i === 2) && <line x1={held.x + 20} y1={held.y + 20} x2={p.x + 20} y2={p.y + 20} stroke="var(--success)" strokeWidth="4" markerEnd="url(#ar)" className="draw" />}

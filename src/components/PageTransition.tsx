@@ -82,7 +82,7 @@ export function PageTransition() {
   useEffect(() => {
     if (first.current) { first.current = false; return; }
     count.current += 1;
-    setState({ kind: KINDS[count.current % KINDS.length], key: count.current });
+    setState({ kind: KINDS[count.current % KINDS.length]!, key: count.current });
     const t = setTimeout(() => setState(null), 1150);
     return () => clearTimeout(t);
   }, [path]);

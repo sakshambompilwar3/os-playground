@@ -19,14 +19,14 @@ function ChalkText() {
   const [idx, setIdx] = useState(0);
   const [len, setLen] = useState(0);
   useEffect(() => {
-    const full = CHALK[idx];
+    const full = CHALK[idx]!;
     const t = setTimeout(() => {
       if (len < full.length) setLen(len + 1);
       else { setLen(0); setIdx((idx + 1) % CHALK.length); }
     }, len < full.length ? 70 : 1600);
     return () => clearTimeout(t);
   }, [len, idx]);
-  return <span className="font-hand text-4xl md:text-5xl">{CHALK[idx].slice(0, len)}<span className="animate-blink">|</span></span>;
+  return <span className="font-hand text-4xl md:text-5xl">{CHALK[idx]!.slice(0, len)}<span className="animate-blink">|</span></span>;
 }
 
 const notes = [

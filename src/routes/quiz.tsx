@@ -37,7 +37,7 @@ function Quiz() {
       </div>
     );
 
-  const q = Q[i];
+  const q = Q[i]!;
   return (
     <div className="mx-auto max-w-2xl space-y-6">
       <div className="flex items-center justify-between">

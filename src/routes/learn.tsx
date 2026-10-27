@@ -40,8 +40,8 @@ function Learn() {
         ))}
       </div>
       <div key={open} className="notebook animate-rise min-h-96 rounded-md py-8 pl-20 pr-8 leading-8">
-        <p className="font-hand text-4xl font-bold text-primary">{cards[open].t}</p>
-        <p className="mt-4 font-hand text-3xl">{cards[open].b}</p>
+        <p className="font-hand text-4xl font-bold text-primary">{cards[open]!.t}</p>
+        <p className="mt-4 font-hand text-3xl">{cards[open]!.b}</p>
         <div className="mt-8 flex gap-3">
           <button disabled={open === 0} onClick={() => setOpen(open - 1)} className="press paper-card px-4 py-2 text-sm disabled:opacity-40">← prev</button>
           {open < cards.length - 1 ? (
