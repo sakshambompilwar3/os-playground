@@ -2,6 +2,12 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { MatrixTable, VectorRow } from "@/components/MatrixTable";
 import { SAMPLE, runSafety, type Matrix } from "@/lib/bankers";
+import { resourceNames, resizeMatrix, validCount } from "@/lib/simulator";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { CalculationDetails } from "@/components/CalculationDetails";
+import { SimulatorNotes } from "@/components/SimulatorNotes";
+import { Calculator, Play, Pause, RotateCcw, StepForward, Shuffle } from "lucide-react";
 
 export const Route = createFileRoute("/simulator")({
   head: () => ({
@@ -10,13 +16,12 @@ export const Route = createFileRoute("/simulator")({
       { name: "description", content: "Edit Max, Allocation and Available, then step through the safety algorithm." },
       { property: "og:title", content: "Banker's Safety Simulator" },
       { property: "og:description", content: "Step-by-step animated safe sequence finder." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Simulator,
 });
-
-const RES = ["A", "B", "C", "D", "E"];
-const resize = (m: Matrix, n: number, r: number) => Array.from({ length: n }, (_, i) => Array.from({ length: r }, (_, j) => m[i]?.[j] ?? 0));
 
 function Simulator() {
   const [n, setN] = useState(5);
@@ -26,10 +31,15 @@ function Simulator() {
   const [avail, setAvail] = useState<number[]>(SAMPLE.available);
   const [step, setStep] = useState(-1);
   const [playing, setPlaying] = useState(false);
+  const [processCount, setProcessCount] = useState("5");
+  const [resourceCount, setResourceCount] = useState("3");
+  const [sizeError, setSizeError] = useState("");
+  const [calculations, setCalculations] = useState(false);
 
-  const resources = RES.slice(0, r);
+  const resources = resourceNames(r);
   const result = useMemo(() => runSafety(avail, max, alloc), [avail, max, alloc]);
   const total = result.steps.length;
+  const invalid = result.need.some((row) => row.some((v) => v < 0));
 
   useEffect(() => { setStep(-1); setPlaying(false); }, [avail, max, alloc]);
   useEffect(() => {
@@ -40,8 +50,10 @@ function Simulator() {
   }, [playing, step, total]);
 
   const applySize = (nn: number, rr: number) => {
+    if (!validCount(nn) || !validCount(rr)) { setSizeError("Enter positive whole numbers for both counts."); return; }
+    setSizeError("");
     setN(nn); setR(rr);
-    setMax((m) => resize(m, nn, rr)); setAlloc((m) => resize(m, nn, rr));
+    setMax((m) => resizeMatrix(m, nn, rr)); setAlloc((m) => resizeMatrix(m, nn, rr));
     setAvail((a) => Array.from({ length: rr }, (_, j) => a[j] ?? 0));
   };
   const randomize = () => {
@@ -53,7 +65,7 @@ function Simulator() {
 
   const current = step >= 0 && step < total ? result.steps[step] : null;
   const done = result.sequence.slice(0, Math.max(0, Math.min(step + 1, total)));
-  const work = current ? current.workAfter : step >= total && total ? result.steps[total - 1]!.workAfter : avail;
+  const work = current ? current.workAfter : step >= total ? result.steps.at(-1)?.workAfter ?? avail : avail;
   const finished = step >= total;
 
   return (
@@ -64,20 +76,24 @@ function Simulator() {
           <p className="text-muted-foreground">Edit the numbers, then press play to find a safe sequence.</p>
         </div>
         <div className="flex flex-wrap items-center gap-3 font-mono text-sm">
-          <label className="paper-card flex items-center gap-2 px-3 py-1.5">processes
-            <input type="range" min={2} max={8} value={n} onChange={(e) => applySize(+e.target.value, r)} /> {n}
+          <label className="flex items-center gap-2">processes
+            <input aria-label="Number of processes" type="number" min={1} step={1} value={processCount} onChange={(e) => setProcessCount(e.target.value)} className="w-20 rounded-md border-2 border-input bg-paper p-2" />
           </label>
-          <label className="paper-card flex items-center gap-2 px-3 py-1.5">resources
-            <input type="range" min={1} max={5} value={r} onChange={(e) => applySize(n, +e.target.value)} /> {r}
+          <label className="flex items-center gap-2">resources
+            <input aria-label="Number of resources" type="number" min={1} step={1} value={resourceCount} onChange={(e) => setResourceCount(e.target.value)} className="w-20 rounded-md border-2 border-input bg-paper p-2" />
           </label>
-          <button onClick={randomize} className="press paper-card px-3 py-1.5">🎲 random</button>
-          <button onClick={() => { applySize(5, 3); setMax(SAMPLE.max); setAlloc(SAMPLE.alloc); setAvail(SAMPLE.available); }} className="press paper-card px-3 py-1.5">textbook</button>
+          <Button variant="outline" onClick={() => applySize(Number(processCount), Number(resourceCount))}>Apply counts</Button>
+          <Button variant="outline" onClick={randomize}><Shuffle />Random</Button>
+          <Button variant="outline" onClick={() => { applySize(5, 3); setProcessCount("5"); setResourceCount("3"); setMax(SAMPLE.max); setAlloc(SAMPLE.alloc); setAvail(SAMPLE.available); }}>Load example</Button>
+          <SimulatorNotes />
         </div>
       </div>
+      {sizeError && <p role="alert" className="text-destructive">{sizeError}</p>}
+      {invalid && <p role="alert" className="text-destructive">Allocation cannot exceed Max. Correct the highlighted negative Need values before playing.</p>}
 
       <VectorRow label="Available:" resources={resources} values={avail} onChange={(j, v) => setAvail(avail.map((x, k) => (k === j ? v : x)))} />
 
-      <div className="grid gap-5 md:grid-cols-3">
+      <div className="grid min-w-0 gap-5 lg:grid-cols-3">
         <MatrixTable title="Max" resources={resources} data={max} editable onChange={(i, j, v) => setMax(max.map((row, a) => row.map((x, b) => (a === i && b === j ? v : x))))} />
         <MatrixTable title="Allocation" resources={resources} data={alloc} editable onChange={(i, j, v) => setAlloc(alloc.map((row, a) => row.map((x, b) => (a === i && b === j ? v : x))))} />
         <MatrixTable title="Need (auto)" resources={resources} data={result.need} activeRow={current?.process ?? null} doneRows={done} />
@@ -85,10 +101,11 @@ function Simulator() {
 
       <div className="chalkboard rounded-md p-6">
         <div className="flex flex-wrap items-center gap-3">
-          <button onClick={() => { if (finished) setStep(-1); setPlaying(!playing); }} className="press paper-card bg-highlight px-4 py-2 font-bold text-foreground">{playing ? "❚❚ pause" : finished ? "↺ replay" : "▶ play"}</button>
-          <button onClick={() => setStep((s) => Math.min(s + 1, total))} disabled={finished} className="press paper-card px-4 py-2 text-foreground disabled:opacity-50">step →</button>
-          <button onClick={() => { setStep(-1); setPlaying(false); }} className="press paper-card px-4 py-2 text-foreground">reset</button>
-          <span className="ml-auto font-mono text-sm">Work = [{work.join(", ")}]</span>
+          <Button variant="outline" disabled={invalid} onClick={() => { if (finished) setStep(-1); setPlaying(!playing); }} className="bg-highlight text-foreground">{playing ? <Pause /> : finished ? <RotateCcw /> : <Play />}{playing ? "Pause" : finished ? "Replay" : "Play"}</Button>
+          <Button variant="outline" onClick={() => { setPlaying(false); setCalculations(true); }}><Calculator />Calculations</Button>
+          <Button variant="outline" onClick={() => setStep((s) => Math.min(s + 1, total))} disabled={finished || invalid}><StepForward />Step</Button>
+          <Button variant="outline" onClick={() => { setStep(-1); setPlaying(false); }}><RotateCcw />Reset</Button>
+          <span className="min-w-0 break-words font-mono text-sm sm:ml-auto">Work = [{work.join(", ")}]</span>
         </div>
 
         <div className="mt-6 flex min-h-16 flex-wrap items-center gap-3">
@@ -102,12 +119,13 @@ function Simulator() {
         </div>
 
         <p key={step} className="animate-rise mt-4 font-hand text-2xl">
-          {current && <>P{current.process}: Need [{result.need[current.process]!.join(",")}] ≤ Work [{current.workBefore.join(",")}] ✓ — finishes and releases [{alloc[current.process]!.join(",")}]</>}
+          {current && <>P{current.process}: Need [{result.need[current.process]?.join(",")}] ≤ Work [{current.workBefore.join(",")}] ✓ — finishes and releases [{alloc[current.process]?.join(",")}]</>}
           {finished && (result.safe
             ? <>✅ SAFE! Sequence: ⟨{result.sequence.map((p) => `P${p}`).join(", ")}⟩</>
             : <>⚠️ UNSAFE — no process can proceed with Work [{work.join(",")}]. Stuck: {max.map((_, i) => i).filter((i) => !result.sequence.includes(i)).map((i) => `P${i}`).join(", ")}</>)}
         </p>
       </div>
+      <Dialog open={calculations} onOpenChange={setCalculations}><DialogContent className="max-h-[85dvh] w-[calc(100%-2rem)] max-w-4xl overflow-y-auto bg-paper"><DialogHeader><DialogTitle className="font-hand text-3xl">All calculations</DialogTitle><DialogDescription>Safety check · {n} processes · {r} resources</DialogDescription></DialogHeader><CalculationDetails available={avail} max={max} alloc={alloc} resources={resources} /></DialogContent></Dialog>
     </div>
   );
 }
