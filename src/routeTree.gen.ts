@@ -10,15 +10,42 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BankersRouteImport } from './routes/bankers'
+import { Route as ChatbotRouteImport } from './routes/chatbot'
+import { Route as CpuSchedulingRouteImport } from './routes/cpu-scheduling'
 import { Route as DeadlockRouteImport } from './routes/deadlock'
+import { Route as DiskSchedulingRouteImport } from './routes/disk-scheduling'
 import { Route as LearnRouteImport } from './routes/learn'
+import { Route as MemoryAllocationRouteImport } from './routes/memory-allocation'
+import { Route as NotesRouteImport } from './routes/notes'
 import { Route as QuizRouteImport } from './routes/quiz'
 import { Route as RequestRouteImport } from './routes/request'
 import { Route as SimulatorRouteImport } from './routes/simulator'
+import { Route as NotesIndexRouteImport } from './routes/notes.index'
+import { Route as NotesTopicRouteImport } from './routes/notes.$topic'
+import { Route as NotesBankersRouteImport } from './routes/notes.bankers'
+import { Route as QuizIndexRouteImport } from './routes/quiz.index'
+import { Route as QuizTopicRouteImport } from './routes/quiz.$topic'
+import { Route as QuizBankersRouteImport } from './routes/quiz.bankers'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BankersRoute = BankersRouteImport.update({
+  id: '/bankers',
+  path: '/bankers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChatbotRoute = ChatbotRouteImport.update({
+  id: '/chatbot',
+  path: '/chatbot',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CpuSchedulingRoute = CpuSchedulingRouteImport.update({
+  id: '/cpu-scheduling',
+  path: '/cpu-scheduling',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DeadlockRoute = DeadlockRouteImport.update({
@@ -26,9 +53,24 @@ const DeadlockRoute = DeadlockRouteImport.update({
   path: '/deadlock',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DiskSchedulingRoute = DiskSchedulingRouteImport.update({
+  id: '/disk-scheduling',
+  path: '/disk-scheduling',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LearnRoute = LearnRouteImport.update({
   id: '/learn',
   path: '/learn',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MemoryAllocationRoute = MemoryAllocationRouteImport.update({
+  id: '/memory-allocation',
+  path: '/memory-allocation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotesRoute = NotesRouteImport.update({
+  id: '/notes',
+  path: '/notes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const QuizRoute = QuizRouteImport.update({
@@ -46,52 +88,168 @@ const SimulatorRoute = SimulatorRouteImport.update({
   path: '/simulator',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NotesIndexRoute = NotesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => NotesRoute,
+} as any)
+const NotesTopicRoute = NotesTopicRouteImport.update({
+  id: '/$topic',
+  path: '/$topic',
+  getParentRoute: () => NotesRoute,
+} as any)
+const NotesBankersRoute = NotesBankersRouteImport.update({
+  id: '/bankers',
+  path: '/bankers',
+  getParentRoute: () => NotesRoute,
+} as any)
+const QuizIndexRoute = QuizIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => QuizRoute,
+} as any)
+const QuizTopicRoute = QuizTopicRouteImport.update({
+  id: '/$topic',
+  path: '/$topic',
+  getParentRoute: () => QuizRoute,
+} as any)
+const QuizBankersRoute = QuizBankersRouteImport.update({
+  id: '/bankers',
+  path: '/bankers',
+  getParentRoute: () => QuizRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/bankers': typeof BankersRoute
+  '/chatbot': typeof ChatbotRoute
+  '/cpu-scheduling': typeof CpuSchedulingRoute
   '/deadlock': typeof DeadlockRoute
+  '/disk-scheduling': typeof DiskSchedulingRoute
   '/learn': typeof LearnRoute
-  '/quiz': typeof QuizRoute
+  '/memory-allocation': typeof MemoryAllocationRoute
+  '/notes': typeof NotesRouteWithChildren
+  '/quiz': typeof QuizRouteWithChildren
   '/request': typeof RequestRoute
   '/simulator': typeof SimulatorRoute
+  '/notes/$topic': typeof NotesTopicRoute
+  '/notes/bankers': typeof NotesBankersRoute
+  '/quiz/$topic': typeof QuizTopicRoute
+  '/quiz/bankers': typeof QuizBankersRoute
+  '/notes/': typeof NotesIndexRoute
+  '/quiz/': typeof QuizIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/bankers': typeof BankersRoute
+  '/chatbot': typeof ChatbotRoute
+  '/cpu-scheduling': typeof CpuSchedulingRoute
   '/deadlock': typeof DeadlockRoute
+  '/disk-scheduling': typeof DiskSchedulingRoute
   '/learn': typeof LearnRoute
-  '/quiz': typeof QuizRoute
+  '/memory-allocation': typeof MemoryAllocationRoute
   '/request': typeof RequestRoute
   '/simulator': typeof SimulatorRoute
+  '/notes/$topic': typeof NotesTopicRoute
+  '/notes/bankers': typeof NotesBankersRoute
+  '/quiz/$topic': typeof QuizTopicRoute
+  '/quiz/bankers': typeof QuizBankersRoute
+  '/notes': typeof NotesIndexRoute
+  '/quiz': typeof QuizIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/bankers': typeof BankersRoute
+  '/chatbot': typeof ChatbotRoute
+  '/cpu-scheduling': typeof CpuSchedulingRoute
   '/deadlock': typeof DeadlockRoute
+  '/disk-scheduling': typeof DiskSchedulingRoute
   '/learn': typeof LearnRoute
-  '/quiz': typeof QuizRoute
+  '/memory-allocation': typeof MemoryAllocationRoute
+  '/notes': typeof NotesRouteWithChildren
+  '/quiz': typeof QuizRouteWithChildren
   '/request': typeof RequestRoute
   '/simulator': typeof SimulatorRoute
+  '/notes/$topic': typeof NotesTopicRoute
+  '/notes/bankers': typeof NotesBankersRoute
+  '/quiz/$topic': typeof QuizTopicRoute
+  '/quiz/bankers': typeof QuizBankersRoute
+  '/notes/': typeof NotesIndexRoute
+  '/quiz/': typeof QuizIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/deadlock' | '/learn' | '/quiz' | '/request' | '/simulator'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/deadlock' | '/learn' | '/quiz' | '/request' | '/simulator'
-  id:
-    | '__root__'
+  fullPaths:
     | '/'
+    | '/bankers'
+    | '/chatbot'
+    | '/cpu-scheduling'
     | '/deadlock'
+    | '/disk-scheduling'
     | '/learn'
+    | '/memory-allocation'
+    | '/notes'
     | '/quiz'
     | '/request'
     | '/simulator'
+    | '/notes/$topic'
+    | '/notes/bankers'
+    | '/quiz/$topic'
+    | '/quiz/bankers'
+    | '/notes/'
+    | '/quiz/'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/bankers'
+    | '/chatbot'
+    | '/cpu-scheduling'
+    | '/deadlock'
+    | '/disk-scheduling'
+    | '/learn'
+    | '/memory-allocation'
+    | '/request'
+    | '/simulator'
+    | '/notes/$topic'
+    | '/notes/bankers'
+    | '/quiz/$topic'
+    | '/quiz/bankers'
+    | '/notes'
+    | '/quiz'
+  id:
+    | '__root__'
+    | '/'
+    | '/bankers'
+    | '/chatbot'
+    | '/cpu-scheduling'
+    | '/deadlock'
+    | '/disk-scheduling'
+    | '/learn'
+    | '/memory-allocation'
+    | '/notes'
+    | '/quiz'
+    | '/request'
+    | '/simulator'
+    | '/notes/$topic'
+    | '/notes/bankers'
+    | '/quiz/$topic'
+    | '/quiz/bankers'
+    | '/notes/'
+    | '/quiz/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BankersRoute: typeof BankersRoute
+  ChatbotRoute: typeof ChatbotRoute
+  CpuSchedulingRoute: typeof CpuSchedulingRoute
   DeadlockRoute: typeof DeadlockRoute
+  DiskSchedulingRoute: typeof DiskSchedulingRoute
   LearnRoute: typeof LearnRoute
-  QuizRoute: typeof QuizRoute
+  MemoryAllocationRoute: typeof MemoryAllocationRoute
+  NotesRoute: typeof NotesRouteWithChildren
+  QuizRoute: typeof QuizRouteWithChildren
   RequestRoute: typeof RequestRoute
   SimulatorRoute: typeof SimulatorRoute
 }
@@ -105,6 +263,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/bankers': {
+      id: '/bankers'
+      path: '/bankers'
+      fullPath: '/bankers'
+      preLoaderRoute: typeof BankersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/chatbot': {
+      id: '/chatbot'
+      path: '/chatbot'
+      fullPath: '/chatbot'
+      preLoaderRoute: typeof ChatbotRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cpu-scheduling': {
+      id: '/cpu-scheduling'
+      path: '/cpu-scheduling'
+      fullPath: '/cpu-scheduling'
+      preLoaderRoute: typeof CpuSchedulingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/deadlock': {
       id: '/deadlock'
       path: '/deadlock'
@@ -112,11 +291,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DeadlockRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/disk-scheduling': {
+      id: '/disk-scheduling'
+      path: '/disk-scheduling'
+      fullPath: '/disk-scheduling'
+      preLoaderRoute: typeof DiskSchedulingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/learn': {
       id: '/learn'
       path: '/learn'
       fullPath: '/learn'
       preLoaderRoute: typeof LearnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/memory-allocation': {
+      id: '/memory-allocation'
+      path: '/memory-allocation'
+      fullPath: '/memory-allocation'
+      preLoaderRoute: typeof MemoryAllocationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notes': {
+      id: '/notes'
+      path: '/notes'
+      fullPath: '/notes'
+      preLoaderRoute: typeof NotesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/quiz': {
@@ -140,14 +340,90 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SimulatorRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/notes/': {
+      id: '/notes/'
+      path: '/'
+      fullPath: '/notes/'
+      preLoaderRoute: typeof NotesIndexRouteImport
+      parentRoute: typeof NotesRoute
+    }
+    '/notes/$topic': {
+      id: '/notes/$topic'
+      path: '/$topic'
+      fullPath: '/notes/$topic'
+      preLoaderRoute: typeof NotesTopicRouteImport
+      parentRoute: typeof NotesRoute
+    }
+    '/notes/bankers': {
+      id: '/notes/bankers'
+      path: '/bankers'
+      fullPath: '/notes/bankers'
+      preLoaderRoute: typeof NotesBankersRouteImport
+      parentRoute: typeof NotesRoute
+    }
+    '/quiz/': {
+      id: '/quiz/'
+      path: '/'
+      fullPath: '/quiz/'
+      preLoaderRoute: typeof QuizIndexRouteImport
+      parentRoute: typeof QuizRoute
+    }
+    '/quiz/$topic': {
+      id: '/quiz/$topic'
+      path: '/$topic'
+      fullPath: '/quiz/$topic'
+      preLoaderRoute: typeof QuizTopicRouteImport
+      parentRoute: typeof QuizRoute
+    }
+    '/quiz/bankers': {
+      id: '/quiz/bankers'
+      path: '/bankers'
+      fullPath: '/quiz/bankers'
+      preLoaderRoute: typeof QuizBankersRouteImport
+      parentRoute: typeof QuizRoute
+    }
   }
 }
 
+interface NotesRouteChildren {
+  NotesTopicRoute: typeof NotesTopicRoute
+  NotesBankersRoute: typeof NotesBankersRoute
+  NotesIndexRoute: typeof NotesIndexRoute
+}
+
+const NotesRouteChildren: NotesRouteChildren = {
+  NotesTopicRoute: NotesTopicRoute,
+  NotesBankersRoute: NotesBankersRoute,
+  NotesIndexRoute: NotesIndexRoute,
+}
+
+const NotesRouteWithChildren = NotesRoute._addFileChildren(NotesRouteChildren)
+
+interface QuizRouteChildren {
+  QuizTopicRoute: typeof QuizTopicRoute
+  QuizBankersRoute: typeof QuizBankersRoute
+  QuizIndexRoute: typeof QuizIndexRoute
+}
+
+const QuizRouteChildren: QuizRouteChildren = {
+  QuizTopicRoute: QuizTopicRoute,
+  QuizBankersRoute: QuizBankersRoute,
+  QuizIndexRoute: QuizIndexRoute,
+}
+
+const QuizRouteWithChildren = QuizRoute._addFileChildren(QuizRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BankersRoute: BankersRoute,
+  ChatbotRoute: ChatbotRoute,
+  CpuSchedulingRoute: CpuSchedulingRoute,
   DeadlockRoute: DeadlockRoute,
+  DiskSchedulingRoute: DiskSchedulingRoute,
   LearnRoute: LearnRoute,
-  QuizRoute: QuizRoute,
+  MemoryAllocationRoute: MemoryAllocationRoute,
+  NotesRoute: NotesRouteWithChildren,
+  QuizRoute: QuizRouteWithChildren,
   RequestRoute: RequestRoute,
   SimulatorRoute: SimulatorRoute,
 }

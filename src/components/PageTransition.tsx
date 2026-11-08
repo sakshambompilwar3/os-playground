@@ -6,11 +6,19 @@ type Kind = (typeof KINDS)[number];
 
 const LABELS: Record<string, string> = {
   "/": "home.sys",
+  "/bankers": "bankers_hub.toc",
   "/learn": "learn.md",
+  "/notes": "notes.index",
+  "/notes/bankers": "banker_notes.md",
   "/simulator": "safety_check.exe",
   "/request": "request_handler.bin",
   "/deadlock": "deadlock.lab",
   "/quiz": "quiz.sh",
+  "/quiz/bankers": "quiz_bankers.sh",
+  "/chatbot": "chatbot.ai",
+  "/cpu-scheduling": "cpu_sched.exe",
+  "/memory-allocation": "mem_alloc.bin",
+  "/disk-scheduling": "disk_sched.exe",
 };
 
 function Terminal({ path }: { path: string }) {

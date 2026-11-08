@@ -1,13 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
+import { OS_TOPICS } from "@/lib/topics";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Banker's Algorithm Playground — OS Class" },
-      { name: "description", content: "A classroom-style playground to learn Dijkstra's Banker's Algorithm for deadlock avoidance." },
-      { property: "og:title", content: "Banker's Algorithm Playground — OS Class" },
-      { property: "og:description", content: "Learn deadlock avoidance interactively: simulate, request resources, and quiz yourself." },
+      { title: "OS Playground — Banker's Algorithm & more" },
+      { name: "description", content: "A classroom-style playground to learn OS algorithms: Banker's, CPU Scheduling, Memory Allocation, Disk Scheduling." },
+      { property: "og:title", content: "OS Playground — Banker's Algorithm & more" },
+      { property: "og:description", content: "Learn OS concepts interactively: simulate, request resources, and quiz yourself." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -15,69 +16,204 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-const CHALK = ["Need = Max − Allocation", "Request ≤ Need ?", "Request ≤ Available ?", "Safe state ⇒ no deadlock"];
-
-function ChalkText() {
-  const [idx, setIdx] = useState(0);
+function ChalkTagline({ text }: { text: string }) {
   const [len, setLen] = useState(0);
+
   useEffect(() => {
-    const full = CHALK[idx]!;
+    setLen(0);
+  }, [text]);
+
+  useEffect(() => {
+    if (len >= text.length) return;
     const t = setTimeout(() => {
-      if (len < full.length) setLen(len + 1);
-      else { setLen(0); setIdx((idx + 1) % CHALK.length); }
-    }, len < full.length ? 70 : 1600);
+      setLen((l) => l + 1);
+    }, 45);
     return () => clearTimeout(t);
-  }, [len, idx]);
-  return <span className="font-hand text-4xl md:text-5xl">{CHALK[idx]!.slice(0, len)}<span className="animate-blink">|</span></span>;
+  }, [len, text]);
+
+  return (
+    <span className="font-hand text-4xl md:text-5xl">
+      {text.slice(0, len)}
+      <span className="animate-blink">|</span>
+    </span>
+  );
 }
 
-const notes = [
-  { to: "/learn", title: "Learn", text: "The theory, with drawings", color: "bg-highlight", r: "-3deg" },
-  { to: "/simulator", title: "Simulator", text: "Step through the safety check", color: "bg-accent/70", r: "2deg" },
-  { to: "/request", title: "Requests", text: "Grant or deny a process", color: "bg-success/40", r: "-1.5deg" },
-  { to: "/deadlock", title: "Deadlock Lab", text: "Watch processes get stuck", color: "bg-primary/25", r: "3deg" },
-  { to: "/quiz", title: "Pop Quiz", text: "Test before the exam!", color: "bg-destructive/30", r: "-2deg" },
-] as const;
-
 function Home() {
+  const [slide, setSlide] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const touchStartX = useRef<number | null>(null);
+  const boardRef = useRef<HTMLElement>(null);
+
+  const total = OS_TOPICS.length;
+  const currentTopic = OS_TOPICS[slide]!;
+
+  const nextSlide = useCallback(() => {
+    setSlide((s) => (s + 1) % total);
+  }, [total]);
+
+  const prevSlide = useCallback(() => {
+    setSlide((s) => (s - 1 + total) % total);
+  }, [total]);
+
+  // Auto-advance every ~7s unless paused or reduced-motion is requested
+  useEffect(() => {
+    if (isPaused) return;
+    if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+    const timer = setInterval(() => {
+      nextSlide();
+    }, 7000);
+    return () => clearInterval(timer);
+  }, [isPaused, nextSlide]);
+
+  // Keyboard navigation when board is focused
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      prevSlide();
+    } else if (e.key === "ArrowRight") {
+      e.preventDefault();
+      nextSlide();
+    }
+  };
+
+  // Touch swipe support
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0]?.clientX ?? null;
+    setIsPaused(true);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    setIsPaused(false);
+    if (touchStartX.current === null) return;
+    const diff = (e.changedTouches[0]?.clientX ?? 0) - touchStartX.current;
+    if (diff > 45) {
+      prevSlide();
+    } else if (diff < -45) {
+      nextSlide();
+    }
+    touchStartX.current = null;
+  };
+
   return (
     <div className="space-y-14">
-      {/* chalkboard */}
-      <section className="chalkboard relative overflow-hidden rounded-md px-6 py-14 md:px-14">
-        <p className="font-mono text-xs uppercase tracking-[0.3em] opacity-70">CS-301 · Operating Systems · Lecture 7</p>
-        <h1 className="mt-4 font-hand text-6xl font-bold leading-none md:text-8xl">Banker's Algorithm</h1>
-        <svg viewBox="0 0 600 30" className="mt-2 h-6 w-80 md:w-[28rem]" aria-hidden>
-          <path d="M5 20 C 150 5, 300 30, 595 12" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" className="draw" />
-        </svg>
-        <div className="mt-8 min-h-14"><ChalkText /></div>
-        <div className="mt-10 flex flex-wrap gap-3">
-          <Link to="/simulator" className="press paper-card bg-highlight px-5 py-3 font-bold text-foreground">Start the simulator →</Link>
-          <Link to="/learn" className="press paper-card px-5 py-3 font-bold text-foreground">Open the notes</Link>
+      {/* chalkboard hero carousel */}
+      <section
+        ref={boardRef}
+        tabIndex={0}
+        aria-label="OS Topics Interactive Blackboard"
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+        onFocus={() => setIsPaused(true)}
+        onBlur={() => setIsPaused(false)}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        onKeyDown={handleKeyDown}
+        className="chalkboard relative overflow-hidden rounded-md px-6 py-14 outline-none focus-visible:ring-2 focus-visible:ring-chalk-foreground/50 md:px-14"
+      >
+        <div key={currentTopic.slug} className="animate-rise">
+          <p className="font-mono text-xs uppercase tracking-[0.3em] opacity-70">
+            {currentTopic.lectureLabel}
+          </p>
+          <h1 className="mt-4 font-hand text-6xl font-bold leading-none md:text-8xl">
+            {currentTopic.title}
+          </h1>
+          <svg viewBox="0 0 600 30" className="mt-2 h-6 w-80 md:w-[28rem]" aria-hidden>
+            <path
+              d="M5 20 C 150 5, 300 30, 595 12"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="4"
+              strokeLinecap="round"
+              className="draw"
+            />
+          </svg>
+          <div className="mt-8 min-h-14">
+            <ChalkTagline text={currentTopic.tagline} />
+          </div>
+          <div className="mt-10 flex flex-wrap gap-3">
+            <Link
+              to={currentTopic.simulatorLink}
+              className="press paper-card bg-highlight px-5 py-3 font-bold text-foreground"
+            >
+              Start the simulator →
+            </Link>
+            <Link
+              to={currentTopic.notesLink}
+              className="press paper-card px-5 py-3 font-bold text-foreground"
+            >
+              Open the notes
+            </Link>
+          </div>
         </div>
+
+        {/* chalk controls (arrows + dots) - faint chalk marks styled, top of chalk/eraser */}
+        <div className="absolute bottom-3 left-6 flex items-center gap-3 font-hand text-xl text-chalk-foreground/70 sm:bottom-4 sm:left-14">
+          <button
+            type="button"
+            onClick={prevSlide}
+            aria-label="Previous topic slide"
+            className="rounded px-2 py-0.5 transition-opacity hover:opacity-100 opacity-60 focus-visible:opacity-100"
+          >
+            ← prev
+          </button>
+          <div className="flex items-center gap-1.5" aria-label={`Slide ${slide + 1} of ${total}`}>
+            {OS_TOPICS.map((t, idx) => (
+              <button
+                key={t.slug}
+                type="button"
+                onClick={() => setSlide(idx)}
+                aria-label={`Go to ${t.title}`}
+                className={`h-2.5 rounded-full transition-all ${
+                  idx === slide
+                    ? "w-5 bg-chalk-foreground/90"
+                    : "w-2.5 bg-chalk-foreground/30 hover:bg-chalk-foreground/60"
+                }`}
+              />
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={nextSlide}
+            aria-label="Next topic slide"
+            className="rounded px-2 py-0.5 transition-opacity hover:opacity-100 opacity-60 focus-visible:opacity-100"
+          >
+            next →
+          </button>
+        </div>
+
         {/* chalk + eraser */}
-        <div className="absolute bottom-3 right-6 flex items-end gap-3">
+        <div className="absolute bottom-3 right-6 flex items-end gap-3 pointer-events-none">
           <span className="block h-3 w-16 rounded-full bg-chalk-foreground/90" />
           <span className="block h-6 w-20 rounded-sm bg-accent" />
         </div>
       </section>
 
-      {/* sticky notes */}
+      {/* topic cards (preserved exactly) */}
       <section>
-        <h2 className="font-hand text-4xl font-bold">Today's <span className="marker">homework</span></h2>
-        <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
-          {notes.map((n, i) => (
-            <Link
-              key={n.to}
-              to={n.to}
-              className={`animate-float group relative block min-h-40 p-5 shadow-[var(--shadow-paper)] transition-transform hover:scale-105 ${n.color}`}
-              style={{ ["--r" as string]: n.r, animationDelay: `${i * 0.4}s` }}
-            >
-              <span className="absolute -top-3 left-1/2 h-6 w-16 -translate-x-1/2 rotate-2 bg-paper/70" />
-              <p className="font-hand text-3xl font-bold">{n.title}</p>
-              <p className="mt-2 text-sm">{n.text}</p>
-              <p className="mt-4 font-mono text-xs opacity-0 transition-opacity group-hover:opacity-100">open →</p>
-            </Link>
-          ))}
+        <h2 className="font-hand text-4xl font-bold">Pick a <span className="marker">topic</span></h2>
+        <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {OS_TOPICS.map((topic, i) => {
+            const to = `/${topic.slug}`;
+            return (
+              <Link
+                key={topic.slug}
+                to={to}
+                className={`animate-float group relative block min-h-44 p-5 shadow-[var(--shadow-paper)] transition-transform hover:scale-105 ${topic.color}`}
+                style={{ ["--r" as string]: topic.rotation, animationDelay: `${i * 0.4}s` }}
+              >
+                <span className="absolute -top-3 left-1/2 h-6 w-16 -translate-x-1/2 rotate-2 bg-paper/70" />
+                <p className="font-hand text-3xl font-bold">{topic.title}</p>
+                <p className="mt-2 text-sm">{topic.description}</p>
+                {!topic.ready && (
+                  <span className="mt-3 inline-block rounded-full border-2 border-foreground/30 px-2 py-0.5 font-mono text-xs">coming soon</span>
+                )}
+                <p className="mt-4 font-mono text-xs opacity-0 transition-opacity group-hover:opacity-100">open →</p>
+              </Link>
+            );
+          })}
         </div>
       </section>
 

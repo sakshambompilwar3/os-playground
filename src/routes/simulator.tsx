@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { MatrixTable, VectorRow } from "@/components/MatrixTable";
 import { SAMPLE, runSafety, type Matrix } from "@/lib/bankers";
@@ -6,7 +6,6 @@ import { resourceNames, resizeMatrix, validCount } from "@/lib/simulator";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { CalculationDetails } from "@/components/CalculationDetails";
-import { SimulatorNotes } from "@/components/SimulatorNotes";
 import { Calculator, Play, Pause, RotateCcw, StepForward, Shuffle } from "lucide-react";
 
 export const Route = createFileRoute("/simulator")({
@@ -52,15 +51,66 @@ function Simulator() {
   const applySize = (nn: number, rr: number) => {
     if (!validCount(nn) || !validCount(rr)) { setSizeError("Enter positive whole numbers for both counts."); return; }
     setSizeError("");
+    setStep(-1);
+    setPlaying(false);
     setN(nn); setR(rr);
     setMax((m) => resizeMatrix(m, nn, rr)); setAlloc((m) => resizeMatrix(m, nn, rr));
     setAvail((a) => Array.from({ length: rr }, (_, j) => a[j] ?? 0));
   };
+
+  const handleProcessChange = (valStr: string) => {
+    setProcessCount(valStr);
+    if (valStr.trim() === "") return;
+    const val = Number(valStr);
+    if (!Number.isNaN(val) && Number.isInteger(val) && val >= 1 && val <= 10) {
+      applySize(val, r);
+    }
+  };
+
+  const handleProcessBlur = () => {
+    let val = Math.floor(Number(processCount));
+    if (Number.isNaN(val) || val < 1) val = 1;
+    if (val > 10) val = 10;
+    setProcessCount(String(val));
+    applySize(val, r);
+  };
+
+  const handleResourceChange = (valStr: string) => {
+    setResourceCount(valStr);
+    if (valStr.trim() === "") return;
+    const val = Number(valStr);
+    if (!Number.isNaN(val) && Number.isInteger(val) && val >= 1 && val <= 6) {
+      applySize(n, val);
+    }
+  };
+
+  const handleResourceBlur = () => {
+    let val = Math.floor(Number(resourceCount));
+    if (Number.isNaN(val) || val < 1) val = 1;
+    if (val > 6) val = 6;
+    setResourceCount(String(val));
+    applySize(n, val);
+  };
+
   const randomize = () => {
+    setStep(-1);
+    setPlaying(false);
     const mx = Array.from({ length: n }, () => Array.from({ length: r }, () => Math.floor(Math.random() * 8) + 1));
     setMax(mx);
     setAlloc(mx.map((row) => row.map((v) => Math.floor(Math.random() * (v + 1)))));
     setAvail(Array.from({ length: r }, () => Math.floor(Math.random() * 5)));
+  };
+
+  const loadExample = () => {
+    setStep(-1);
+    setPlaying(false);
+    setProcessCount("5");
+    setResourceCount("3");
+    setN(5);
+    setR(3);
+    setMax(SAMPLE.max);
+    setAlloc(SAMPLE.alloc);
+    setAvail(SAMPLE.available);
   };
 
   const current = step >= 0 && step < total ? result.steps[step] : null;
@@ -70,6 +120,11 @@ function Simulator() {
 
   return (
     <div className="space-y-8">
+      <div>
+        <Link to="/bankers" className="text-sm text-muted-foreground hover:underline">
+          ← back to Banker's Algorithm
+        </Link>
+      </div>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="font-hand text-6xl font-bold">Safety simulator</h1>
@@ -77,15 +132,34 @@ function Simulator() {
         </div>
         <div className="flex flex-wrap items-center gap-3 font-mono text-sm">
           <label className="flex items-center gap-2">processes
-            <input aria-label="Number of processes" type="number" min={1} step={1} value={processCount} onChange={(e) => setProcessCount(e.target.value)} className="w-20 rounded-md border-2 border-input bg-paper p-2" />
+            <input
+              aria-label="Number of processes"
+              type="number"
+              min={1}
+              max={10}
+              step={1}
+              value={processCount}
+              onChange={(e) => handleProcessChange(e.target.value)}
+              onBlur={handleProcessBlur}
+              className="w-20 rounded-md border-2 border-input bg-paper p-2"
+            />
           </label>
           <label className="flex items-center gap-2">resources
-            <input aria-label="Number of resources" type="number" min={1} step={1} value={resourceCount} onChange={(e) => setResourceCount(e.target.value)} className="w-20 rounded-md border-2 border-input bg-paper p-2" />
+            <input
+              aria-label="Number of resources"
+              type="number"
+              min={1}
+              max={6}
+              step={1}
+              value={resourceCount}
+              onChange={(e) => handleResourceChange(e.target.value)}
+              onBlur={handleResourceBlur}
+              className="w-20 rounded-md border-2 border-input bg-paper p-2"
+            />
           </label>
-          <Button variant="outline" onClick={() => applySize(Number(processCount), Number(resourceCount))}>Apply counts</Button>
+          <Button variant="outline" onClick={() => { handleProcessBlur(); handleResourceBlur(); }}>Apply counts</Button>
           <Button variant="outline" onClick={randomize}><Shuffle />Random</Button>
-          <Button variant="outline" onClick={() => { applySize(5, 3); setProcessCount("5"); setResourceCount("3"); setMax(SAMPLE.max); setAlloc(SAMPLE.alloc); setAvail(SAMPLE.available); }}>Load example</Button>
-          <SimulatorNotes />
+          <Button variant="outline" onClick={loadExample}>Load example</Button>
         </div>
       </div>
       {sizeError && <p role="alert" className="text-destructive">{sizeError}</p>}

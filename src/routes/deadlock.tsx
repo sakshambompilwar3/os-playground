@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -37,7 +37,11 @@ function Deadlock() {
   const banker = phase === 3;
 
   return (
-    <div className="grid items-center gap-10 lg:grid-cols-2">
+    <div className="space-y-6">
+      <Link to="/bankers" className="text-sm text-muted-foreground hover:underline">
+        ← back to Banker's Algorithm
+      </Link>
+      <div className="grid items-center gap-10 lg:grid-cols-2">
       <div className="space-y-5">
         <h1 className="font-hand text-6xl font-bold">Deadlock lab</h1>
         <p key={phase} className="animate-rise notebook rounded-md py-4 pl-20 pr-6 font-hand text-2xl leading-8">{steps[phase]}</p>
@@ -86,6 +90,7 @@ function Deadlock() {
           <section className="border-t pt-3"><h3 className="font-hand text-2xl font-bold">6. Let the safe sequence complete</h3><p className="mt-2">Give R1 to P1; P1 finishes and releases R0 and R1. Give R0 to P0; P0 finishes and releases R0 and R2. Then give R1 and R2 to P2; P2 finishes. All three resources are free. Circular wait never forms.</p></section>
         </div>
       </DialogContent></Dialog>
+      </div>
     </div>
   );
 }
