@@ -11,6 +11,9 @@ const LABELS: Record<string, string> = {
   "/request": "request_handler.bin",
   "/deadlock": "deadlock.lab",
   "/quiz": "quiz.sh",
+  "/cpu-scheduling": "cpu_sched.exe",
+  "/memory-allocation": "mem_alloc.bin",
+  "/disk-scheduling": "disk_sched.exe",
 };
 
 function Terminal({ path }: { path: string }) {

@@ -1,13 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { OS_TOPICS } from "@/lib/topics";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Banker's Algorithm Playground — OS Class" },
-      { name: "description", content: "A classroom-style playground to learn Dijkstra's Banker's Algorithm for deadlock avoidance." },
-      { property: "og:title", content: "Banker's Algorithm Playground — OS Class" },
-      { property: "og:description", content: "Learn deadlock avoidance interactively: simulate, request resources, and quiz yourself." },
+      { title: "OS Playground — Banker's Algorithm & more" },
+      { name: "description", content: "A classroom-style playground to learn OS algorithms: Banker's, CPU Scheduling, Memory Allocation, Disk Scheduling." },
+      { property: "og:title", content: "OS Playground — Banker's Algorithm & more" },
+      { property: "og:description", content: "Learn OS concepts interactively: simulate, request resources, and quiz yourself." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -31,14 +32,6 @@ function ChalkText() {
   return <span className="font-hand text-4xl md:text-5xl">{CHALK[idx]!.slice(0, len)}<span className="animate-blink">|</span></span>;
 }
 
-const notes = [
-  { to: "/learn", title: "Learn", text: "The theory, with drawings", color: "bg-highlight", r: "-3deg" },
-  { to: "/simulator", title: "Simulator", text: "Step through the safety check", color: "bg-accent/70", r: "2deg" },
-  { to: "/request", title: "Requests", text: "Grant or deny a process", color: "bg-success/40", r: "-1.5deg" },
-  { to: "/deadlock", title: "Deadlock Lab", text: "Watch processes get stuck", color: "bg-primary/25", r: "3deg" },
-  { to: "/quiz", title: "Pop Quiz", text: "Test before the exam!", color: "bg-destructive/30", r: "-2deg" },
-] as const;
-
 function Home() {
   return (
     <div className="space-y-14">
@@ -61,23 +54,31 @@ function Home() {
         </div>
       </section>
 
-      {/* sticky notes */}
+      {/* topic cards */}
       <section>
-        <h2 className="font-hand text-4xl font-bold">Today's <span className="marker">homework</span></h2>
-        <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
-          {notes.map((n, i) => (
-            <Link
-              key={n.to}
-              to={n.to}
-              className={`animate-float group relative block min-h-40 p-5 shadow-[var(--shadow-paper)] transition-transform hover:scale-105 ${n.color}`}
-              style={{ ["--r" as string]: n.r, animationDelay: `${i * 0.4}s` }}
-            >
-              <span className="absolute -top-3 left-1/2 h-6 w-16 -translate-x-1/2 rotate-2 bg-paper/70" />
-              <p className="font-hand text-3xl font-bold">{n.title}</p>
-              <p className="mt-2 text-sm">{n.text}</p>
-              <p className="mt-4 font-mono text-xs opacity-0 transition-opacity group-hover:opacity-100">open →</p>
-            </Link>
-          ))}
+        <h2 className="font-hand text-4xl font-bold">Pick a <span className="marker">topic</span></h2>
+        <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {OS_TOPICS.map((topic, i) => {
+            const to = topic.ready
+              ? (topic.subLinks?.[0]?.to ?? "/")
+              : `/${topic.slug}`;
+            return (
+              <Link
+                key={topic.slug}
+                to={to}
+                className={`animate-float group relative block min-h-44 p-5 shadow-[var(--shadow-paper)] transition-transform hover:scale-105 ${topic.color}`}
+                style={{ ["--r" as string]: topic.rotation, animationDelay: `${i * 0.4}s` }}
+              >
+                <span className="absolute -top-3 left-1/2 h-6 w-16 -translate-x-1/2 rotate-2 bg-paper/70" />
+                <p className="font-hand text-3xl font-bold">{topic.title}</p>
+                <p className="mt-2 text-sm">{topic.description}</p>
+                {!topic.ready && (
+                  <span className="mt-3 inline-block rounded-full border-2 border-foreground/30 px-2 py-0.5 font-mono text-xs">coming soon</span>
+                )}
+                <p className="mt-4 font-mono text-xs opacity-0 transition-opacity group-hover:opacity-100">open →</p>
+              </Link>
+            );
+          })}
         </div>
       </section>
 

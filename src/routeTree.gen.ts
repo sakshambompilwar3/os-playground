@@ -10,8 +10,11 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CpuSchedulingRouteImport } from './routes/cpu-scheduling'
 import { Route as DeadlockRouteImport } from './routes/deadlock'
+import { Route as DiskSchedulingRouteImport } from './routes/disk-scheduling'
 import { Route as LearnRouteImport } from './routes/learn'
+import { Route as MemoryAllocationRouteImport } from './routes/memory-allocation'
 import { Route as QuizRouteImport } from './routes/quiz'
 import { Route as RequestRouteImport } from './routes/request'
 import { Route as SimulatorRouteImport } from './routes/simulator'
@@ -21,14 +24,29 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CpuSchedulingRoute = CpuSchedulingRouteImport.update({
+  id: '/cpu-scheduling',
+  path: '/cpu-scheduling',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DeadlockRoute = DeadlockRouteImport.update({
   id: '/deadlock',
   path: '/deadlock',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DiskSchedulingRoute = DiskSchedulingRouteImport.update({
+  id: '/disk-scheduling',
+  path: '/disk-scheduling',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LearnRoute = LearnRouteImport.update({
   id: '/learn',
   path: '/learn',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MemoryAllocationRoute = MemoryAllocationRouteImport.update({
+  id: '/memory-allocation',
+  path: '/memory-allocation',
   getParentRoute: () => rootRouteImport,
 } as any)
 const QuizRoute = QuizRouteImport.update({
@@ -49,16 +67,22 @@ const SimulatorRoute = SimulatorRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/cpu-scheduling': typeof CpuSchedulingRoute
   '/deadlock': typeof DeadlockRoute
+  '/disk-scheduling': typeof DiskSchedulingRoute
   '/learn': typeof LearnRoute
+  '/memory-allocation': typeof MemoryAllocationRoute
   '/quiz': typeof QuizRoute
   '/request': typeof RequestRoute
   '/simulator': typeof SimulatorRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/cpu-scheduling': typeof CpuSchedulingRoute
   '/deadlock': typeof DeadlockRoute
+  '/disk-scheduling': typeof DiskSchedulingRoute
   '/learn': typeof LearnRoute
+  '/memory-allocation': typeof MemoryAllocationRoute
   '/quiz': typeof QuizRoute
   '/request': typeof RequestRoute
   '/simulator': typeof SimulatorRoute
@@ -66,22 +90,46 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/cpu-scheduling': typeof CpuSchedulingRoute
   '/deadlock': typeof DeadlockRoute
+  '/disk-scheduling': typeof DiskSchedulingRoute
   '/learn': typeof LearnRoute
+  '/memory-allocation': typeof MemoryAllocationRoute
   '/quiz': typeof QuizRoute
   '/request': typeof RequestRoute
   '/simulator': typeof SimulatorRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/deadlock' | '/learn' | '/quiz' | '/request' | '/simulator'
+  fullPaths:
+    | '/'
+    | '/cpu-scheduling'
+    | '/deadlock'
+    | '/disk-scheduling'
+    | '/learn'
+    | '/memory-allocation'
+    | '/quiz'
+    | '/request'
+    | '/simulator'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/deadlock' | '/learn' | '/quiz' | '/request' | '/simulator'
+  to:
+    | '/'
+    | '/cpu-scheduling'
+    | '/deadlock'
+    | '/disk-scheduling'
+    | '/learn'
+    | '/memory-allocation'
+    | '/quiz'
+    | '/request'
+    | '/simulator'
   id:
     | '__root__'
     | '/'
+    | '/cpu-scheduling'
     | '/deadlock'
+    | '/disk-scheduling'
     | '/learn'
+    | '/memory-allocation'
     | '/quiz'
     | '/request'
     | '/simulator'
@@ -89,8 +137,11 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CpuSchedulingRoute: typeof CpuSchedulingRoute
   DeadlockRoute: typeof DeadlockRoute
+  DiskSchedulingRoute: typeof DiskSchedulingRoute
   LearnRoute: typeof LearnRoute
+  MemoryAllocationRoute: typeof MemoryAllocationRoute
   QuizRoute: typeof QuizRoute
   RequestRoute: typeof RequestRoute
   SimulatorRoute: typeof SimulatorRoute
@@ -105,6 +156,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cpu-scheduling': {
+      id: '/cpu-scheduling'
+      path: '/cpu-scheduling'
+      fullPath: '/cpu-scheduling'
+      preLoaderRoute: typeof CpuSchedulingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/deadlock': {
       id: '/deadlock'
       path: '/deadlock'
@@ -112,11 +170,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DeadlockRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/disk-scheduling': {
+      id: '/disk-scheduling'
+      path: '/disk-scheduling'
+      fullPath: '/disk-scheduling'
+      preLoaderRoute: typeof DiskSchedulingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/learn': {
       id: '/learn'
       path: '/learn'
       fullPath: '/learn'
       preLoaderRoute: typeof LearnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/memory-allocation': {
+      id: '/memory-allocation'
+      path: '/memory-allocation'
+      fullPath: '/memory-allocation'
+      preLoaderRoute: typeof MemoryAllocationRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/quiz': {
@@ -145,8 +217,11 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CpuSchedulingRoute: CpuSchedulingRoute,
   DeadlockRoute: DeadlockRoute,
+  DiskSchedulingRoute: DiskSchedulingRoute,
   LearnRoute: LearnRoute,
+  MemoryAllocationRoute: MemoryAllocationRoute,
   QuizRoute: QuizRoute,
   RequestRoute: RequestRoute,
   SimulatorRoute: SimulatorRoute,
