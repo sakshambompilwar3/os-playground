@@ -11,13 +11,13 @@ export const Route = createFileRoute("/memory-allocation")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: MemoryAllocation,
+  component: MemoryAllocationHub,
 });
 
 const TABS = ["Learn", "Simulator", "Quiz"] as const;
 
-function MemoryAllocation() {
-  const [tab, setTab] = useState<(typeof TABS)[number]>("Learn");
+function MemoryAllocationHub() {
+  const [tab, setTab] = useState<(typeof TABS)[number]>("Simulator");
   return (
     <div className="space-y-8">
       <div>
@@ -25,6 +25,13 @@ function MemoryAllocation() {
         <h1 className="mt-2 font-hand text-6xl font-bold">Memory Allocation</h1>
         <p className="text-muted-foreground">Paging, segmentation & page replacement</p>
       </div>
+
+      {/* Hub links */}
+      <div className="flex flex-wrap gap-3">
+        <Link to="/notes/memory-allocation" className="press paper-card px-4 py-2 font-hand text-xl bg-highlight">Notes →</Link>
+        <Link to="/quiz/memory-allocation" className="press paper-card px-4 py-2 font-hand text-xl">Quiz →</Link>
+      </div>
+
       <div className="flex gap-2">
         {TABS.map((t) => (
           <button

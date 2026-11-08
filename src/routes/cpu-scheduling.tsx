@@ -11,13 +11,13 @@ export const Route = createFileRoute("/cpu-scheduling")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: CpuScheduling,
+  component: CpuSchedulingHub,
 });
 
 const TABS = ["Learn", "Simulator", "Quiz"] as const;
 
-function CpuScheduling() {
-  const [tab, setTab] = useState<(typeof TABS)[number]>("Learn");
+function CpuSchedulingHub() {
+  const [tab, setTab] = useState<(typeof TABS)[number]>("Simulator");
   return (
     <div className="space-y-8">
       <div>
@@ -25,6 +25,13 @@ function CpuScheduling() {
         <h1 className="mt-2 font-hand text-6xl font-bold">CPU Scheduling</h1>
         <p className="text-muted-foreground">FCFS, SJF, Priority, Round Robin & more</p>
       </div>
+
+      {/* Hub links */}
+      <div className="flex flex-wrap gap-3">
+        <Link to="/notes/cpu-scheduling" className="press paper-card px-4 py-2 font-hand text-xl bg-highlight">Notes →</Link>
+        <Link to="/quiz/cpu-scheduling" className="press paper-card px-4 py-2 font-hand text-xl">Quiz →</Link>
+      </div>
+
       <div className="flex gap-2">
         {TABS.map((t) => (
           <button

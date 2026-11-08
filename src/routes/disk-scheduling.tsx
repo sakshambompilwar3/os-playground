@@ -11,13 +11,13 @@ export const Route = createFileRoute("/disk-scheduling")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: DiskScheduling,
+  component: DiskSchedulingHub,
 });
 
 const TABS = ["Learn", "Simulator", "Quiz"] as const;
 
-function DiskScheduling() {
-  const [tab, setTab] = useState<(typeof TABS)[number]>("Learn");
+function DiskSchedulingHub() {
+  const [tab, setTab] = useState<(typeof TABS)[number]>("Simulator");
   return (
     <div className="space-y-8">
       <div>
@@ -25,6 +25,13 @@ function DiskScheduling() {
         <h1 className="mt-2 font-hand text-6xl font-bold">Disk Scheduling</h1>
         <p className="text-muted-foreground">FCFS, SSTF, SCAN, C-SCAN & LOOK</p>
       </div>
+
+      {/* Hub links */}
+      <div className="flex flex-wrap gap-3">
+        <Link to="/notes/disk-scheduling" className="press paper-card px-4 py-2 font-hand text-xl bg-highlight">Notes →</Link>
+        <Link to="/quiz/disk-scheduling" className="press paper-card px-4 py-2 font-hand text-xl">Quiz →</Link>
+      </div>
+
       <div className="flex gap-2">
         {TABS.map((t) => (
           <button
