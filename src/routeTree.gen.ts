@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BankersRouteImport } from './routes/bankers'
 import { Route as ChatbotRouteImport } from './routes/chatbot'
 import { Route as CpuSchedulingRouteImport } from './routes/cpu-scheduling'
 import { Route as DeadlockRouteImport } from './routes/deadlock'
@@ -30,6 +31,11 @@ import { Route as QuizBankersRouteImport } from './routes/quiz.bankers'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BankersRoute = BankersRouteImport.update({
+  id: '/bankers',
+  path: '/bankers',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ChatbotRoute = ChatbotRouteImport.update({
@@ -115,6 +121,7 @@ const QuizBankersRoute = QuizBankersRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/bankers': typeof BankersRoute
   '/chatbot': typeof ChatbotRoute
   '/cpu-scheduling': typeof CpuSchedulingRoute
   '/deadlock': typeof DeadlockRoute
@@ -134,6 +141,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/bankers': typeof BankersRoute
   '/chatbot': typeof ChatbotRoute
   '/cpu-scheduling': typeof CpuSchedulingRoute
   '/deadlock': typeof DeadlockRoute
@@ -152,6 +160,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/bankers': typeof BankersRoute
   '/chatbot': typeof ChatbotRoute
   '/cpu-scheduling': typeof CpuSchedulingRoute
   '/deadlock': typeof DeadlockRoute
@@ -173,6 +182,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/bankers'
     | '/chatbot'
     | '/cpu-scheduling'
     | '/deadlock'
@@ -192,6 +202,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/bankers'
     | '/chatbot'
     | '/cpu-scheduling'
     | '/deadlock'
@@ -209,6 +220,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/bankers'
     | '/chatbot'
     | '/cpu-scheduling'
     | '/deadlock'
@@ -229,6 +241,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BankersRoute: typeof BankersRoute
   ChatbotRoute: typeof ChatbotRoute
   CpuSchedulingRoute: typeof CpuSchedulingRoute
   DeadlockRoute: typeof DeadlockRoute
@@ -248,6 +261,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bankers': {
+      id: '/bankers'
+      path: '/bankers'
+      fullPath: '/bankers'
+      preLoaderRoute: typeof BankersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/chatbot': {
@@ -395,6 +415,7 @@ const QuizRouteWithChildren = QuizRoute._addFileChildren(QuizRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BankersRoute: BankersRoute,
   ChatbotRoute: ChatbotRoute,
   CpuSchedulingRoute: CpuSchedulingRoute,
   DeadlockRoute: DeadlockRoute,

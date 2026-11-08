@@ -14,7 +14,7 @@ export function MatrixTable({ title, resources, data, editable, onChange, active
   return (
     <div className="paper-card overflow-hidden">
       <p className="border-b-2 border-foreground bg-secondary px-3 py-1.5 font-hand text-xl font-bold">{title}</p>
-      <div className="max-h-[32rem] overflow-auto"><table className="w-full font-mono text-sm">
+      <div className="max-h-[32rem] overflow-x-auto overflow-y-auto"><table className="w-full min-w-max font-mono text-sm">
         <thead>
           <tr>
             <th className="px-2 py-1 text-left text-muted-foreground">#</th>

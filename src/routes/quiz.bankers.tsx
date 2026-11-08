@@ -35,8 +35,9 @@ function BankersQuiz() {
       <div className="chalkboard mx-auto max-w-xl rounded-md p-10 text-center">
         <p className="font-hand text-5xl font-bold">Grade: {score}/{Q.length}</p>
         <p className="mt-3 font-hand text-2xl">{score === Q.length ? "A+ ⭐ Teacher's pet!" : score >= 4 ? "Nice work — almost there!" : "Revisit the notes and try again ✎"}</p>
-        <div className="mt-6 flex justify-center gap-3">
+        <div className="mt-6 flex flex-wrap justify-center gap-3">
           <button onClick={() => { setI(0); setScore(0); setPick(null); }} className="press paper-card bg-highlight px-5 py-2 font-bold text-foreground">retake</button>
+          <Link to="/bankers" className="press paper-card px-5 py-2 font-bold text-foreground">Banker's Hub</Link>
           <Link to="/quiz" className="press paper-card px-5 py-2 font-bold text-foreground">all quizzes</Link>
         </div>
       </div>
@@ -47,8 +48,12 @@ function BankersQuiz() {
     <div className="mx-auto max-w-2xl space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <Link to="/quiz" className="text-sm text-muted-foreground hover:underline">← all quizzes</Link>
-          <h1 className="font-hand text-6xl font-bold">Banker's Quiz</h1>
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Link to="/bankers" className="hover:underline">← Banker's Hub</Link>
+            <span>·</span>
+            <Link to="/quiz" className="hover:underline">all quizzes</Link>
+          </div>
+          <h1 className="mt-1 font-hand text-6xl font-bold">Banker's Quiz</h1>
         </div>
         <span className="paper-card px-3 py-1 font-mono text-sm">{i + 1}/{Q.length} · score {score}</span>
       </div>

@@ -6,6 +6,7 @@ type Kind = (typeof KINDS)[number];
 
 const LABELS: Record<string, string> = {
   "/": "home.sys",
+  "/bankers": "bankers_hub.toc",
   "/learn": "learn.md",
   "/notes": "notes.index",
   "/notes/bankers": "banker_notes.md",

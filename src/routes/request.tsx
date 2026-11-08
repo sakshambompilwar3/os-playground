@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { MatrixTable, VectorRow } from "@/components/MatrixTable";
 import { SAMPLE, computeNeed, requestResources, type Matrix, type RequestOutcome } from "@/lib/bankers";
@@ -44,7 +44,10 @@ function RequestPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="font-hand text-6xl font-bold">You are the OS</h1>
+        <Link to="/bankers" className="text-sm text-muted-foreground hover:underline">
+          ← back to Banker's Algorithm
+        </Link>
+        <h1 className="mt-2 font-hand text-6xl font-bold">You are the OS</h1>
         <p className="text-muted-foreground">Pick a process, type a request, and let the Banker decide.</p>
       </div>
       <VectorRow label="Available:" resources={R} values={avail} />

@@ -196,9 +196,7 @@ function Home() {
         <h2 className="font-hand text-4xl font-bold">Pick a <span className="marker">topic</span></h2>
         <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {OS_TOPICS.map((topic, i) => {
-            const to = topic.ready
-              ? (topic.subLinks?.[0]?.to ?? topic.simulatorLink)
-              : `/${topic.slug}`;
+            const to = `/${topic.slug}`;
             return (
               <Link
                 key={topic.slug}
