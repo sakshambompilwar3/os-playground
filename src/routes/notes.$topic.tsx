@@ -26,7 +26,15 @@ function TopicNotes() {
   return (
     <div className="space-y-8">
       <div>
-        <Link to="/notes" className="text-sm text-muted-foreground hover:underline">← all notes</Link>
+        <div className="flex items-center gap-3 text-sm text-muted-foreground">
+          {topic && (
+            <>
+              <Link to={`/${topic.slug}` as "/"} className="hover:underline">← back to {topic.title}</Link>
+              <span>·</span>
+            </>
+          )}
+          <Link to="/notes" className="hover:underline">all notes</Link>
+        </div>
         <h1 className="mt-2 font-hand text-6xl font-bold">{title}</h1>
         <p className="text-muted-foreground">Study notes</p>
       </div>

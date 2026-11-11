@@ -16,7 +16,9 @@ const LABELS: Record<string, string> = {
   "/quiz": "quiz.sh",
   "/quiz/bankers": "quiz_bankers.sh",
   "/chatbot": "chatbot.ai",
-  "/cpu-scheduling": "cpu_sched.exe",
+  "/cpu-scheduling": "cpu_sched.toc",
+  "/cpu-scheduling/simulator": "cpu_sched.exe",
+  "/cpu-scheduling/comparison": "cpu_compare.sh",
   "/memory-allocation": "mem_alloc.bin",
   "/disk-scheduling": "disk_sched.exe",
 };
