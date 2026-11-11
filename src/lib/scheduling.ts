@@ -810,3 +810,431 @@ export function runScheduling(
     warnings,
   };
 }
+
+export const FIXED_ALGORITHM_ORDER: SchedulingAlgorithm[] = [
+  "fcfs",
+  "sjf",
+  "srtf",
+  "round-robin",
+  "priority-np",
+  "priority-p",
+];
+
+export interface AlgorithmRanking {
+  rank: number;
+  result: SchedulingResult;
+  totalWT: number;
+  totalTAT: number;
+  totalRT: number;
+  contextSwitches: number;
+  avgWT: number;
+  avgTAT: number;
+  avgRT: number;
+  n: number;
+  tieBreakReason: string;
+}
+
+export interface MetricWinner {
+  winners: SchedulingResult[];
+  value: number;
+  isTie: boolean;
+  formattedValue: string;
+}
+
+export interface SmallestLongestWaitItem {
+  result: SchedulingResult;
+  processName: string;
+  processId: string;
+  waitingTime: number;
+}
+
+export interface SmallestLongestWaitWinner {
+  winners: SmallestLongestWaitItem[];
+  waitingTime: number;
+  isTie: boolean;
+}
+
+export interface BestVerdict {
+  isTie: boolean;
+  tiedAlgorithms: SchedulingAlgorithm[];
+  winner: SchedulingResult;
+  winners: SchedulingResult[];
+  rankings: AlgorithmRanking[];
+  perMetricWinners: {
+    avgWT: MetricWinner;
+    avgTAT: MetricWinner;
+    avgRT: MetricWinner;
+    contextSwitches: MetricWinner;
+    makespan: MetricWinner;
+    smallestLongestWait: SmallestLongestWaitWinner;
+  };
+  whyExplanation: string[];
+  tieBreakReason: string;
+}
+
+function buildWhyExplanation(params: {
+  isTie: boolean;
+  winners: SchedulingResult[];
+  winner: SchedulingResult;
+  rankings: AlgorithmRanking[];
+  perMetricWinners: BestVerdict["perMetricWinners"];
+  contextSwitchTime: number;
+  results: SchedulingResult[];
+}): string[] {
+  const { isTie, winners, winner, rankings, perMetricWinners, contextSwitchTime } = params;
+  const lines: string[] = [];
+
+  const winnerLabel = ALGORITHM_META[winner.algorithm].shortLabel;
+
+  // Sentence 1: What it won by, with real numbers
+  if (!isTie) {
+    const nextBest = rankings[1];
+    const worst = rankings[rankings.length - 1];
+    const nextBestLabel = ALGORITHM_META[nextBest.result.algorithm].shortLabel;
+    const worstLabel = ALGORITHM_META[worst.result.algorithm].shortLabel;
+
+    if (rankings.length > 2 && nextBest.totalWT !== worst.totalWT) {
+      lines.push(
+        `${winnerLabel} has the lowest average waiting time (${winner.avgWaitingTime.toFixed(2)}), compared with ${nextBest.avgWT.toFixed(2)} for ${nextBestLabel}, the next best, and ${worst.avgWT.toFixed(2)} for ${worstLabel}, the worst.`,
+      );
+    } else if (rankings.length > 1) {
+      lines.push(
+        `${winnerLabel} has the lowest average waiting time (${winner.avgWaitingTime.toFixed(2)}), compared with ${nextBest.avgWT.toFixed(2)} for ${nextBestLabel}.`,
+      );
+    } else {
+      lines.push(
+        `${winnerLabel} achieved an average waiting time of ${winner.avgWaitingTime.toFixed(2)}.`,
+      );
+    }
+  } else {
+    const tiedNames = winners.map((w) => ALGORITHM_META[w.algorithm].shortLabel).join(" and ");
+    const nonTied = rankings.filter(
+      (r) => !winners.some((w) => w.algorithm === r.result.algorithm),
+    );
+    if (nonTied.length > 0) {
+      const worst = nonTied[nonTied.length - 1];
+      const worstLabel = ALGORITHM_META[worst.result.algorithm].shortLabel;
+      lines.push(
+        `${tiedNames} tied with the lowest average waiting time (${winner.avgWaitingTime.toFixed(2)}), compared with ${worst.avgWT.toFixed(2)} for ${worstLabel}, the worst.`,
+      );
+    } else {
+      lines.push(
+        `${tiedNames} tied with the lowest average waiting time (${winner.avgWaitingTime.toFixed(2)}).`,
+      );
+    }
+  }
+
+  // Sentence 2: Reason that matches the algorithm's rule
+  if (!isTie) {
+    switch (winner.algorithm) {
+      case "fcfs":
+        lines.push(
+          "FCFS runs in arrival order with no reordering, eliminating scheduling decisions and preemption overhead.",
+        );
+        break;
+      case "sjf":
+        lines.push(
+          "SJF always starts the shortest waiting job, which cuts total waiting time.",
+        );
+        break;
+      case "srtf":
+        lines.push(
+          "SRTF always runs the process with the least remaining time and preempts for shorter arrivals, which minimizes total waiting when switching is free.",
+        );
+        break;
+      case "round-robin":
+        lines.push(
+          "Round Robin shares the CPU in equal slices, which gives fast first responses but makes long jobs wait longer overall.",
+        );
+        break;
+      case "priority-np":
+        lines.push(
+          "Priority (non-preemptive) runs by priority, not by length, so it does not aim to minimize waiting.",
+        );
+        break;
+      case "priority-p":
+        lines.push(
+          "Priority (preemptive) runs by priority, not by length, so it does not aim to minimize waiting.",
+        );
+        break;
+    }
+  } else {
+    lines.push(
+      "These algorithms tied because the arrival times and burst lengths caused them to schedule the ready processes in equivalent order without extra delays.",
+    );
+  }
+
+  // Sentence 3: Trade-off drawn from the data
+  const bestRTWinner = perMetricWinners.avgRT.winners[0];
+  const isRTDifferent =
+    bestRTWinner &&
+    !winners.some((w) => w.algorithm === bestRTWinner.algorithm) &&
+    bestRTWinner.avgResponseTime < winner.avgResponseTime;
+
+  if (isRTDifferent) {
+    const rtLabel = ALGORITHM_META[bestRTWinner.algorithm].shortLabel;
+    lines.push(
+      `${rtLabel} starts every process sooner, with an average response time of ${bestRTWinner.avgResponseTime.toFixed(2)}, but it finishes them later.`,
+    );
+  } else {
+    let winnerMaxProc = winner.metrics[0];
+    for (const m of winner.metrics) {
+      if (m.waitingTime > winnerMaxProc.waitingTime) {
+        winnerMaxProc = m;
+      }
+    }
+    const bestPeak = perMetricWinners.smallestLongestWait;
+    if (bestPeak.waitingTime < winnerMaxProc.waitingTime) {
+      const peakProc = bestPeak.winners[0];
+      const peakLabel = ALGORITHM_META[peakProc.result.algorithm].shortLabel;
+      lines.push(
+        `Under ${winnerLabel}, ${winnerMaxProc.name} waited the longest (${winnerMaxProc.waitingTime} ms), compared with a lower peak wait of ${bestPeak.waitingTime} ms for ${peakProc.processName} under ${peakLabel}.`,
+      );
+    } else if (winner.contextSwitchCount > 0) {
+      const fewestCS = perMetricWinners.contextSwitches.value;
+      lines.push(
+        `${winnerLabel} required ${winner.contextSwitchCount} context switch${winner.contextSwitchCount === 1 ? "" : "es"}${fewestCS < winner.contextSwitchCount ? ` (compared with ${fewestCS} for non-preemptive algorithms)` : ""}.`,
+      );
+    } else {
+      lines.push(
+        `Under ${winnerLabel}, ${winnerMaxProc.name} waited the longest at ${winnerMaxProc.waitingTime} ms, while keeping overall queue delays to a minimum.`,
+      );
+    }
+  }
+
+  // Sentence 4: Context switch cost note if CS > 0
+  if (contextSwitchTime > 0) {
+    lines.push(
+      `Switching costs of ${contextSwitchTime} ms per context switch were included, meaning preemptive algorithms paid extra overhead that can erode their theoretical advantages.`,
+    );
+  }
+
+  // Sentence 5: Closing line
+  lines.push(
+    "Best here means lowest average waiting time for this input. A different example or goal can change the answer.",
+  );
+
+  return lines;
+}
+
+export function pickBest(
+  results: SchedulingResult[],
+  contextSwitchTime: number = 0,
+): BestVerdict {
+  if (results.length === 0) {
+    throw new Error("pickBest requires at least one scheduling result");
+  }
+
+  interface ComputedStats {
+    result: SchedulingResult;
+    totalWT: number;
+    totalTAT: number;
+    totalRT: number;
+    contextSwitches: number;
+    avgWT: number;
+    avgTAT: number;
+    avgRT: number;
+    n: number;
+  }
+
+  const computed: ComputedStats[] = results.map((r) => {
+    const totalWT = r.metrics.reduce((acc, m) => acc + m.waitingTime, 0);
+    const totalTAT = r.metrics.reduce((acc, m) => acc + m.turnaroundTime, 0);
+    const totalRT = r.metrics.reduce((acc, m) => acc + m.responseTime, 0);
+    const n = Math.max(1, r.metrics.length);
+    return {
+      result: r,
+      totalWT,
+      totalTAT,
+      totalRT,
+      contextSwitches: r.contextSwitchCount,
+      avgWT: totalWT / n,
+      avgTAT: totalTAT / n,
+      avgRT: totalRT / n,
+      n,
+    };
+  });
+
+  // Sort by the strict rule:
+  // 1. totalWT (asc)
+  // 2. totalTAT (asc)
+  // 3. totalRT (asc)
+  // 4. contextSwitches (asc)
+  // 5. FIXED_ALGORITHM_ORDER (asc)
+  const sorted = [...computed].sort((a, b) => {
+    if (a.totalWT !== b.totalWT) return a.totalWT - b.totalWT;
+    if (a.totalTAT !== b.totalTAT) return a.totalTAT - b.totalTAT;
+    if (a.totalRT !== b.totalRT) return a.totalRT - b.totalRT;
+    if (a.contextSwitches !== b.contextSwitches) return a.contextSwitches - b.contextSwitches;
+    return (
+      FIXED_ALGORITHM_ORDER.indexOf(a.result.algorithm) -
+      FIXED_ALGORITHM_ORDER.indexOf(b.result.algorithm)
+    );
+  });
+
+  const minWT = sorted[0].totalWT;
+  const wtTies = sorted.filter((c) => c.totalWT === minWT);
+
+  let isTie = false;
+  let topCandidates = wtTies;
+  let tieBreakReason = "Decided by lowest total waiting time.";
+
+  if (wtTies.length > 1) {
+    const minTAT = Math.min(...wtTies.map((c) => c.totalTAT));
+    const tatTies = wtTies.filter((c) => c.totalTAT === minTAT);
+
+    if (tatTies.length === 1) {
+      topCandidates = tatTies;
+      tieBreakReason = "Tied on total waiting time; broken by lowest total turnaround time.";
+    } else {
+      const minRT = Math.min(...tatTies.map((c) => c.totalRT));
+      const rtTies = tatTies.filter((c) => c.totalRT === minRT);
+
+      if (rtTies.length === 1) {
+        topCandidates = rtTies;
+        tieBreakReason =
+          "Tied on total waiting time and turnaround time; broken by lowest total response time.";
+      } else {
+        isTie = true;
+        topCandidates = rtTies;
+        tieBreakReason = `Tie on total waiting time (${minWT}), turnaround time (${minTAT}), and response time (${minRT}).`;
+      }
+    }
+  }
+
+  const winner = topCandidates[0].result;
+  const winners = topCandidates.map((c) => c.result);
+  const tiedAlgorithms = winners.map((w) => w.algorithm);
+
+  const rankings: AlgorithmRanking[] = sorted.map((item, idx) => {
+    const rank = idx + 1;
+    let itemReason = "";
+
+    if (idx === 0) {
+      itemReason = isTie ? "Tied for 1st place" : tieBreakReason;
+    } else {
+      const prev = sorted[idx - 1];
+      if (
+        item.totalWT === prev.totalWT &&
+        item.totalTAT === prev.totalTAT &&
+        item.totalRT === prev.totalRT
+      ) {
+        itemReason = `Tied with ${ALGORITHM_META[prev.result.algorithm].shortLabel} on WT, TAT, and RT`;
+      } else if (item.totalWT !== prev.totalWT) {
+        itemReason = `Higher total WT (+${item.totalWT - prev.totalWT})`;
+      } else if (item.totalTAT !== prev.totalTAT) {
+        itemReason = `Tied on WT; higher total TAT (+${item.totalTAT - prev.totalTAT})`;
+      } else {
+        itemReason = `Tied on WT and TAT; higher total RT (+${item.totalRT - prev.totalRT})`;
+      }
+    }
+
+    return {
+      rank,
+      result: item.result,
+      totalWT: item.totalWT,
+      totalTAT: item.totalTAT,
+      totalRT: item.totalRT,
+      contextSwitches: item.contextSwitches,
+      avgWT: item.avgWT,
+      avgTAT: item.avgTAT,
+      avgRT: item.avgRT,
+      n: item.n,
+      tieBreakReason: itemReason,
+    };
+  });
+
+  const minAvgWT = Math.min(...computed.map((c) => c.totalWT));
+  const wtWinners = computed.filter((c) => c.totalWT === minAvgWT).map((c) => c.result);
+
+  const minAvgTAT = Math.min(...computed.map((c) => c.totalTAT));
+  const tatWinners = computed.filter((c) => c.totalTAT === minAvgTAT).map((c) => c.result);
+
+  const minAvgRT = Math.min(...computed.map((c) => c.totalRT));
+  const rtWinners = computed.filter((c) => c.totalRT === minAvgRT).map((c) => c.result);
+
+  const minCS = Math.min(...computed.map((c) => c.contextSwitches));
+  const csWinners = computed.filter((c) => c.contextSwitches === minCS).map((c) => c.result);
+
+  const minMakespan = Math.min(...results.map((r) => r.totalTime));
+  const makespanWinners = results.filter((r) => r.totalTime === minMakespan);
+
+  const longestPerAlgo = results.map((r) => {
+    let maxProc = r.metrics[0];
+    for (const m of r.metrics) {
+      if (m.waitingTime > maxProc.waitingTime) {
+        maxProc = m;
+      }
+    }
+    return {
+      result: r,
+      processName: maxProc ? maxProc.name : "None",
+      processId: maxProc ? maxProc.id : "P0",
+      waitingTime: maxProc ? maxProc.waitingTime : 0,
+    };
+  });
+
+  const minLongestWait = Math.min(...longestPerAlgo.map((l) => l.waitingTime));
+  const smallestLongestWaitWinners = longestPerAlgo.filter(
+    (l) => l.waitingTime === minLongestWait,
+  );
+
+  const perMetricWinners = {
+    avgWT: {
+      winners: wtWinners,
+      value: minAvgWT / computed[0].n,
+      isTie: wtWinners.length > 1,
+      formattedValue: (minAvgWT / computed[0].n).toFixed(2),
+    },
+    avgTAT: {
+      winners: tatWinners,
+      value: minAvgTAT / computed[0].n,
+      isTie: tatWinners.length > 1,
+      formattedValue: (minAvgTAT / computed[0].n).toFixed(2),
+    },
+    avgRT: {
+      winners: rtWinners,
+      value: minAvgRT / computed[0].n,
+      isTie: rtWinners.length > 1,
+      formattedValue: (minAvgRT / computed[0].n).toFixed(2),
+    },
+    contextSwitches: {
+      winners: csWinners,
+      value: minCS,
+      isTie: csWinners.length > 1,
+      formattedValue: String(minCS),
+    },
+    makespan: {
+      winners: makespanWinners,
+      value: minMakespan,
+      isTie: makespanWinners.length > 1,
+      formattedValue: `${minMakespan} ms`,
+    },
+    smallestLongestWait: {
+      winners: smallestLongestWaitWinners,
+      waitingTime: minLongestWait,
+      isTie: smallestLongestWaitWinners.length > 1,
+    },
+  };
+
+  const whyExplanation = buildWhyExplanation({
+    isTie,
+    winners,
+    winner,
+    rankings,
+    perMetricWinners,
+    contextSwitchTime,
+    results,
+  });
+
+  return {
+    isTie,
+    tiedAlgorithms,
+    winner,
+    winners,
+    rankings,
+    perMetricWinners,
+    whyExplanation,
+    tieBreakReason,
+  };
+}
