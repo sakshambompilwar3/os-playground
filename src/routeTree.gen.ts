@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BankersRouteImport } from './routes/bankers'
 import { Route as ChatbotRouteImport } from './routes/chatbot'
+import { Route as ComparisonRouteImport } from './routes/comparison'
 import { Route as CpuSchedulingRouteImport } from './routes/cpu-scheduling'
 import { Route as DeadlockRouteImport } from './routes/deadlock'
 import { Route as DiskSchedulingRouteImport } from './routes/disk-scheduling'
@@ -21,15 +22,18 @@ import { Route as NotesRouteImport } from './routes/notes'
 import { Route as QuizRouteImport } from './routes/quiz'
 import { Route as RequestRouteImport } from './routes/request'
 import { Route as SimulatorRouteImport } from './routes/simulator'
+import { Route as ComparisonCpuSchedulingRouteImport } from './routes/comparison.cpu-scheduling'
 import { Route as CpuSchedulingIndexRouteImport } from './routes/cpu-scheduling.index'
 import { Route as CpuSchedulingComparisonRouteImport } from './routes/cpu-scheduling.comparison'
 import { Route as CpuSchedulingSimulatorRouteImport } from './routes/cpu-scheduling.simulator'
 import { Route as NotesIndexRouteImport } from './routes/notes.index'
 import { Route as NotesTopicRouteImport } from './routes/notes.$topic'
 import { Route as NotesBankersRouteImport } from './routes/notes.bankers'
+import { Route as NotesCpuSchedulingRouteImport } from './routes/notes.cpu-scheduling'
 import { Route as QuizIndexRouteImport } from './routes/quiz.index'
 import { Route as QuizTopicRouteImport } from './routes/quiz.$topic'
 import { Route as QuizBankersRouteImport } from './routes/quiz.bankers'
+import { Route as QuizCpuSchedulingRouteImport } from './routes/quiz.cpu-scheduling'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -44,6 +48,11 @@ const BankersRoute = BankersRouteImport.update({
 const ChatbotRoute = ChatbotRouteImport.update({
   id: '/chatbot',
   path: '/chatbot',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ComparisonRoute = ComparisonRouteImport.update({
+  id: '/comparison',
+  path: '/comparison',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CpuSchedulingRoute = CpuSchedulingRouteImport.update({
@@ -91,6 +100,11 @@ const SimulatorRoute = SimulatorRouteImport.update({
   path: '/simulator',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ComparisonCpuSchedulingRoute = ComparisonCpuSchedulingRouteImport.update({
+  id: '/cpu-scheduling',
+  path: '/cpu-scheduling',
+  getParentRoute: () => ComparisonRoute,
+} as any)
 const CpuSchedulingIndexRoute = CpuSchedulingIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -121,6 +135,11 @@ const NotesBankersRoute = NotesBankersRouteImport.update({
   path: '/bankers',
   getParentRoute: () => NotesRoute,
 } as any)
+const NotesCpuSchedulingRoute = NotesCpuSchedulingRouteImport.update({
+  id: '/cpu-scheduling',
+  path: '/cpu-scheduling',
+  getParentRoute: () => NotesRoute,
+} as any)
 const QuizIndexRoute = QuizIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -136,11 +155,17 @@ const QuizBankersRoute = QuizBankersRouteImport.update({
   path: '/bankers',
   getParentRoute: () => QuizRoute,
 } as any)
+const QuizCpuSchedulingRoute = QuizCpuSchedulingRouteImport.update({
+  id: '/cpu-scheduling',
+  path: '/cpu-scheduling',
+  getParentRoute: () => QuizRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/bankers': typeof BankersRoute
   '/chatbot': typeof ChatbotRoute
+  '/comparison': typeof ComparisonRouteWithChildren
   '/cpu-scheduling': typeof CpuSchedulingRouteWithChildren
   '/deadlock': typeof DeadlockRoute
   '/disk-scheduling': typeof DiskSchedulingRoute
@@ -150,12 +175,15 @@ export interface FileRoutesByFullPath {
   '/quiz': typeof QuizRouteWithChildren
   '/request': typeof RequestRoute
   '/simulator': typeof SimulatorRoute
+  '/comparison/cpu-scheduling': typeof ComparisonCpuSchedulingRoute
   '/cpu-scheduling/comparison': typeof CpuSchedulingComparisonRoute
   '/cpu-scheduling/simulator': typeof CpuSchedulingSimulatorRoute
   '/notes/$topic': typeof NotesTopicRoute
   '/notes/bankers': typeof NotesBankersRoute
+  '/notes/cpu-scheduling': typeof NotesCpuSchedulingRoute
   '/quiz/$topic': typeof QuizTopicRoute
   '/quiz/bankers': typeof QuizBankersRoute
+  '/quiz/cpu-scheduling': typeof QuizCpuSchedulingRoute
   '/cpu-scheduling/': typeof CpuSchedulingIndexRoute
   '/notes/': typeof NotesIndexRoute
   '/quiz/': typeof QuizIndexRoute
@@ -164,18 +192,22 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/bankers': typeof BankersRoute
   '/chatbot': typeof ChatbotRoute
+  '/comparison': typeof ComparisonRouteWithChildren
   '/deadlock': typeof DeadlockRoute
   '/disk-scheduling': typeof DiskSchedulingRoute
   '/learn': typeof LearnRoute
   '/memory-allocation': typeof MemoryAllocationRoute
   '/request': typeof RequestRoute
   '/simulator': typeof SimulatorRoute
+  '/comparison/cpu-scheduling': typeof ComparisonCpuSchedulingRoute
   '/cpu-scheduling/comparison': typeof CpuSchedulingComparisonRoute
   '/cpu-scheduling/simulator': typeof CpuSchedulingSimulatorRoute
   '/notes/$topic': typeof NotesTopicRoute
   '/notes/bankers': typeof NotesBankersRoute
+  '/notes/cpu-scheduling': typeof NotesCpuSchedulingRoute
   '/quiz/$topic': typeof QuizTopicRoute
   '/quiz/bankers': typeof QuizBankersRoute
+  '/quiz/cpu-scheduling': typeof QuizCpuSchedulingRoute
   '/cpu-scheduling': typeof CpuSchedulingIndexRoute
   '/notes': typeof NotesIndexRoute
   '/quiz': typeof QuizIndexRoute
@@ -185,6 +217,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/bankers': typeof BankersRoute
   '/chatbot': typeof ChatbotRoute
+  '/comparison': typeof ComparisonRouteWithChildren
   '/cpu-scheduling': typeof CpuSchedulingRouteWithChildren
   '/deadlock': typeof DeadlockRoute
   '/disk-scheduling': typeof DiskSchedulingRoute
@@ -194,12 +227,15 @@ export interface FileRoutesById {
   '/quiz': typeof QuizRouteWithChildren
   '/request': typeof RequestRoute
   '/simulator': typeof SimulatorRoute
+  '/comparison/cpu-scheduling': typeof ComparisonCpuSchedulingRoute
   '/cpu-scheduling/comparison': typeof CpuSchedulingComparisonRoute
   '/cpu-scheduling/simulator': typeof CpuSchedulingSimulatorRoute
   '/notes/$topic': typeof NotesTopicRoute
   '/notes/bankers': typeof NotesBankersRoute
+  '/notes/cpu-scheduling': typeof NotesCpuSchedulingRoute
   '/quiz/$topic': typeof QuizTopicRoute
   '/quiz/bankers': typeof QuizBankersRoute
+  '/quiz/cpu-scheduling': typeof QuizCpuSchedulingRoute
   '/cpu-scheduling/': typeof CpuSchedulingIndexRoute
   '/notes/': typeof NotesIndexRoute
   '/quiz/': typeof QuizIndexRoute
@@ -210,6 +246,7 @@ export interface FileRouteTypes {
     | '/'
     | '/bankers'
     | '/chatbot'
+    | '/comparison'
     | '/cpu-scheduling'
     | '/deadlock'
     | '/disk-scheduling'
@@ -219,12 +256,15 @@ export interface FileRouteTypes {
     | '/quiz'
     | '/request'
     | '/simulator'
+    | '/comparison/cpu-scheduling'
     | '/cpu-scheduling/comparison'
     | '/cpu-scheduling/simulator'
     | '/notes/$topic'
     | '/notes/bankers'
+    | '/notes/cpu-scheduling'
     | '/quiz/$topic'
     | '/quiz/bankers'
+    | '/quiz/cpu-scheduling'
     | '/cpu-scheduling/'
     | '/notes/'
     | '/quiz/'
@@ -233,18 +273,22 @@ export interface FileRouteTypes {
     | '/'
     | '/bankers'
     | '/chatbot'
+    | '/comparison'
     | '/deadlock'
     | '/disk-scheduling'
     | '/learn'
     | '/memory-allocation'
     | '/request'
     | '/simulator'
+    | '/comparison/cpu-scheduling'
     | '/cpu-scheduling/comparison'
     | '/cpu-scheduling/simulator'
     | '/notes/$topic'
     | '/notes/bankers'
+    | '/notes/cpu-scheduling'
     | '/quiz/$topic'
     | '/quiz/bankers'
+    | '/quiz/cpu-scheduling'
     | '/cpu-scheduling'
     | '/notes'
     | '/quiz'
@@ -253,6 +297,7 @@ export interface FileRouteTypes {
     | '/'
     | '/bankers'
     | '/chatbot'
+    | '/comparison'
     | '/cpu-scheduling'
     | '/deadlock'
     | '/disk-scheduling'
@@ -262,12 +307,15 @@ export interface FileRouteTypes {
     | '/quiz'
     | '/request'
     | '/simulator'
+    | '/comparison/cpu-scheduling'
     | '/cpu-scheduling/comparison'
     | '/cpu-scheduling/simulator'
     | '/notes/$topic'
     | '/notes/bankers'
+    | '/notes/cpu-scheduling'
     | '/quiz/$topic'
     | '/quiz/bankers'
+    | '/quiz/cpu-scheduling'
     | '/cpu-scheduling/'
     | '/notes/'
     | '/quiz/'
@@ -277,6 +325,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BankersRoute: typeof BankersRoute
   ChatbotRoute: typeof ChatbotRoute
+  ComparisonRoute: typeof ComparisonRouteWithChildren
   CpuSchedulingRoute: typeof CpuSchedulingRouteWithChildren
   DeadlockRoute: typeof DeadlockRoute
   DiskSchedulingRoute: typeof DiskSchedulingRoute
@@ -309,6 +358,13 @@ declare module '@tanstack/react-router' {
       path: '/chatbot'
       fullPath: '/chatbot'
       preLoaderRoute: typeof ChatbotRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/comparison': {
+      id: '/comparison'
+      path: '/comparison'
+      fullPath: '/comparison'
+      preLoaderRoute: typeof ComparisonRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/cpu-scheduling': {
@@ -374,6 +430,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SimulatorRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/comparison/cpu-scheduling': {
+      id: '/comparison/cpu-scheduling'
+      path: '/cpu-scheduling'
+      fullPath: '/comparison/cpu-scheduling'
+      preLoaderRoute: typeof ComparisonCpuSchedulingRouteImport
+      parentRoute: typeof ComparisonRoute
+    }
     '/cpu-scheduling/': {
       id: '/cpu-scheduling/'
       path: '/'
@@ -416,6 +479,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NotesBankersRouteImport
       parentRoute: typeof NotesRoute
     }
+    '/notes/cpu-scheduling': {
+      id: '/notes/cpu-scheduling'
+      path: '/cpu-scheduling'
+      fullPath: '/notes/cpu-scheduling'
+      preLoaderRoute: typeof NotesCpuSchedulingRouteImport
+      parentRoute: typeof NotesRoute
+    }
     '/quiz/': {
       id: '/quiz/'
       path: '/'
@@ -437,8 +507,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof QuizBankersRouteImport
       parentRoute: typeof QuizRoute
     }
+    '/quiz/cpu-scheduling': {
+      id: '/quiz/cpu-scheduling'
+      path: '/cpu-scheduling'
+      fullPath: '/quiz/cpu-scheduling'
+      preLoaderRoute: typeof QuizCpuSchedulingRouteImport
+      parentRoute: typeof QuizRoute
+    }
   }
 }
+
+interface ComparisonRouteChildren {
+  ComparisonCpuSchedulingRoute: typeof ComparisonCpuSchedulingRoute
+}
+
+const ComparisonRouteChildren: ComparisonRouteChildren = {
+  ComparisonCpuSchedulingRoute: ComparisonCpuSchedulingRoute,
+}
+
+const ComparisonRouteWithChildren = ComparisonRoute._addFileChildren(
+  ComparisonRouteChildren,
+)
 
 interface CpuSchedulingRouteChildren {
   CpuSchedulingComparisonRoute: typeof CpuSchedulingComparisonRoute
@@ -459,12 +548,14 @@ const CpuSchedulingRouteWithChildren = CpuSchedulingRoute._addFileChildren(
 interface NotesRouteChildren {
   NotesTopicRoute: typeof NotesTopicRoute
   NotesBankersRoute: typeof NotesBankersRoute
+  NotesCpuSchedulingRoute: typeof NotesCpuSchedulingRoute
   NotesIndexRoute: typeof NotesIndexRoute
 }
 
 const NotesRouteChildren: NotesRouteChildren = {
   NotesTopicRoute: NotesTopicRoute,
   NotesBankersRoute: NotesBankersRoute,
+  NotesCpuSchedulingRoute: NotesCpuSchedulingRoute,
   NotesIndexRoute: NotesIndexRoute,
 }
 
@@ -473,12 +564,14 @@ const NotesRouteWithChildren = NotesRoute._addFileChildren(NotesRouteChildren)
 interface QuizRouteChildren {
   QuizTopicRoute: typeof QuizTopicRoute
   QuizBankersRoute: typeof QuizBankersRoute
+  QuizCpuSchedulingRoute: typeof QuizCpuSchedulingRoute
   QuizIndexRoute: typeof QuizIndexRoute
 }
 
 const QuizRouteChildren: QuizRouteChildren = {
   QuizTopicRoute: QuizTopicRoute,
   QuizBankersRoute: QuizBankersRoute,
+  QuizCpuSchedulingRoute: QuizCpuSchedulingRoute,
   QuizIndexRoute: QuizIndexRoute,
 }
 
@@ -488,6 +581,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BankersRoute: BankersRoute,
   ChatbotRoute: ChatbotRoute,
+  ComparisonRoute: ComparisonRouteWithChildren,
   CpuSchedulingRoute: CpuSchedulingRouteWithChildren,
   DeadlockRoute: DeadlockRoute,
   DiskSchedulingRoute: DiskSchedulingRoute,
