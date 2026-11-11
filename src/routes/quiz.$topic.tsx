@@ -26,7 +26,15 @@ function TopicQuiz() {
   return (
     <div className="space-y-8">
       <div>
-        <Link to="/quiz" className="text-sm text-muted-foreground hover:underline">← all quizzes</Link>
+        <div className="flex items-center gap-3 text-sm text-muted-foreground">
+          {topic && (
+            <>
+              <Link to={`/${topic.slug}` as "/"} className="hover:underline">← back to {topic.title}</Link>
+              <span>·</span>
+            </>
+          )}
+          <Link to="/quiz" className="hover:underline">all quizzes</Link>
+        </div>
         <h1 className="mt-2 font-hand text-6xl font-bold">{title} Quiz</h1>
         <p className="text-muted-foreground">Pop Quiz</p>
       </div>

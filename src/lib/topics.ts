@@ -1,8 +1,15 @@
 /**
  * Central registry of OS topics.
- * Add a new entry here and it will appear on the Home page, hero carousel, and nav.
- * Set `ready: false` for placeholder topics that show "Coming soon" tabs.
+ * Add a new entry here and it will appear on the Home page, hero carousel, and hubs.
+ * Set `ready: false` for placeholder topics that show "Coming soon" pages.
  */
+export interface HubEntry {
+  num: string;
+  title: string;
+  desc: string;
+  to: string;
+}
+
 export interface OSTopic {
   slug: string;
   title: string;
@@ -15,12 +22,15 @@ export interface OSTopic {
   lectureLabel: string;
   /** Chalk tagline shown on the hero chalkboard. */
   tagline: string;
-  /** Link to this topic's simulator page. */
+  /** Link to this topic's simulator/hub page from hero board. */
   simulatorLink: string;
   /** Link to this topic's notes page. */
   notesLink: string;
-  /** Sub-pages for the topic hub. */
-  hubLinks: { to: string; label: string }[];
+  /** Optional unit label and quote shown in the topic's Table of Contents hub. */
+  unitLabel?: string | undefined;
+  quote?: string | undefined;
+  /** Numbered entries for the topic hub's Table of Contents. */
+  hubEntries: HubEntry[];
 }
 
 export const OS_TOPICS: OSTopic[] = [
@@ -36,12 +46,14 @@ export const OS_TOPICS: OSTopic[] = [
     tagline: "Safe state ⇒ no deadlock",
     simulatorLink: "/simulator",
     notesLink: "/notes/bankers",
-    hubLinks: [
-      { to: "/notes/bankers", label: "Notes" },
-      { to: "/simulator", label: "Simulator" },
-      { to: "/request", label: "Requests" },
-      { to: "/deadlock", label: "Deadlock Lab" },
-      { to: "/quiz/bankers", label: "Quiz" },
+    unitLabel: "Unit IV · Deadlocks",
+    quote: "“Safe states guarantee freedom from deadlock.” — Dijkstra",
+    hubEntries: [
+      { num: "1.", title: "Learn", desc: "Theory with drawings", to: "/notes/bankers" },
+      { num: "2.", title: "Simulator", desc: "Step through the safety check", to: "/simulator" },
+      { num: "3.", title: "Requests", desc: "Grant or deny a process", to: "/request" },
+      { num: "4.", title: "Deadlock Lab", desc: "Watch processes get stuck", to: "/deadlock" },
+      { num: "5.", title: "Pop Quiz", desc: "Test before the exam", to: "/quiz/bankers" },
     ],
   },
   {
@@ -56,10 +68,12 @@ export const OS_TOPICS: OSTopic[] = [
     tagline: "Who runs next ⇒ the scheduler decides",
     simulatorLink: "/cpu-scheduling",
     notesLink: "/notes/cpu-scheduling",
-    hubLinks: [
-      { to: "/notes/cpu-scheduling", label: "Notes" },
-      { to: "/cpu-scheduling", label: "Simulator" },
-      { to: "/quiz/cpu-scheduling", label: "Quiz" },
+    unitLabel: "Unit II · Scheduling",
+    hubEntries: [
+      { num: "1.", title: "Learn", desc: "Theory, with drawings", to: "/notes/cpu-scheduling" },
+      { num: "2.", title: "Simulator", desc: "Watch the CPU pick the next process", to: "/cpu-scheduling/simulator" },
+      { num: "3.", title: "Comparison", desc: "Which algorithm wins?", to: "/cpu-scheduling/comparison" },
+      { num: "4.", title: "Pop Quiz", desc: "Test before the exam", to: "/quiz/cpu-scheduling" },
     ],
   },
   {
@@ -74,10 +88,10 @@ export const OS_TOPICS: OSTopic[] = [
     tagline: "Best fit ⇒ fewer holes",
     simulatorLink: "/memory-allocation",
     notesLink: "/notes/memory-allocation",
-    hubLinks: [
-      { to: "/notes/memory-allocation", label: "Notes" },
-      { to: "/memory-allocation", label: "Simulator" },
-      { to: "/quiz/memory-allocation", label: "Quiz" },
+    hubEntries: [
+      { num: "1.", title: "Learn", desc: "Theory, with drawings", to: "/notes/memory-allocation" },
+      { num: "2.", title: "Simulator", desc: "Coming soon", to: "/memory-allocation" },
+      { num: "3.", title: "Pop Quiz", desc: "Test before the exam", to: "/quiz/memory-allocation" },
     ],
   },
   {
@@ -92,10 +106,10 @@ export const OS_TOPICS: OSTopic[] = [
     tagline: "Shorter seek ⇒ faster disk",
     simulatorLink: "/disk-scheduling",
     notesLink: "/notes/disk-scheduling",
-    hubLinks: [
-      { to: "/notes/disk-scheduling", label: "Notes" },
-      { to: "/disk-scheduling", label: "Simulator" },
-      { to: "/quiz/disk-scheduling", label: "Quiz" },
+    hubEntries: [
+      { num: "1.", title: "Learn", desc: "Theory, with drawings", to: "/notes/disk-scheduling" },
+      { num: "2.", title: "Simulator", desc: "Coming soon", to: "/disk-scheduling" },
+      { num: "3.", title: "Pop Quiz", desc: "Test before the exam", to: "/quiz/disk-scheduling" },
     ],
   },
 ];
