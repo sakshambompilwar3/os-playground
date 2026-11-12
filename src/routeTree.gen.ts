@@ -23,9 +23,12 @@ import { Route as QuizRouteImport } from './routes/quiz'
 import { Route as RequestRouteImport } from './routes/request'
 import { Route as SimulatorRouteImport } from './routes/simulator'
 import { Route as ComparisonCpuSchedulingRouteImport } from './routes/comparison.cpu-scheduling'
+import { Route as ComparisonMemoryAllocationRouteImport } from './routes/comparison.memory-allocation'
 import { Route as CpuSchedulingIndexRouteImport } from './routes/cpu-scheduling.index'
 import { Route as CpuSchedulingComparisonRouteImport } from './routes/cpu-scheduling.comparison'
 import { Route as CpuSchedulingSimulatorRouteImport } from './routes/cpu-scheduling.simulator'
+import { Route as MemoryAllocationIndexRouteImport } from './routes/memory-allocation.index'
+import { Route as MemoryAllocationSimulatorRouteImport } from './routes/memory-allocation.simulator'
 import { Route as NotesIndexRouteImport } from './routes/notes.index'
 import { Route as NotesTopicRouteImport } from './routes/notes.$topic'
 import { Route as NotesBankersRouteImport } from './routes/notes.bankers'
@@ -105,6 +108,12 @@ const ComparisonCpuSchedulingRoute = ComparisonCpuSchedulingRouteImport.update({
   path: '/cpu-scheduling',
   getParentRoute: () => ComparisonRoute,
 } as any)
+const ComparisonMemoryAllocationRoute =
+  ComparisonMemoryAllocationRouteImport.update({
+    id: '/memory-allocation',
+    path: '/memory-allocation',
+    getParentRoute: () => ComparisonRoute,
+  } as any)
 const CpuSchedulingIndexRoute = CpuSchedulingIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -120,6 +129,17 @@ const CpuSchedulingSimulatorRoute = CpuSchedulingSimulatorRouteImport.update({
   path: '/simulator',
   getParentRoute: () => CpuSchedulingRoute,
 } as any)
+const MemoryAllocationIndexRoute = MemoryAllocationIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => MemoryAllocationRoute,
+} as any)
+const MemoryAllocationSimulatorRoute =
+  MemoryAllocationSimulatorRouteImport.update({
+    id: '/simulator',
+    path: '/simulator',
+    getParentRoute: () => MemoryAllocationRoute,
+  } as any)
 const NotesIndexRoute = NotesIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -170,14 +190,16 @@ export interface FileRoutesByFullPath {
   '/deadlock': typeof DeadlockRoute
   '/disk-scheduling': typeof DiskSchedulingRoute
   '/learn': typeof LearnRoute
-  '/memory-allocation': typeof MemoryAllocationRoute
+  '/memory-allocation': typeof MemoryAllocationRouteWithChildren
   '/notes': typeof NotesRouteWithChildren
   '/quiz': typeof QuizRouteWithChildren
   '/request': typeof RequestRoute
   '/simulator': typeof SimulatorRoute
   '/comparison/cpu-scheduling': typeof ComparisonCpuSchedulingRoute
+  '/comparison/memory-allocation': typeof ComparisonMemoryAllocationRoute
   '/cpu-scheduling/comparison': typeof CpuSchedulingComparisonRoute
   '/cpu-scheduling/simulator': typeof CpuSchedulingSimulatorRoute
+  '/memory-allocation/simulator': typeof MemoryAllocationSimulatorRoute
   '/notes/$topic': typeof NotesTopicRoute
   '/notes/bankers': typeof NotesBankersRoute
   '/notes/cpu-scheduling': typeof NotesCpuSchedulingRoute
@@ -185,6 +207,7 @@ export interface FileRoutesByFullPath {
   '/quiz/bankers': typeof QuizBankersRoute
   '/quiz/cpu-scheduling': typeof QuizCpuSchedulingRoute
   '/cpu-scheduling/': typeof CpuSchedulingIndexRoute
+  '/memory-allocation/': typeof MemoryAllocationIndexRoute
   '/notes/': typeof NotesIndexRoute
   '/quiz/': typeof QuizIndexRoute
 }
@@ -196,12 +219,13 @@ export interface FileRoutesByTo {
   '/deadlock': typeof DeadlockRoute
   '/disk-scheduling': typeof DiskSchedulingRoute
   '/learn': typeof LearnRoute
-  '/memory-allocation': typeof MemoryAllocationRoute
   '/request': typeof RequestRoute
   '/simulator': typeof SimulatorRoute
   '/comparison/cpu-scheduling': typeof ComparisonCpuSchedulingRoute
+  '/comparison/memory-allocation': typeof ComparisonMemoryAllocationRoute
   '/cpu-scheduling/comparison': typeof CpuSchedulingComparisonRoute
   '/cpu-scheduling/simulator': typeof CpuSchedulingSimulatorRoute
+  '/memory-allocation/simulator': typeof MemoryAllocationSimulatorRoute
   '/notes/$topic': typeof NotesTopicRoute
   '/notes/bankers': typeof NotesBankersRoute
   '/notes/cpu-scheduling': typeof NotesCpuSchedulingRoute
@@ -209,6 +233,7 @@ export interface FileRoutesByTo {
   '/quiz/bankers': typeof QuizBankersRoute
   '/quiz/cpu-scheduling': typeof QuizCpuSchedulingRoute
   '/cpu-scheduling': typeof CpuSchedulingIndexRoute
+  '/memory-allocation': typeof MemoryAllocationIndexRoute
   '/notes': typeof NotesIndexRoute
   '/quiz': typeof QuizIndexRoute
 }
@@ -222,14 +247,16 @@ export interface FileRoutesById {
   '/deadlock': typeof DeadlockRoute
   '/disk-scheduling': typeof DiskSchedulingRoute
   '/learn': typeof LearnRoute
-  '/memory-allocation': typeof MemoryAllocationRoute
+  '/memory-allocation': typeof MemoryAllocationRouteWithChildren
   '/notes': typeof NotesRouteWithChildren
   '/quiz': typeof QuizRouteWithChildren
   '/request': typeof RequestRoute
   '/simulator': typeof SimulatorRoute
   '/comparison/cpu-scheduling': typeof ComparisonCpuSchedulingRoute
+  '/comparison/memory-allocation': typeof ComparisonMemoryAllocationRoute
   '/cpu-scheduling/comparison': typeof CpuSchedulingComparisonRoute
   '/cpu-scheduling/simulator': typeof CpuSchedulingSimulatorRoute
+  '/memory-allocation/simulator': typeof MemoryAllocationSimulatorRoute
   '/notes/$topic': typeof NotesTopicRoute
   '/notes/bankers': typeof NotesBankersRoute
   '/notes/cpu-scheduling': typeof NotesCpuSchedulingRoute
@@ -237,6 +264,7 @@ export interface FileRoutesById {
   '/quiz/bankers': typeof QuizBankersRoute
   '/quiz/cpu-scheduling': typeof QuizCpuSchedulingRoute
   '/cpu-scheduling/': typeof CpuSchedulingIndexRoute
+  '/memory-allocation/': typeof MemoryAllocationIndexRoute
   '/notes/': typeof NotesIndexRoute
   '/quiz/': typeof QuizIndexRoute
 }
@@ -257,8 +285,10 @@ export interface FileRouteTypes {
     | '/request'
     | '/simulator'
     | '/comparison/cpu-scheduling'
+    | '/comparison/memory-allocation'
     | '/cpu-scheduling/comparison'
     | '/cpu-scheduling/simulator'
+    | '/memory-allocation/simulator'
     | '/notes/$topic'
     | '/notes/bankers'
     | '/notes/cpu-scheduling'
@@ -266,6 +296,7 @@ export interface FileRouteTypes {
     | '/quiz/bankers'
     | '/quiz/cpu-scheduling'
     | '/cpu-scheduling/'
+    | '/memory-allocation/'
     | '/notes/'
     | '/quiz/'
   fileRoutesByTo: FileRoutesByTo
@@ -277,12 +308,13 @@ export interface FileRouteTypes {
     | '/deadlock'
     | '/disk-scheduling'
     | '/learn'
-    | '/memory-allocation'
     | '/request'
     | '/simulator'
     | '/comparison/cpu-scheduling'
+    | '/comparison/memory-allocation'
     | '/cpu-scheduling/comparison'
     | '/cpu-scheduling/simulator'
+    | '/memory-allocation/simulator'
     | '/notes/$topic'
     | '/notes/bankers'
     | '/notes/cpu-scheduling'
@@ -290,6 +322,7 @@ export interface FileRouteTypes {
     | '/quiz/bankers'
     | '/quiz/cpu-scheduling'
     | '/cpu-scheduling'
+    | '/memory-allocation'
     | '/notes'
     | '/quiz'
   id:
@@ -308,8 +341,10 @@ export interface FileRouteTypes {
     | '/request'
     | '/simulator'
     | '/comparison/cpu-scheduling'
+    | '/comparison/memory-allocation'
     | '/cpu-scheduling/comparison'
     | '/cpu-scheduling/simulator'
+    | '/memory-allocation/simulator'
     | '/notes/$topic'
     | '/notes/bankers'
     | '/notes/cpu-scheduling'
@@ -317,6 +352,7 @@ export interface FileRouteTypes {
     | '/quiz/bankers'
     | '/quiz/cpu-scheduling'
     | '/cpu-scheduling/'
+    | '/memory-allocation/'
     | '/notes/'
     | '/quiz/'
   fileRoutesById: FileRoutesById
@@ -330,7 +366,7 @@ export interface RootRouteChildren {
   DeadlockRoute: typeof DeadlockRoute
   DiskSchedulingRoute: typeof DiskSchedulingRoute
   LearnRoute: typeof LearnRoute
-  MemoryAllocationRoute: typeof MemoryAllocationRoute
+  MemoryAllocationRoute: typeof MemoryAllocationRouteWithChildren
   NotesRoute: typeof NotesRouteWithChildren
   QuizRoute: typeof QuizRouteWithChildren
   RequestRoute: typeof RequestRoute
@@ -437,6 +473,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ComparisonCpuSchedulingRouteImport
       parentRoute: typeof ComparisonRoute
     }
+    '/comparison/memory-allocation': {
+      id: '/comparison/memory-allocation'
+      path: '/memory-allocation'
+      fullPath: '/comparison/memory-allocation'
+      preLoaderRoute: typeof ComparisonMemoryAllocationRouteImport
+      parentRoute: typeof ComparisonRoute
+    }
     '/cpu-scheduling/': {
       id: '/cpu-scheduling/'
       path: '/'
@@ -457,6 +500,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/cpu-scheduling/simulator'
       preLoaderRoute: typeof CpuSchedulingSimulatorRouteImport
       parentRoute: typeof CpuSchedulingRoute
+    }
+    '/memory-allocation/': {
+      id: '/memory-allocation/'
+      path: '/'
+      fullPath: '/memory-allocation/'
+      preLoaderRoute: typeof MemoryAllocationIndexRouteImport
+      parentRoute: typeof MemoryAllocationRoute
+    }
+    '/memory-allocation/simulator': {
+      id: '/memory-allocation/simulator'
+      path: '/simulator'
+      fullPath: '/memory-allocation/simulator'
+      preLoaderRoute: typeof MemoryAllocationSimulatorRouteImport
+      parentRoute: typeof MemoryAllocationRoute
     }
     '/notes/': {
       id: '/notes/'
@@ -519,10 +576,12 @@ declare module '@tanstack/react-router' {
 
 interface ComparisonRouteChildren {
   ComparisonCpuSchedulingRoute: typeof ComparisonCpuSchedulingRoute
+  ComparisonMemoryAllocationRoute: typeof ComparisonMemoryAllocationRoute
 }
 
 const ComparisonRouteChildren: ComparisonRouteChildren = {
   ComparisonCpuSchedulingRoute: ComparisonCpuSchedulingRoute,
+  ComparisonMemoryAllocationRoute: ComparisonMemoryAllocationRoute,
 }
 
 const ComparisonRouteWithChildren = ComparisonRoute._addFileChildren(
@@ -544,6 +603,19 @@ const CpuSchedulingRouteChildren: CpuSchedulingRouteChildren = {
 const CpuSchedulingRouteWithChildren = CpuSchedulingRoute._addFileChildren(
   CpuSchedulingRouteChildren,
 )
+
+interface MemoryAllocationRouteChildren {
+  MemoryAllocationSimulatorRoute: typeof MemoryAllocationSimulatorRoute
+  MemoryAllocationIndexRoute: typeof MemoryAllocationIndexRoute
+}
+
+const MemoryAllocationRouteChildren: MemoryAllocationRouteChildren = {
+  MemoryAllocationSimulatorRoute: MemoryAllocationSimulatorRoute,
+  MemoryAllocationIndexRoute: MemoryAllocationIndexRoute,
+}
+
+const MemoryAllocationRouteWithChildren =
+  MemoryAllocationRoute._addFileChildren(MemoryAllocationRouteChildren)
 
 interface NotesRouteChildren {
   NotesTopicRoute: typeof NotesTopicRoute
@@ -586,7 +658,7 @@ const rootRouteChildren: RootRouteChildren = {
   DeadlockRoute: DeadlockRoute,
   DiskSchedulingRoute: DiskSchedulingRoute,
   LearnRoute: LearnRoute,
-  MemoryAllocationRoute: MemoryAllocationRoute,
+  MemoryAllocationRoute: MemoryAllocationRouteWithChildren,
   NotesRoute: NotesRouteWithChildren,
   QuizRoute: QuizRouteWithChildren,
   RequestRoute: RequestRoute,

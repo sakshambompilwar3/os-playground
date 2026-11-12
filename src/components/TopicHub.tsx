@@ -63,6 +63,11 @@ export function TopicHub({ title, lectureLabel, unitLabel, quote, entries }: Top
                   <span className="font-hand text-3xl font-bold text-foreground transition-all duration-150 group-hover:text-primary group-hover:underline decoration-wavy decoration-accent decoration-2 underline-offset-4 group-focus-visible:underline">
                     {entry.title}
                   </span>
+                  {entry.comingSoon && (
+                    <span className="rounded-full border border-foreground/30 px-2 py-0.5 font-mono text-[11px] text-muted-foreground">
+                      coming soon
+                    </span>
+                  )}
                 </div>
 
                 {/* Dotted leader line on larger screens */}
