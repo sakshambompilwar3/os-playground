@@ -3,6 +3,7 @@ import {
   compactMemory,
   DEFAULT_EXAMPLE_BLOCKS,
   DEFAULT_EXAMPLE_MEM_PROCESSES,
+  pickBest,
   retryWaitingAfterCompaction,
   simulateMemoryAllocation,
   type BlockInput,
@@ -194,6 +195,144 @@ describe("edge cases & compaction", () => {
     expect(retried.records[3]!.status).toBe("allocated");
     expect(retried.records[3]!.start).toBe(741);
     expect(retried.records[3]!.end).toBe(1167);
+  });
+});
+
+describe("pickBest algorithm verdict", () => {
+  const strategies: FitStrategy[] = ["first-fit", "best-fit", "worst-fit", "next-fit"];
+
+  it("DYNAMIC verdict = Best Fit (allocated 1167 KB, utilization 68.65%, all 4 placed); others 741 KB (43.59%)", () => {
+    const results = strategies.map((s) =>
+      simulateMemoryAllocation(
+        DEFAULT_EXAMPLE_BLOCKS,
+        DEFAULT_EXAMPLE_MEM_PROCESSES,
+        "dynamic",
+        s,
+      ),
+    );
+    const verdict = pickBest(results);
+
+    expect(verdict.isTie).toBe(false);
+    expect(verdict.winner).toBe("best-fit");
+    expect(verdict.winnerName).toBe("Best Fit");
+
+    const bestRank = verdict.ranked.find((r) => r.strategy === "best-fit")!;
+    expect(bestRank.allocatedMemory).toBe(1167);
+    expect(Number(bestRank.utilizationPercent.toFixed(2))).toBe(68.65);
+    expect(bestRank.placedCount).toBe(4);
+    expect(bestRank.waitingCount).toBe(0);
+
+    for (const strat of ["first-fit", "worst-fit", "next-fit"] as FitStrategy[]) {
+      const rank = verdict.ranked.find((r) => r.strategy === strat)!;
+      expect(rank.allocatedMemory).toBe(741);
+      expect(Number(rank.utilizationPercent.toFixed(2))).toBe(43.59);
+      expect(rank.waitingCount).toBe(1);
+    }
+
+    expect(verdict.explanation).toContain("Best Fit placed all 4 processes (utilization 68.65%)");
+    expect(verdict.explanation).toContain("P4 (426 KB)");
+    expect(verdict.explanation).toContain(
+      "Best here means highest memory utilization for this input and this arrival order. A different example can change the answer.",
+    );
+  });
+
+  it("FIXED verdict = Best Fit (allocated 1167 KB, total internal fragmentation 433); others allocate 741 KB with 426 waiting", () => {
+    const results = strategies.map((s) =>
+      simulateMemoryAllocation(
+        DEFAULT_EXAMPLE_BLOCKS,
+        DEFAULT_EXAMPLE_MEM_PROCESSES,
+        "fixed",
+        s,
+      ),
+    );
+    const verdict = pickBest(results);
+
+    expect(verdict.isTie).toBe(false);
+    expect(verdict.winner).toBe("best-fit");
+    const bestRank = verdict.ranked.find((r) => r.strategy === "best-fit")!;
+    expect(bestRank.allocatedMemory).toBe(1167);
+    expect(bestRank.totalInternalFrag).toBe(433);
+    expect(bestRank.placedCount).toBe(4);
+
+    for (const strat of ["first-fit", "worst-fit", "next-fit"] as FitStrategy[]) {
+      const rank = verdict.ranked.find((r) => r.strategy === strat)!;
+      expect(rank.allocatedMemory).toBe(741);
+      expect(rank.waitingCount).toBe(1);
+    }
+  });
+
+  it("Tie test: 1 block of 500 KB and 1 process of 100 KB must produce a TIE among all four strategies, not a single winner", () => {
+    const blocks: BlockInput[] = [{ id: "B1", size: 500 }];
+    const procs: MemProcessInput[] = [{ id: "P1", name: "App1", size: 100 }];
+
+    const dynamicResults = strategies.map((s) =>
+      simulateMemoryAllocation(blocks, procs, "dynamic", s),
+    );
+    const dynamicVerdict = pickBest(dynamicResults);
+    expect(dynamicVerdict.isTie).toBe(true);
+    expect(dynamicVerdict.winner).toBeNull();
+    expect(dynamicVerdict.tiedStrategies).toEqual(["first-fit", "best-fit", "worst-fit", "next-fit"]);
+
+    const fixedResults = strategies.map((s) =>
+      simulateMemoryAllocation(blocks, procs, "fixed", s),
+    );
+    const fixedVerdict = pickBest(fixedResults);
+    expect(fixedVerdict.isTie).toBe(true);
+    expect(fixedVerdict.winner).toBeNull();
+    expect(fixedVerdict.tiedStrategies).toEqual(["first-fit", "best-fit", "worst-fit", "next-fit"]);
+  });
+
+  it("For at least 200 random inputs, pickBest returns a winner whose allocated memory equals the maximum allocated memory among the four strategies", () => {
+    let s = 12345;
+    const rng = () => {
+      s = (s * 1664525 + 1013904223) >>> 0;
+      return s / 0x100000000;
+    };
+
+    const modes: PartitionMode[] = ["fixed", "dynamic"];
+
+    for (let trial = 0; trial < 220; trial += 1) {
+      const numBlocks = 1 + Math.floor(rng() * 12);
+      const numProcs = 1 + Math.floor(rng() * 12);
+      const blocks: BlockInput[] = Array.from({ length: numBlocks }, (_, i) => ({
+        id: `B${i + 1}`,
+        size: 1 + Math.floor(rng() * 700),
+      }));
+      const procs: MemProcessInput[] = Array.from({ length: numProcs }, (_, i) => ({
+        id: `P${i + 1}`,
+        name: `App${i + 1}`,
+        size: 1 + Math.floor(rng() * 700),
+      }));
+      const mode = modes[trial % modes.length]!;
+
+      const results = strategies.map((st) => simulateMemoryAllocation(blocks, procs, mode, st));
+      const verdict = pickBest(results);
+
+      const maxAllocated = Math.max(...results.map((r) => r.summary.allocatedProcessMemory));
+      const totalMemory = blocks.reduce((acc, b) => acc + b.size, 0);
+
+      // Verify each strategy result
+      for (let i = 0; i < strategies.length; i += 1) {
+        const strat = strategies[i]!;
+        const r = results[i]!;
+        const expectedUtil = totalMemory > 0 ? (r.summary.allocatedProcessMemory / totalMemory) * 100 : 0;
+        expect(r.summary.utilizationPercent).toBeCloseTo(expectedUtil, 6);
+
+        const rankItem = verdict.ranked.find((it) => it.strategy === strat)!;
+        expect(rankItem.allocatedMemory).toBe(r.summary.allocatedProcessMemory);
+        expect(rankItem.utilizationPercent).toBeCloseTo(r.summary.utilizationPercent, 6);
+      }
+
+      if (verdict.isTie) {
+        for (const tiedStrat of verdict.tiedStrategies) {
+          const tiedRes = results.find((r) => r.strategy === tiedStrat)!;
+          expect(tiedRes.summary.allocatedProcessMemory).toBe(maxAllocated);
+        }
+      } else {
+        const winningRes = results.find((r) => r.strategy === verdict.winner)!;
+        expect(winningRes.summary.allocatedProcessMemory).toBe(maxAllocated);
+      }
+    }
   });
 });
 

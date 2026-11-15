@@ -672,3 +672,276 @@ export function retryWaitingAfterCompaction(
     summary: computeMemorySummary(currentSegments, updatedRecords),
   };
 }
+
+export interface StrategyRankItem {
+  strategy: FitStrategy;
+  strategyName: string;
+  allocatedMemory: number;
+  utilizationPercent: number;
+  placedCount: number;
+  waitingCount: number;
+  totalInternalFrag: number;
+  largestFreeHole: number;
+  freeHolesCount: number;
+  rank: number;
+  isWinner: boolean;
+  isTied: boolean;
+}
+
+export interface BestMemoryVerdict {
+  isTie: boolean;
+  winner: FitStrategy | null;
+  winnerName: string | null;
+  tiedStrategies: FitStrategy[];
+  ranked: StrategyRankItem[];
+  explanation: string;
+  explanationLines: string[];
+  selectionDetails: {
+    metric: string;
+    tieBreakUsed: string | null;
+    mode: PartitionMode;
+    totalMemory: number;
+  };
+}
+
+const STRATEGY_ORDER: FitStrategy[] = ["first-fit", "best-fit", "worst-fit", "next-fit"];
+
+export function pickBest(results: MemorySimulationResult[]): BestMemoryVerdict {
+  if (results.length === 0) {
+    throw new Error("pickBest requires at least one simulation result");
+  }
+
+  const mode = results[0]!.mode;
+  const totalMemory = results[0]!.summary.totalMemory;
+
+  const rawStats = results.map((r) => {
+    const placedCount = r.records.filter((rec) => rec.status === "allocated").length;
+    const waitingCount = r.records.filter((rec) => rec.status === "waiting").length;
+    return {
+      strategy: r.strategy,
+      strategyName: STRATEGY_META[r.strategy].label,
+      allocatedMemory: r.summary.allocatedProcessMemory,
+      utilizationPercent: r.summary.utilizationPercent,
+      placedCount,
+      waitingCount,
+      totalInternalFrag: r.summary.totalInternalFrag,
+      largestFreeHole: r.summary.largestFreeHole,
+      freeHolesCount: r.summary.freeHoleCount,
+      result: r,
+    };
+  });
+
+  const sorted = [...rawStats].sort((a, b) => {
+    // 1. Highest allocated memory
+    if (b.allocatedMemory !== a.allocatedMemory) {
+      return b.allocatedMemory - a.allocatedMemory;
+    }
+    // 2. More processes placed
+    if (b.placedCount !== a.placedCount) {
+      return b.placedCount - a.placedCount;
+    }
+    // 3. Mode tie-break: lower internal frag in fixed, larger hole in dynamic
+    if (mode === "fixed") {
+      if (a.totalInternalFrag !== b.totalInternalFrag) {
+        return a.totalInternalFrag - b.totalInternalFrag;
+      }
+    } else {
+      if (b.largestFreeHole !== a.largestFreeHole) {
+        return b.largestFreeHole - a.largestFreeHole;
+      }
+    }
+    // 4. Fixed order First, Best, Worst, Next for deterministic ranking display
+    return STRATEGY_ORDER.indexOf(a.strategy) - STRATEGY_ORDER.indexOf(b.strategy);
+  });
+
+  const top = sorted[0]!;
+  const topGroup = sorted.filter(
+    (item) =>
+      item.allocatedMemory === top.allocatedMemory &&
+      item.placedCount === top.placedCount &&
+      (mode === "fixed"
+        ? item.totalInternalFrag === top.totalInternalFrag
+        : item.largestFreeHole === top.largestFreeHole),
+  );
+
+  const isTie = topGroup.length > 1;
+  const winner = isTie ? null : top.strategy;
+  const winnerName = isTie ? null : top.strategyName;
+  const tiedStrategies = topGroup.map((g) => g.strategy);
+
+  // Assign ranks
+  let currentRank = 1;
+  const ranked: StrategyRankItem[] = sorted.map((item, index) => {
+    if (index > 0) {
+      const prev = sorted[index - 1]!;
+      const isEquivalent =
+        item.allocatedMemory === prev.allocatedMemory &&
+        item.placedCount === prev.placedCount &&
+        (mode === "fixed"
+          ? item.totalInternalFrag === prev.totalInternalFrag
+          : item.largestFreeHole === prev.largestFreeHole);
+      if (!isEquivalent) {
+        currentRank = index + 1;
+      }
+    }
+    const isWinner = !isTie && item.strategy === winner;
+    const isTied = isTie && tiedStrategies.includes(item.strategy);
+    return {
+      strategy: item.strategy,
+      strategyName: item.strategyName,
+      allocatedMemory: item.allocatedMemory,
+      utilizationPercent: item.utilizationPercent,
+      placedCount: item.placedCount,
+      waitingCount: item.waitingCount,
+      totalInternalFrag: item.totalInternalFrag,
+      largestFreeHole: item.largestFreeHole,
+      freeHolesCount: item.freeHolesCount,
+      rank: currentRank,
+      isWinner,
+      isTied,
+    };
+  });
+
+  // Determine tie-break explanation metadata
+  let tieBreakUsed: string | null = null;
+  const anyMemoryTie = sorted.some((s, idx) => idx > 0 && s.allocatedMemory === sorted[0]!.allocatedMemory);
+  if (anyMemoryTie) {
+    const anyPlacedTie = sorted.some(
+      (s, idx) => idx > 0 && s.allocatedMemory === sorted[0]!.allocatedMemory && s.placedCount === sorted[0]!.placedCount,
+    );
+    if (anyPlacedTie) {
+      tieBreakUsed = mode === "fixed" ? "Lowest internal fragmentation" : "Largest remaining free hole";
+    } else {
+      tieBreakUsed = "Most processes placed";
+    }
+  }
+
+  // Generate 3-5 sentence explanation
+  const explanationLines: string[] = [];
+
+  if (isTie) {
+    const tiedNames = topGroup.map((g) => g.strategyName).join(", ");
+    explanationLines.push(
+      `All tied strategies (${tiedNames}) placed ${top.placedCount} process${top.placedCount === 1 ? "" : "es"} and achieved identical memory utilization of ${top.utilizationPercent.toFixed(2)}% (${top.allocatedMemory} KB allocated).`,
+    );
+    if (mode === "fixed") {
+      explanationLines.push(
+        `Each tied strategy produced exactly ${top.totalInternalFrag} KB of internal fragmentation.`,
+      );
+    } else {
+      explanationLines.push(
+        `Each tied strategy left the largest remaining free hole at ${top.largestFreeHole} KB.`,
+      );
+    }
+    explanationLines.push(
+      "No single strategy had a distinct advantage for this input and arrival sequence.",
+    );
+    explanationLines.push(
+      "Best here means highest memory utilization for this input and this arrival order. A different example can change the answer.",
+    );
+  } else {
+    // Single winner
+    const runnersUp = sorted.filter((s) => s.strategy !== winner);
+    const runnerAllocatedSet = Array.from(new Set(runnersUp.map((r) => `${r.allocatedMemory} KB (${r.utilizationPercent.toFixed(2)}%)`)));
+    const runnerPlacedSet = Array.from(new Set(runnersUp.map((r) => r.placedCount)));
+
+    // Sentence 1: what it won by
+    if (runnerPlacedSet.length === 1 && runnerAllocatedSet.length === 1) {
+      explanationLines.push(
+        `${top.strategyName} placed ${top.placedCount === rawStats[0]!.result.records.length ? "all " : ""}${top.placedCount} processes (utilization ${top.utilizationPercent.toFixed(2)}%), compared with ${runnerPlacedSet[0]} processes (${runnerAllocatedSet[0]}) for the other strategies.`,
+      );
+    } else {
+      explanationLines.push(
+        `${top.strategyName} achieved the highest utilization at ${top.utilizationPercent.toFixed(2)}% (${top.allocatedMemory} KB allocated, placing ${top.placedCount} processes), outperforming the other strategies.`,
+      );
+    }
+
+    // Sentence 2: which processes other strategies could not place and why
+    const failedProcsInOthers = new Set<string>();
+    const failReasons: string[] = [];
+    for (const other of runnersUp) {
+      const waiting = other.result.records.filter((r) => r.status === "waiting");
+      for (const w of waiting) {
+        if (!failedProcsInOthers.has(w.processId)) {
+          failedProcsInOthers.add(w.processId);
+          failReasons.push(`${w.processId} (${w.processSize} KB) due to insufficient contiguous hole size`);
+        }
+      }
+    }
+    if (failReasons.length > 0) {
+      explanationLines.push(
+        `The other strategies could not allocate ${failReasons.join("; ")}, because holes were split or bypassed earlier in the run.`,
+      );
+    } else if (mode === "fixed" && top.totalInternalFrag < runnersUp[0]!.totalInternalFrag) {
+      explanationLines.push(
+        `While all compared strategies placed the same number of processes, ${top.strategyName} minimized internal fragmentation to ${top.totalInternalFrag} KB.`,
+      );
+    } else if (mode === "dynamic" && top.largestFreeHole > runnersUp[0]!.largestFreeHole) {
+      explanationLines.push(
+        `While all compared strategies placed the same number of processes, ${top.strategyName} preserved the largest contiguous free hole at ${top.largestFreeHole} KB.`,
+      );
+    }
+
+    // Sentence 3: reason matching the winner's rule
+    if (winner === "best-fit") {
+      explanationLines.push(
+        "Best Fit keeps large holes available for large processes by always selecting the tightest fitting partition.",
+      );
+    } else if (winner === "first-fit") {
+      explanationLines.push(
+        "First Fit allocates quickly from the beginning of memory, preserving intact contiguous blocks towards higher addresses.",
+      );
+    } else if (winner === "worst-fit") {
+      explanationLines.push(
+        "Worst Fit leaves large leftover remainders after placement, which can readily accommodate subsequent small requests.",
+      );
+    } else if (winner === "next-fit") {
+      explanationLines.push(
+        "Next Fit cycles through memory from the last allocated position, distributing allocations and avoiding heavy congestion at the front.",
+      );
+    }
+
+    // Sentence 4: trade-off when it applies
+    if (winner === "best-fit") {
+      explanationLines.push(
+        "However, Best Fit must inspect every free hole and tends to leave tiny slivers of memory that are difficult to reuse.",
+      );
+    } else if (winner === "first-fit") {
+      explanationLines.push(
+        "However, First Fit concentrates allocations at lower addresses and tends to accumulate small unusable holes near the start over time.",
+      );
+    } else if (winner === "worst-fit") {
+      explanationLines.push(
+        "However, Worst Fit rapidly breaks down the largest available blocks, which often causes future large processes to fail.",
+      );
+    } else if (winner === "next-fit") {
+      explanationLines.push(
+        "However, Next Fit often splits large memory blocks near the end of memory before checking smaller free holes at the front.",
+      );
+    }
+
+    // Sentence 5: standard closing line
+    explanationLines.push(
+      "Best here means highest memory utilization for this input and this arrival order. A different example can change the answer.",
+    );
+  }
+
+  const explanation = explanationLines.join(" ");
+
+  return {
+    isTie,
+    winner,
+    winnerName,
+    tiedStrategies,
+    ranked,
+    explanation,
+    explanationLines,
+    selectionDetails: {
+      metric: "Allocated memory (KB) & Memory utilization (%)",
+      tieBreakUsed,
+      mode,
+      totalMemory,
+    },
+  };
+}
+
