@@ -215,7 +215,8 @@ describe("Topic Availability in /notes and /quiz", () => {
     expect(memTopic.hubEntries.every((e) => !e.comingSoon)).toBe(true);
 
     const diskTopic = OS_TOPICS.find((t) => t.slug === "disk-scheduling")!;
-    expect(diskTopic.ready).toBe(false);
+    expect(diskTopic.notesReady).toBe(true);
+    expect(diskTopic.quizReady).toBe(true);
 
     // Notes Index
     const NotesIndexComponent = NotesIndexRoute.options.component!;
