@@ -15,6 +15,8 @@ export interface DiskResultsPanelProps {
   colors: Record<string, PaletteColor>;
   displayNames: Record<string, string>;
   isFinished: boolean;
+  hoveredRequestId?: string | null;
+  onHoverRequest?: (id: string | null) => void;
 }
 
 export function DiskResultsPanel({
@@ -23,6 +25,8 @@ export function DiskResultsPanel({
   colors,
   displayNames,
   isFinished,
+  hoveredRequestId,
+  onHoverRequest,
 }: DiskResultsPanelProps) {
   const currentRunningTotal = segmentsShown
     .filter((s) => s.countedInTotal)
@@ -137,11 +141,23 @@ export function DiskResultsPanel({
                     .filter((s) => s.countedInTotal)
                     .reduce((sum, s) => sum + s.distance, 0);
 
+                  const isHovered = seg.requestId && seg.requestId === hoveredRequestId;
+
                   return (
                     <tr
                       key={`row-${idx}`}
-                      className={`border-t border-foreground/10 ${
-                        isJump ? "bg-muted/40 font-semibold" : isEnd ? "bg-card font-semibold" : ""
+                      onMouseEnter={() => seg.requestId && onHoverRequest?.(seg.requestId)}
+                      onMouseLeave={() => seg.requestId && onHoverRequest?.(null)}
+                      onFocus={() => seg.requestId && onHoverRequest?.(seg.requestId)}
+                      onBlur={() => seg.requestId && onHoverRequest?.(null)}
+                      className={`border-t border-foreground/10 transition-colors ${
+                        isHovered
+                          ? "bg-primary/15 font-semibold"
+                          : isJump
+                            ? "bg-muted/40 font-semibold"
+                            : isEnd
+                              ? "bg-card font-semibold"
+                              : ""
                       }`}
                     >
                       <td className="px-4 py-2.5 text-center text-muted-foreground">{idx + 1}</td>

@@ -108,6 +108,9 @@ function DiskSchedulingSimulatorPage() {
     }));
   });
 
+  // Hover state for highlighting between table and chart
+  const [hoveredRequestId, setHoveredRequestId] = useState<string | null>(null);
+
   // Playback state
   const [started, setStarted] = useState(false);
   const [playing, setPlaying] = useState(false);
@@ -625,11 +628,21 @@ function DiskSchedulingSimulatorPage() {
                 const invalid = !isValidCylinder(row.cylinderStr, lastCylinder);
                 const isServed = servedIds.has(row.id);
 
+                const isHovered = hoveredRequestId === row.id;
+
                 return (
                   <tr
                     key={row.id}
+                    onMouseEnter={() => setHoveredRequestId(row.id)}
+                    onMouseLeave={() => setHoveredRequestId(null)}
+                    onFocus={() => setHoveredRequestId(row.id)}
+                    onBlur={() => setHoveredRequestId(null)}
                     className={`border-t border-foreground/10 transition-colors ${
-                      isServed ? "bg-success/15" : ""
+                      isHovered
+                        ? "bg-primary/15"
+                        : isServed
+                          ? "bg-success/15"
+                          : ""
                     }`}
                   >
                     <td className="px-3 py-2 text-center text-muted-foreground">#{idx + 1}</td>
@@ -779,6 +792,8 @@ function DiskSchedulingSimulatorPage() {
           activeStep={activeStep}
           colors={colors}
           displayNames={displayNames}
+          hoveredRequestId={hoveredRequestId}
+          onHoverRequest={setHoveredRequestId}
         />
 
         {/* Narration Box */}
@@ -794,6 +809,8 @@ function DiskSchedulingSimulatorPage() {
         colors={colors}
         displayNames={displayNames}
         isFinished={isFinished}
+        hoveredRequestId={hoveredRequestId}
+        onHoverRequest={setHoveredRequestId}
       />
 
       {/* Calculations Dialog */}
