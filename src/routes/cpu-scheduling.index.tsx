@@ -5,9 +5,18 @@ import { OS_TOPICS } from "@/lib/topics";
 export const Route = createFileRoute("/cpu-scheduling/")({
   head: () => ({
     meta: [
-      { title: "CPU Scheduling — OS Class" },
-      { name: "description", content: "Explore CPU scheduling algorithms: FCFS, SJF, Round Robin and more." },
-      { property: "og:title", content: "CPU Scheduling — OS Class" },
+      { title: "CPU Scheduling | OS Playground" },
+      {
+        name: "description",
+        content:
+          "Explore CPU scheduling algorithms: FCFS, SJF, SRTF, Round Robin, and Priority scheduling.",
+      },
+      { property: "og:title", content: "CPU Scheduling | OS Playground" },
+      {
+        property: "og:description",
+        content:
+          "Explore CPU scheduling algorithms: FCFS, SJF, SRTF, Round Robin, and Priority scheduling.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

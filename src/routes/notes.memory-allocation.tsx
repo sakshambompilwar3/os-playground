@@ -5,16 +5,17 @@ import { MEMORY_ALLOCATION_NOTES as cards } from "@/lib/memory-allocation-notes"
 export const Route = createFileRoute("/notes/memory-allocation")({
   head: () => ({
     meta: [
-      { title: "Learn Memory Allocation — Notes & Visual Diagrams" },
+      { title: "Memory Allocation Notes | OS Playground" },
       {
         name: "description",
         content:
           "Plain-language notes on Fixed & Dynamic partitioning, First Fit, Best Fit, Worst Fit, Next Fit, and Fragmentation.",
       },
-      { property: "og:title", content: "Learn Memory Allocation — OS Notes" },
+      { property: "og:title", content: "Memory Allocation Notes | OS Playground" },
       {
         property: "og:description",
-        content: "Notebook-style cards explaining memory allocation and fragmentation.",
+        content:
+          "Plain-language notes on Fixed & Dynamic partitioning, First Fit, Best Fit, Worst Fit, Next Fit, and Fragmentation.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

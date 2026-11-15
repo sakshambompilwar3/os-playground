@@ -6,7 +6,7 @@ export function SiteNav() {
     <header className="sticky top-0 z-50 border-b-2 border-foreground bg-paper/90 backdrop-blur">
       <nav className="mx-auto flex max-w-6xl flex-wrap items-center gap-2 px-4 py-3">
         <Link to="/" className="mr-auto flex items-center gap-2">
-          <span className="grid h-9 w-9 place-items-center rounded-md border-2 border-foreground bg-highlight font-mono text-sm font-bold">B₳</span>
+          <span className="grid h-9 w-9 place-items-center rounded-md border-2 border-foreground bg-highlight font-mono text-sm font-bold">OS</span>
           <span className="font-hand text-2xl font-bold">OS Playground</span>
         </Link>
 

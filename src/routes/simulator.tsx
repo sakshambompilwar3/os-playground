@@ -11,10 +11,18 @@ import { Calculator, Play, Pause, RotateCcw, StepForward, Shuffle } from "lucide
 export const Route = createFileRoute("/simulator")({
   head: () => ({
     meta: [
-      { title: "Safety Simulator — Banker's Algorithm" },
-      { name: "description", content: "Edit Max, Allocation and Available, then step through the safety algorithm." },
-      { property: "og:title", content: "Banker's Safety Simulator" },
-      { property: "og:description", content: "Step-by-step animated safe sequence finder." },
+      { title: "Banker's Safety Simulator | OS Playground" },
+      {
+        name: "description",
+        content:
+          "Edit Max, Allocation, and Available matrices, then step through Dijkstra's safety algorithm with complete calculation traces.",
+      },
+      { property: "og:title", content: "Banker's Safety Simulator | OS Playground" },
+      {
+        property: "og:description",
+        content:
+          "Edit Max, Allocation, and Available matrices, then step through Dijkstra's safety algorithm with complete calculation traces.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

@@ -9,12 +9,17 @@ import {
   Scripts,
   type ErrorComponentProps,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
-import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteNav } from "@/components/SiteNav";
 import { PageTransition } from "@/components/PageTransition";
+import {
+  getAbsoluteUrl,
+  SITE_DEFAULT_TITLE,
+  SITE_DEFAULT_DESCRIPTION,
+  SITE_NAME,
+} from "../lib/site";
 
 function NotFoundComponent() {
   return (
@@ -31,9 +36,6 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: ErrorComponentProps) {
   console.error(error);
   const router = useRouter();
-  useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
-  }, [error]);
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
       <div className="paper-card max-w-md p-8 text-center">
@@ -53,14 +55,25 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Banker's Algorithm Playground" },
-      { name: "description", content: "Learn deadlock avoidance with an interactive Banker's Algorithm playground." },
+      { name: "theme-color", content: "#224c37" },
+      { title: SITE_DEFAULT_TITLE },
+      { name: "description", content: SITE_DEFAULT_DESCRIPTION },
+      { property: "og:site_name", content: SITE_NAME },
       { property: "og:type", content: "website" },
+      { property: "og:title", content: SITE_DEFAULT_TITLE },
+      { property: "og:description", content: SITE_DEFAULT_DESCRIPTION },
+      { property: "og:image", content: getAbsoluteUrl("/og-image.png") },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: SITE_DEFAULT_TITLE },
+      { name: "twitter:description", content: SITE_DEFAULT_DESCRIPTION },
+      { name: "twitter:image", content: getAbsoluteUrl("/og-image.png") },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
+      { rel: "icon", href: "/favicon.ico", sizes: "32x32" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png", sizes: "180x180" },
+      { rel: "manifest", href: "/site.webmanifest" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;700&display=swap" },
@@ -91,7 +104,11 @@ function RootComponent() {
       <main key={path} className="page-enter mx-auto max-w-6xl px-4 py-10">
         <Outlet />
       </main>
-      <footer className="pb-8 text-center font-hand text-xl text-muted-foreground">made in OS class ✏️ — avoid deadlocks, share resources</footer>
+      <footer className="pb-8 text-center font-hand text-xl text-muted-foreground">
+        OS Playground, built for Operating Systems students ✏️ ·{" "}
+        <Link to="/notes" className="underline hover:text-foreground">Notes</Link> ·{" "}
+        <Link to="/quiz" className="underline hover:text-foreground">Quiz</Link>
+      </footer>
     </QueryClientProvider>
   );
 }

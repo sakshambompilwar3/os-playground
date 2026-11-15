@@ -5,13 +5,18 @@ import { OS_TOPICS } from "@/lib/topics";
 export const Route = createFileRoute("/disk-scheduling/")({
   head: () => ({
     meta: [
-      { title: "Disk Scheduling — OS Class" },
+      { title: "Disk Scheduling | OS Playground" },
       {
         name: "description",
         content:
           "Explore disk scheduling algorithms: FCFS, SSTF, SCAN, C-SCAN, LOOK and C-LOOK.",
       },
-      { property: "og:title", content: "Disk Scheduling — OS Class" },
+      { property: "og:title", content: "Disk Scheduling | OS Playground" },
+      {
+        property: "og:description",
+        content:
+          "Explore disk scheduling algorithms: FCFS, SSTF, SCAN, C-SCAN, LOOK and C-LOOK.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

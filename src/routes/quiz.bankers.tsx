@@ -4,10 +4,18 @@ import { useState } from "react";
 export const Route = createFileRoute("/quiz/bankers")({
   head: () => ({
     meta: [
-      { title: "Pop Quiz — Banker's Algorithm" },
-      { name: "description", content: "Quick multiple-choice quiz on deadlock avoidance and the Banker's Algorithm." },
-      { property: "og:title", content: "Banker's Algorithm Pop Quiz" },
-      { property: "og:description", content: "Test yourself before the OS exam." },
+      { title: "Quiz: Banker's Algorithm | OS Playground" },
+      {
+        name: "description",
+        content:
+          "Multiple-choice quiz on deadlock avoidance, safe states, Need matrix, and the Banker's Algorithm.",
+      },
+      { property: "og:title", content: "Quiz: Banker's Algorithm | OS Playground" },
+      {
+        property: "og:description",
+        content:
+          "Multiple-choice quiz on deadlock avoidance, safe states, Need matrix, and the Banker's Algorithm.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

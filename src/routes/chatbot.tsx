@@ -3,9 +3,18 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 export const Route = createFileRoute("/chatbot")({
   head: () => ({
     meta: [
-      { title: "AI Chatbot — OS Playground" },
-      { name: "description", content: "Ask the AI chatbot your OS questions." },
-      { property: "og:title", content: "AI Chatbot — OS Playground" },
+      { title: "AI Chatbot | OS Playground" },
+      {
+        name: "description",
+        content:
+          "Ask the AI chatbot your Operating Systems questions on deadlock avoidance, CPU scheduling, memory, and disk algorithms.",
+      },
+      { property: "og:title", content: "AI Chatbot | OS Playground" },
+      {
+        property: "og:description",
+        content:
+          "Ask the AI chatbot your Operating Systems questions on deadlock avoidance, CPU scheduling, memory, and disk algorithms.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

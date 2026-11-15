@@ -26,16 +26,17 @@ import {
 export const Route = createFileRoute("/cpu-scheduling/simulator")({
   head: () => ({
     meta: [
-      { title: "CPU Scheduling Simulator — OS Class" },
+      { title: "CPU Scheduling Simulator | OS Playground" },
       {
         name: "description",
         content:
-          "Edit arrival times, bursts, and priorities, then watch FCFS, SJF, SRTF, Round Robin, or Priority build the Gantt chart.",
+          "Simulate FCFS, SJF, SRTF, Round Robin, and Priority scheduling with interactive Gantt charts, ready queue visualization, and calculation traces.",
       },
-      { property: "og:title", content: "CPU Scheduling Simulator — OS Class" },
+      { property: "og:title", content: "CPU Scheduling Simulator | OS Playground" },
       {
         property: "og:description",
-        content: "Interactive step-by-step CPU scheduling simulator with animated Gantt chart.",
+        content:
+          "Simulate FCFS, SJF, SRTF, Round Robin, and Priority scheduling with interactive Gantt charts, ready queue visualization, and calculation traces.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

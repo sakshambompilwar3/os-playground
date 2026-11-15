@@ -5,10 +5,18 @@ import { OS_TOPICS } from "@/lib/topics";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "OS Playground — Banker's Algorithm & more" },
-      { name: "description", content: "A classroom-style playground to learn OS algorithms: Banker's, CPU Scheduling, Memory Allocation, Disk Scheduling." },
-      { property: "og:title", content: "OS Playground — Banker's Algorithm & more" },
-      { property: "og:description", content: "Learn OS concepts interactively: simulate, request resources, and quiz yourself." },
+      { title: "OS Playground | Learn Operating Systems by Playing" },
+      {
+        name: "description",
+        content:
+          "Simulators, notes and quizzes for Operating Systems: Banker's Algorithm, CPU Scheduling, Memory Allocation, and Disk Scheduling.",
+      },
+      { property: "og:title", content: "OS Playground | Learn Operating Systems by Playing" },
+      {
+        property: "og:description",
+        content:
+          "Simulators, notes and quizzes for Operating Systems: Banker's Algorithm, CPU Scheduling, Memory Allocation, and Disk Scheduling.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -194,6 +202,7 @@ function Home() {
       {/* topic cards (preserved exactly) */}
       <section>
         <h2 className="font-hand text-4xl font-bold">Pick a <span className="marker">topic</span></h2>
+        <p className="mt-1 font-hand text-xl text-muted-foreground">Simulators, notes and quizzes for Operating Systems. Pick a topic to start.</p>
         <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {OS_TOPICS.map((topic, i) => {
             const to = `/${topic.slug}`;
@@ -219,10 +228,10 @@ function Home() {
 
       {/* notebook */}
       <section className="notebook rounded-md py-8 pl-20 pr-8 leading-8">
-        <p className="font-hand text-3xl font-bold text-primary">Class notes — why "banker"?</p>
-        <p className="font-hand text-2xl">A bank never lends out cash in a way that leaves it unable to satisfy <span className="marker">all</span> its customers.</p>
-        <p className="font-hand text-2xl">The OS does the same: it only grants a resource request if the system stays in a <b>safe state</b>.</p>
-        <p className="font-hand text-2xl text-accent-foreground">→ invented by Edsger Dijkstra, 1965 ✎</p>
+        <p className="font-hand text-3xl font-bold text-primary">Class notes — what is an Operating System?</p>
+        <p className="font-hand text-2xl">An operating system manages shared hardware resources: <span className="marker">CPU, memory, disk, and devices</span>.</p>
+        <p className="font-hand text-2xl">From scheduling processes to avoiding deadlocks and optimizing disk seeks, smart algorithms keep modern computers responsive and fair.</p>
+        <p className="font-hand text-2xl text-accent-foreground">→ explore the simulators, compare tradeoffs, and master the concepts ✎</p>
       </section>
     </div>
   );

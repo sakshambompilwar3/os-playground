@@ -8,10 +8,18 @@ import { DEADLOCK_EXAMPLE as example } from "@/lib/deadlock-example";
 export const Route = createFileRoute("/deadlock")({
   head: () => ({
     meta: [
-      { title: "Deadlock Lab — Banker's Algorithm" },
-      { name: "description", content: "See a circular wait form between processes, and how the Banker prevents it." },
-      { property: "og:title", content: "Deadlock Lab" },
-      { property: "og:description", content: "Animated resource allocation graph showing circular wait." },
+      { title: "Deadlock Lab | OS Playground" },
+      {
+        name: "description",
+        content:
+          "Compare unconstrained resource allocation against Dijkstra's Banker's avoidance to watch circular wait form in real time.",
+      },
+      { property: "og:title", content: "Deadlock Lab | OS Playground" },
+      {
+        property: "og:description",
+        content:
+          "Compare unconstrained resource allocation against Dijkstra's Banker's avoidance to watch circular wait form in real time.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

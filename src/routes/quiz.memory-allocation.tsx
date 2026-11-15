@@ -4,16 +4,17 @@ import { useState } from "react";
 export const Route = createFileRoute("/quiz/memory-allocation")({
   head: () => ({
     meta: [
-      { title: "Pop Quiz — Memory Allocation" },
+      { title: "Quiz: Memory Allocation | OS Playground" },
       {
         name: "description",
         content:
-          "Quick 6-question multiple-choice quiz on First Fit, Best Fit, Worst Fit, fragmentation, and compaction.",
+          "Multiple-choice quiz on First Fit, Best Fit, Worst Fit, Next Fit, fragmentation, and compaction.",
       },
-      { property: "og:title", content: "Memory Allocation Pop Quiz" },
+      { property: "og:title", content: "Quiz: Memory Allocation | OS Playground" },
       {
         property: "og:description",
-        content: "Test yourself before the OS exam on memory allocation strategies.",
+        content:
+          "Multiple-choice quiz on First Fit, Best Fit, Worst Fit, Next Fit, fragmentation, and compaction.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

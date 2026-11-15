@@ -5,16 +5,17 @@ import { CPU_SCHEDULING_NOTES as cards } from "@/lib/cpu-scheduling-notes";
 export const Route = createFileRoute("/notes/cpu-scheduling")({
   head: () => ({
     meta: [
-      { title: "Learn CPU Scheduling — Notes & Visual Diagrams" },
+      { title: "CPU Scheduling Notes | OS Playground" },
       {
         name: "description",
         content:
-          "Plain-language student notes on FCFS, SJF, SRTF, Round Robin, Priority, Gantt charts, and metrics.",
+          "Plain-language student notes and visual diagrams on FCFS, SJF, SRTF, Round Robin, Priority, Gantt charts, and metrics.",
       },
-      { property: "og:title", content: "Learn CPU Scheduling — OS Notes" },
+      { property: "og:title", content: "CPU Scheduling Notes | OS Playground" },
       {
         property: "og:description",
-        content: "Notebook-style cards explaining CPU scheduling algorithms.",
+        content:
+          "Plain-language student notes and visual diagrams on FCFS, SJF, SRTF, Round Robin, Priority, Gantt charts, and metrics.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

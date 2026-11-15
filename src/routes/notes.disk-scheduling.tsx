@@ -5,16 +5,17 @@ import { DISK_SCHEDULING_NOTES as cards } from "@/lib/disk-scheduling-notes";
 export const Route = createFileRoute("/notes/disk-scheduling")({
   head: () => ({
     meta: [
-      { title: "Learn Disk Scheduling — Notes & Visual Diagrams" },
+      { title: "Disk Scheduling Notes | OS Playground" },
       {
         name: "description",
         content:
-          "Study notes on FCFS, SSTF, SCAN, C-SCAN, LOOK, and C-LOOK with hand-drawn style SVG diagrams and benchmark comparisons.",
+          "Study notes on FCFS, SSTF, SCAN, C-SCAN, LOOK, and C-LOOK with hand-drawn SVG diagrams and seek time explanations.",
       },
-      { property: "og:title", content: "Learn Disk Scheduling — OS Notes" },
+      { property: "og:title", content: "Disk Scheduling Notes | OS Playground" },
       {
         property: "og:description",
-        content: "Notebook-style cards explaining disk geometry, seek time, and head scheduling algorithms.",
+        content:
+          "Study notes on FCFS, SSTF, SCAN, C-SCAN, LOOK, and C-LOOK with hand-drawn SVG diagrams and seek time explanations.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

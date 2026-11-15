@@ -5,10 +5,18 @@ import { learningNotes as cards } from "@/lib/learning-notes";
 export const Route = createFileRoute("/notes/bankers")({
   head: () => ({
     meta: [
-      { title: "Learn the Banker's Algorithm — Notes" },
-      { name: "description", content: "Plain-language notes on safe states, Need, Available and the safety algorithm." },
-      { property: "og:title", content: "Learn the Banker's Algorithm" },
-      { property: "og:description", content: "Flip through notebook-style cards explaining deadlock avoidance." },
+      { title: "Banker's Algorithm Notes | OS Playground" },
+      {
+        name: "description",
+        content:
+          "Plain-language visual notes on safe states, Need, Available vectors, and Dijkstra's safety algorithm.",
+      },
+      { property: "og:title", content: "Banker's Algorithm Notes | OS Playground" },
+      {
+        property: "og:description",
+        content:
+          "Plain-language visual notes on safe states, Need, Available vectors, and Dijkstra's safety algorithm.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

@@ -4,9 +4,18 @@ import { OS_TOPICS } from "@/lib/topics";
 export const Route = createFileRoute("/quiz/")({
   head: () => ({
     meta: [
-      { title: "Quiz — OS Playground" },
-      { name: "description", content: "Test yourself on all OS topics." },
-      { property: "og:title", content: "Quiz — OS Playground" },
+      { title: "Pop Quiz | OS Playground" },
+      {
+        name: "description",
+        content:
+          "Test your knowledge across Operating Systems topics with interactive multiple-choice quizzes and immediate explanations.",
+      },
+      { property: "og:title", content: "Pop Quiz | OS Playground" },
+      {
+        property: "og:description",
+        content:
+          "Test your knowledge across Operating Systems topics with interactive multiple-choice quizzes and immediate explanations.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

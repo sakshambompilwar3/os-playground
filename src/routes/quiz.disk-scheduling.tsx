@@ -4,16 +4,17 @@ import { useState } from "react";
 export const Route = createFileRoute("/quiz/disk-scheduling")({
   head: () => ({
     meta: [
-      { title: "Pop Quiz — Disk Scheduling" },
+      { title: "Quiz: Disk Scheduling | OS Playground" },
       {
         name: "description",
         content:
-          "Quick 6-question multiple-choice quiz on FCFS, SSTF, SCAN, C-SCAN, and LOOK disk head movement algorithms.",
+          "Multiple-choice quiz on FCFS, SSTF, SCAN, C-SCAN, LOOK, disk geometry, and seek time optimization.",
       },
-      { property: "og:title", content: "Disk Scheduling Pop Quiz" },
+      { property: "og:title", content: "Quiz: Disk Scheduling | OS Playground" },
       {
         property: "og:description",
-        content: "Test yourself before the OS exam on disk head movement and scheduling strategies.",
+        content:
+          "Multiple-choice quiz on FCFS, SSTF, SCAN, C-SCAN, LOOK, disk geometry, and seek time optimization.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

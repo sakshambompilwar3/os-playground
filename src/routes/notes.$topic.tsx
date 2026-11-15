@@ -5,11 +5,13 @@ export const Route = createFileRoute("/notes/$topic")({
   head: ({ params }) => {
     const topic = OS_TOPICS.find((t) => t.slug === params.topic);
     const title = topic ? `${topic.title} Notes` : "Notes";
+    const desc = `Visual study notes and chalkboard diagrams for ${topic?.title ?? "Operating Systems"}.`;
     return {
       meta: [
-        { title: `${title} — OS Playground` },
-        { name: "description", content: `Study notes for ${title}.` },
-        { property: "og:title", content: title },
+        { title: `${title} | OS Playground` },
+        { name: "description", content: desc },
+        { property: "og:title", content: `${title} | OS Playground` },
+        { property: "og:description", content: desc },
         { property: "og:type", content: "website" },
         { name: "twitter:card", content: "summary_large_image" },
       ],

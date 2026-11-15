@@ -36,13 +36,18 @@ import { assignProcessColors } from "@/lib/palette";
 export const Route = createFileRoute("/memory-allocation/simulator")({
   head: () => ({
     meta: [
-      { title: "Memory Allocation Simulator — OS Playground" },
+      { title: "Memory Allocation Simulator | OS Playground" },
       {
         name: "description",
         content:
-          "Interactive Memory Allocation simulator for Fixed & Dynamic partitioning with First Fit, Best Fit, Worst Fit, Next Fit, and Compaction.",
+          "Step-by-step memory allocation simulator for First Fit, Best Fit, Worst Fit, and Next Fit with dynamic hole splitting and compaction.",
       },
-      { property: "og:title", content: "Memory Allocation Simulator — OS Playground" },
+      { property: "og:title", content: "Memory Allocation Simulator | OS Playground" },
+      {
+        property: "og:description",
+        content:
+          "Step-by-step memory allocation simulator for First Fit, Best Fit, Worst Fit, and Next Fit with dynamic hole splitting and compaction.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
