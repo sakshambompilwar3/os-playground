@@ -8,6 +8,7 @@ export interface HubEntry {
   title: string;
   desc: string;
   to: string;
+  comingSoon?: boolean;
 }
 
 export interface OSTopic {
@@ -18,6 +19,8 @@ export interface OSTopic {
   color: string;
   rotation: string;
   ready: boolean;
+  notesReady?: boolean;
+  quizReady?: boolean;
   /** Lecture label shown on the hero chalkboard. */
   lectureLabel: string;
   /** Chalk tagline shown on the hero chalkboard. */
@@ -83,15 +86,19 @@ export const OS_TOPICS: OSTopic[] = [
     description: "Paging, segmentation & page replacement",
     color: "bg-success/40",
     rotation: "-1.5deg",
-    ready: false,
+    ready: true,
+    notesReady: true,
+    quizReady: true,
     lectureLabel: "CS-301 · Operating Systems · Lecture 11",
     tagline: "Best fit ⇒ fewer holes",
-    simulatorLink: "/memory-allocation",
+    simulatorLink: "/memory-allocation/simulator",
     notesLink: "/notes/memory-allocation",
+    unitLabel: "Unit III · Memory",
     hubEntries: [
-      { num: "1.", title: "Learn", desc: "Theory, with drawings", to: "/notes/memory-allocation" },
-      { num: "2.", title: "Simulator", desc: "Coming soon", to: "/memory-allocation" },
-      { num: "3.", title: "Pop Quiz", desc: "Test before the exam", to: "/quiz/memory-allocation" },
+      { num: "1.", title: "Learn", desc: "Partitions, holes and fragmentation", to: "/notes/memory-allocation" },
+      { num: "2.", title: "Simulator", desc: "Place processes into memory", to: "/memory-allocation/simulator" },
+      { num: "3.", title: "Comparison", desc: "Which fit wastes the least?", to: "/comparison/memory-allocation" },
+      { num: "4.", title: "Pop Quiz", desc: "Test before the exam", to: "/quiz/memory-allocation" },
     ],
   },
   {

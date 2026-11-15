@@ -30,7 +30,7 @@ function QuizIndex() {
             <span className="absolute -top-3 left-1/2 h-6 w-16 -translate-x-1/2 rotate-2 bg-paper/70" />
             <p className="font-hand text-3xl font-bold">{topic.title}</p>
             <p className="mt-2 text-sm">{topic.description}</p>
-            {!topic.ready && (
+            {!(topic.quizReady ?? topic.ready) && (
               <span className="mt-3 inline-block rounded-full border-2 border-foreground/30 px-2 py-0.5 font-mono text-xs">coming soon</span>
             )}
             <p className="mt-4 font-mono text-xs opacity-0 transition-opacity group-hover:opacity-100">open →</p>
