@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
+  computeLongestWait,
+  FIXED_ALGORITHM_ORDER,
+  pickBest,
   simulateDiskScheduling,
   type DiskAlgorithm,
   type DiskDirection,
@@ -355,5 +358,186 @@ describe("Disk Scheduling - 250+ Randomized Invariant Tests", () => {
         }
       }
     }
+  });
+
+  describe("pickBest & Comparison Verdict Verification", () => {
+    it("Benchmark higher (jump counted): verdict SSTF 236, ranking: SSTF 236, LOOK 299, C-LOOK 322, SCAN 331, C-SCAN 382, FCFS 640", () => {
+      const results = FIXED_ALGORITHM_ORDER.map((algo) =>
+        simulateDiskScheduling(
+          TEXTBOOK_CYLINDERS,
+          TEXTBOOK_HEAD,
+          TEXTBOOK_REQUESTS,
+          algo,
+          "higher",
+          true,
+        ),
+      );
+
+      const verdict = pickBest(results);
+      expect(verdict.isTie).toBe(false);
+      expect(verdict.winner).toBe("sstf");
+      expect(verdict.ranked[0]!.totalHeadMovement).toBe(236);
+
+      const rankedOrder = verdict.ranked.map((r) => `${r.algorithm} ${r.totalHeadMovement}`);
+      expect(rankedOrder).toEqual([
+        "sstf 236",
+        "look 299",
+        "c-look 322",
+        "scan 331",
+        "c-scan 382",
+        "fcfs 640",
+      ]);
+    });
+
+    it("Benchmark lower (jump counted): verdict LOOK 208, ranking: LOOK 208, SSTF 236, SCAN 236, C-LOOK 326, C-SCAN 386, FCFS 640", () => {
+      const results = FIXED_ALGORITHM_ORDER.map((algo) =>
+        simulateDiskScheduling(
+          TEXTBOOK_CYLINDERS,
+          TEXTBOOK_HEAD,
+          TEXTBOOK_REQUESTS,
+          algo,
+          "lower",
+          true,
+        ),
+      );
+
+      const verdict = pickBest(results);
+      expect(verdict.isTie).toBe(false);
+      expect(verdict.winner).toBe("look");
+      expect(verdict.ranked[0]!.totalHeadMovement).toBe(208);
+
+      const rankedOrder = verdict.ranked.map((r) => `${r.algorithm} ${r.totalHeadMovement}`);
+      expect(rankedOrder).toEqual([
+        "look 208",
+        "sstf 236",
+        "scan 236",
+        "c-look 326",
+        "c-scan 386",
+        "fcfs 640",
+      ]);
+    });
+
+    it("Benchmark higher (jump NOT counted): verdict C-LOOK 153, C-SCAN 183", () => {
+      const results = FIXED_ALGORITHM_ORDER.map((algo) =>
+        simulateDiskScheduling(
+          TEXTBOOK_CYLINDERS,
+          TEXTBOOK_HEAD,
+          TEXTBOOK_REQUESTS,
+          algo,
+          "higher",
+          false,
+        ),
+      );
+
+      const verdict = pickBest(results);
+      expect(verdict.isTie).toBe(false);
+      expect(verdict.winner).toBe("c-look");
+      expect(verdict.ranked[0]!.totalHeadMovement).toBe(153);
+      expect(verdict.ranked[1]!.algorithm).toBe("c-scan");
+      expect(verdict.ranked[1]!.totalHeadMovement).toBe(183);
+    });
+
+    it("Tie test: head 100 and all requests on cylinder 100 gives total 0 for every algorithm and reports a TIE among all six", () => {
+      const reqs: DiskRequestInput[] = [
+        { id: "R1", name: "R1", cylinder: 100 },
+        { id: "R2", name: "R2", cylinder: 100 },
+        { id: "R3", name: "R3", cylinder: 100 },
+      ];
+
+      const results = FIXED_ALGORITHM_ORDER.map((algo) =>
+        simulateDiskScheduling(200, 100, reqs, algo, "higher", true),
+      );
+
+      const verdict = pickBest(results);
+      expect(verdict.isTie).toBe(true);
+      expect(verdict.winner).toBeNull();
+      expect(verdict.tiedAlgorithms).toHaveLength(6);
+      expect(verdict.tiedAlgorithms).toEqual(FIXED_ALGORITHM_ORDER);
+      for (const item of verdict.ranked) {
+        expect(item.totalHeadMovement).toBe(0);
+        expect(item.longestWait).toBe(0);
+      }
+    });
+
+    it("200 random inputs: pickBest winner equals minimum total, per-algorithm totals match segments sum, longest wait verified", () => {
+      let seed = 789123;
+      const rng = () => {
+        seed = (seed * 1664525 + 1013904223) % 4294967296;
+        return seed / 4294967296;
+      };
+
+      for (let run = 0; run < 200; run++) {
+        const N = 10 + Math.floor(rng() * 490);
+        const head = Math.floor(rng() * N);
+        const reqCount = 1 + Math.floor(rng() * 15);
+        const direction: DiskDirection = rng() > 0.5 ? "higher" : "lower";
+        const countJump = rng() > 0.5;
+
+        const reqs: DiskRequestInput[] = Array.from({ length: reqCount }, (_, i) => ({
+          id: `R${i + 1}`,
+          name: `Req_${i + 1}`,
+          cylinder: Math.floor(rng() * N),
+        }));
+
+        const results = FIXED_ALGORITHM_ORDER.map((algo) =>
+          simulateDiskScheduling(N, head, reqs, algo, direction, countJump),
+        );
+
+        const verdict = pickBest(results);
+
+        // 1. Independent minimum calculation
+        const totals = results.map((r) => r.totalHeadMovement);
+        const independentMin = Math.min(...totals);
+
+        if (!verdict.isTie) {
+          const winnerRes = results.find((r) => r.algorithm === verdict.winner)!;
+          expect(winnerRes.totalHeadMovement).toBe(independentMin);
+          expect(verdict.ranked[0]!.totalHeadMovement).toBe(independentMin);
+        } else {
+          for (const tiedAlgo of verdict.tiedAlgorithms) {
+            const tiedRes = results.find((r) => r.algorithm === tiedAlgo)!;
+            expect(tiedRes.totalHeadMovement).toBe(independentMin);
+          }
+        }
+
+        // 2. Per-algorithm total equals sum of segment distances (accounting for jump toggle)
+        for (const res of results) {
+          const expectedSum = res.segments
+            .filter((s) => s.countedInTotal)
+            .reduce((acc, s) => acc + s.distance, 0);
+          expect(res.totalHeadMovement).toBe(expectedSum);
+
+          // 3. Longest wait equals running total at the moment the last request is served
+          const lw = computeLongestWait(res);
+          let lastServeIdx = -1;
+          for (let i = res.segments.length - 1; i >= 0; i--) {
+            if (res.segments[i]!.kind === "serve") {
+              lastServeIdx = i;
+              break;
+            }
+          }
+          if (lastServeIdx >= 0) {
+            const manualLw = res.segments
+              .slice(0, lastServeIdx + 1)
+              .filter((s) => s.countedInTotal)
+              .reduce((acc, s) => acc + s.distance, 0);
+            expect(lw).toBe(manualLw);
+          } else {
+            expect(lw).toBe(0);
+          }
+        }
+
+        // 4. Invariant: LOOK total <= SCAN total and C-LOOK <= C-SCAN (when jump counted)
+        if (countJump) {
+          const scanRes = results.find((r) => r.algorithm === "scan")!;
+          const lookRes = results.find((r) => r.algorithm === "look")!;
+          expect(lookRes.totalHeadMovement).toBeLessThanOrEqual(scanRes.totalHeadMovement);
+
+          const cScanRes = results.find((r) => r.algorithm === "c-scan")!;
+          const cLookRes = results.find((r) => r.algorithm === "c-look")!;
+          expect(cLookRes.totalHeadMovement).toBeLessThanOrEqual(cScanRes.totalHeadMovement);
+        }
+      }
+    });
   });
 });

@@ -548,3 +548,370 @@ function assembleResult(
     servedCount: serviceOrder.length,
   };
 }
+
+export interface DiskRankingItem {
+  algorithm: DiskAlgorithm;
+  algorithmName: string;
+  totalHeadMovement: number;
+  longestWait: number;
+  averageSeekPerRequest: number;
+  totalSeekTimeMs: number;
+  rank: number;
+  isWinner: boolean;
+  tieBreakUsed?: string;
+  result: DiskSimulationResult;
+}
+
+export interface BestDiskVerdict {
+  isTie: boolean;
+  winner: DiskAlgorithm | null;
+  winnerName: string | null;
+  tiedAlgorithms: DiskAlgorithm[];
+  ranked: DiskRankingItem[];
+  perMetricWinners: {
+    lowestMovement: {
+      algorithm: DiskAlgorithm;
+      value: number;
+      isTie: boolean;
+      tied: DiskAlgorithm[];
+    };
+    lowestLongestWait: {
+      algorithm: DiskAlgorithm;
+      value: number;
+      isTie: boolean;
+      tied: DiskAlgorithm[];
+    };
+  };
+  explanation: string;
+  explanationLines: string[];
+  selectionDetails: {
+    metric: string;
+    tieBreakUsed: string | null;
+    currentDirection: DiskDirection;
+    countReturnJump: boolean;
+  };
+}
+
+export const FIXED_ALGORITHM_ORDER: DiskAlgorithm[] = [
+  "fcfs",
+  "sstf",
+  "scan",
+  "c-scan",
+  "look",
+  "c-look",
+];
+
+/**
+ * Computes the longest wait (cylinders the head moved before the last request was served).
+ */
+export function computeLongestWait(result: DiskSimulationResult): number {
+  let lastServeIdx = -1;
+  for (let i = result.segments.length - 1; i >= 0; i--) {
+    if (result.segments[i]!.kind === "serve") {
+      lastServeIdx = i;
+      break;
+    }
+  }
+  if (lastServeIdx === -1) return 0;
+  return result.segments
+    .slice(0, lastServeIdx + 1)
+    .filter((s) => s.countedInTotal)
+    .reduce((sum, s) => sum + s.distance, 0);
+}
+
+/**
+ * Pure function to determine the best disk scheduling algorithm based on simulation results.
+ * Follows strict rules: lowest total head movement, ties broken by lower longest wait,
+ * and if still equal, reports a TIE without naming a single winner.
+ */
+export function pickBest(results: DiskSimulationResult[]): BestDiskVerdict {
+  if (results.length === 0) {
+    throw new Error("pickBest requires at least one simulation result");
+  }
+
+  const rawStats = results.map((r) => {
+    const longestWait = computeLongestWait(r);
+    return {
+      algorithm: r.algorithm,
+      algorithmName: DISK_ALGORITHM_MAP[r.algorithm].label,
+      totalHeadMovement: r.totalHeadMovement,
+      longestWait,
+      averageSeekPerRequest: r.averageSeekPerRequest,
+      totalSeekTimeMs: r.totalSeekTimeMs,
+      result: r,
+    };
+  });
+
+  const getOrderIndex = (algo: DiskAlgorithm) => FIXED_ALGORITHM_ORDER.indexOf(algo);
+
+  // Sort by:
+  // 1. Lowest total head movement
+  // 2. Lowest longest wait
+  // 3. Fixed order: FCFS, SSTF, SCAN, C-SCAN, LOOK, C-LOOK
+  const sorted = [...rawStats].sort((a, b) => {
+    if (a.totalHeadMovement !== b.totalHeadMovement) {
+      return a.totalHeadMovement - b.totalHeadMovement;
+    }
+    if (a.longestWait !== b.longestWait) {
+      return a.longestWait - b.longestWait;
+    }
+    return getOrderIndex(a.algorithm) - getOrderIndex(b.algorithm);
+  });
+
+  const minMovement = sorted[0]!.totalHeadMovement;
+  const sameMovement = sorted.filter((s) => s.totalHeadMovement === minMovement);
+  const minLongestWaitAmongMin = Math.min(...sameMovement.map((s) => s.longestWait));
+  const tiedTop = sameMovement.filter((s) => s.longestWait === minLongestWaitAmongMin);
+
+  const isTie = tiedTop.length > 1;
+  const winner = isTie ? null : sorted[0]!.algorithm;
+  const winnerName = isTie ? null : DISK_ALGORITHM_MAP[sorted[0]!.algorithm].label;
+  const tiedAlgorithms = isTie ? tiedTop.map((s) => s.algorithm) : [];
+
+  // Per-metric winners
+  const minMove = Math.min(...rawStats.map((s) => s.totalHeadMovement));
+  const minMoveAlgos = rawStats.filter((s) => s.totalHeadMovement === minMove).map((s) => s.algorithm);
+
+  const minWait = Math.min(...rawStats.map((s) => s.longestWait));
+  const minWaitAlgos = rawStats.filter((s) => s.longestWait === minWait).map((s) => s.algorithm);
+
+  const perMetricWinners = {
+    lowestMovement: {
+      algorithm: minMoveAlgos[0]!,
+      value: minMove,
+      isTie: minMoveAlgos.length > 1,
+      tied: minMoveAlgos,
+    },
+    lowestLongestWait: {
+      algorithm: minWaitAlgos[0]!,
+      value: minWait,
+      isTie: minWaitAlgos.length > 1,
+      tied: minWaitAlgos,
+    },
+  };
+
+  // Build ranked items with ranks & tieBreak notes
+  let currentRank = 1;
+  const ranked: DiskRankingItem[] = sorted.map((item, idx) => {
+    if (idx > 0) {
+      const prev = sorted[idx - 1]!;
+      if (
+        item.totalHeadMovement !== prev.totalHeadMovement ||
+        item.longestWait !== prev.longestWait
+      ) {
+        currentRank = idx + 1;
+      }
+    }
+
+    let tieBreakUsed: string | undefined;
+    const sameMoveItems = sorted.filter(
+      (other) => other.algorithm !== item.algorithm && other.totalHeadMovement === item.totalHeadMovement,
+    );
+    if (sameMoveItems.length > 0) {
+      tieBreakUsed = `Tied on total (${item.totalHeadMovement} cyl); longest wait: ${item.longestWait} cyl`;
+    }
+
+    const isWinnerItem = isTie
+      ? tiedAlgorithms.includes(item.algorithm)
+      : item.algorithm === winner;
+
+    return {
+      algorithm: item.algorithm,
+      algorithmName: item.algorithmName,
+      totalHeadMovement: item.totalHeadMovement,
+      longestWait: item.longestWait,
+      averageSeekPerRequest: item.averageSeekPerRequest,
+      totalSeekTimeMs: item.totalSeekTimeMs,
+      rank: currentRank,
+      isWinner: isWinnerItem,
+      tieBreakUsed,
+      result: item.result,
+    };
+  });
+
+  // Build 3 to 5 sentence why explanation
+  const explanationLines: string[] = [];
+
+  if (isTie) {
+    const tiedNames = tiedAlgorithms.map((a) => DISK_ALGORITHM_MAP[a].label).join(", ");
+    explanationLines.push(
+      `All ${tiedAlgorithms.length} tied algorithms (${tiedNames}) completed with ${minMovement} cylinders of total head movement.`,
+    );
+    explanationLines.push(
+      `Because every algorithm serviced the workload with identical movement and identical longest wait, no single algorithm outperforms the others.`,
+    );
+  } else {
+    const winnerLabel = DISK_ALGORITHM_MAP[winner!].label;
+    const nextBest = sorted[1]!;
+    const worst = sorted[sorted.length - 1]!;
+
+    // Sentence 1: What it won by
+    explanationLines.push(
+      `${winnerLabel} moved the head ${sorted[0]!.totalHeadMovement} cylinders in total, compared with ${nextBest.totalHeadMovement} for ${DISK_ALGORITHM_MAP[nextBest.algorithm].label}, the next best, and ${worst.totalHeadMovement} for ${DISK_ALGORITHM_MAP[worst.algorithm].label}, the worst.`,
+    );
+
+    // Sentence 2: Reason matching winner's rule
+    switch (winner) {
+      case "sstf":
+        explanationLines.push(`SSTF always serves the nearest request, so each hop is short.`);
+        break;
+      case "look":
+        explanationLines.push(
+          `LOOK turns at the last request in the current direction and skips the trip to the disk end.`,
+        );
+        break;
+      case "c-look":
+        explanationLines.push(
+          `C-LOOK turns at the last request and skips traveling to the physical boundaries.`,
+        );
+        break;
+      case "scan":
+        explanationLines.push(
+          `SCAN sweeps continuously to the disk end before reversing direction.`,
+        );
+        break;
+      case "c-scan":
+        explanationLines.push(
+          `C-SCAN sweeps to the boundary and returns in one jump for uniform waiting.`,
+        );
+        break;
+      case "fcfs":
+        explanationLines.push(
+          `FCFS ignores cylinder positions and serves requests in arrival order, causing zigzag travel.`,
+        );
+        break;
+    }
+
+    // Sentence 3: Extra distance worst algorithm travelled
+    const extraCyl = worst.totalHeadMovement - sorted[0]!.totalHeadMovement;
+    const extraMs = (extraCyl * sorted[0]!.result.seekTimePerCylinderMs).toFixed(1);
+    explanationLines.push(
+      `The least efficient algorithm (${DISK_ALGORITHM_MAP[worst.algorithm].label}) travelled an extra ${extraCyl} cylinders (${extraMs} ms of seek time).`,
+    );
+
+    // Sentence 4: Trade-off when it applies
+    if (winner === "sstf") {
+      explanationLines.push(
+        `While SSTF minimizes seek distance here, it can starve distant requests if closer ones keep arriving; sweep algorithms trade a bit of distance for guaranteed fairness.`,
+      );
+    } else if (
+      perMetricWinners.lowestLongestWait.algorithm !== winner &&
+      !perMetricWinners.lowestLongestWait.isTie
+    ) {
+      const waitWinnerLabel = DISK_ALGORITHM_MAP[perMetricWinners.lowestLongestWait.algorithm].label;
+      explanationLines.push(
+        `Notably, ${waitWinnerLabel} achieved a lower longest wait (${perMetricWinners.lowestLongestWait.value} cylinders vs ${sorted[0]!.longestWait} cylinders for ${winnerLabel}).`,
+      );
+    }
+  }
+
+  // Final closing line (always present)
+  explanationLines.push(
+    `Best here means the least head movement for this input and direction. A different example or direction can change the answer.`,
+  );
+
+  let tieBreakUsed: string | null = null;
+  if (!isTie && sameMovement.length > 1) {
+    tieBreakUsed = `Total head movement tied at ${minMovement} cylinders; broken by lower longest wait (${sorted[0]!.longestWait} cylinders).`;
+  } else if (isTie) {
+    tieBreakUsed = `All tied contenders have identical total movement (${minMovement} cyl) and identical longest wait (${minLongestWaitAmongMin} cyl).`;
+  }
+
+  return {
+    isTie,
+    winner,
+    winnerName,
+    tiedAlgorithms,
+    ranked,
+    perMetricWinners,
+    explanation: explanationLines.join(" "),
+    explanationLines,
+    selectionDetails: {
+      metric: "Lowest Total Head Movement (cylinders)",
+      tieBreakUsed,
+      currentDirection: results[0]!.direction,
+      countReturnJump: results[0]!.countReturnJump,
+    },
+  };
+}
+
+export interface DirectionSensitivityItem {
+  algorithm: DiskAlgorithm;
+  label: string;
+  higherTotal: number;
+  lowerTotal: number;
+  difference: number;
+}
+
+export interface DirectionSensitivityReport {
+  items: DirectionSensitivityItem[];
+  higherWinner: { algorithm: DiskAlgorithm; label: string; total: number };
+  lowerWinner: { algorithm: DiskAlgorithm; label: string; total: number };
+}
+
+/**
+ * Evaluates direction sensitivity for all six algorithms by running higher vs lower on identical workloads.
+ */
+export function computeDirectionSensitivity(
+  totalCylinders: number,
+  startHead: number,
+  requests: DiskRequestInput[],
+  countReturnJump: boolean = true,
+  seekTimePerCylinderMs: number = 1,
+): DirectionSensitivityReport {
+  const higherResults = FIXED_ALGORITHM_ORDER.map((algo) =>
+    simulateDiskScheduling(
+      totalCylinders,
+      startHead,
+      requests,
+      algo,
+      "higher",
+      countReturnJump,
+      seekTimePerCylinderMs,
+    ),
+  );
+
+  const lowerResults = FIXED_ALGORITHM_ORDER.map((algo) =>
+    simulateDiskScheduling(
+      totalCylinders,
+      startHead,
+      requests,
+      algo,
+      "lower",
+      countReturnJump,
+      seekTimePerCylinderMs,
+    ),
+  );
+
+  const higherVerdict = pickBest(higherResults);
+  const lowerVerdict = pickBest(lowerResults);
+
+  const items: DirectionSensitivityItem[] = FIXED_ALGORITHM_ORDER.map((algo, idx) => {
+    const hRes = higherResults[idx]!;
+    const lRes = lowerResults[idx]!;
+    return {
+      algorithm: algo,
+      label: DISK_ALGORITHM_MAP[algo].label,
+      higherTotal: hRes.totalHeadMovement,
+      lowerTotal: lRes.totalHeadMovement,
+      difference: Math.abs(hRes.totalHeadMovement - lRes.totalHeadMovement),
+    };
+  });
+
+  const higherWinAlgo = higherVerdict.winner || higherVerdict.ranked[0]!.algorithm;
+  const lowerWinAlgo = lowerVerdict.winner || lowerVerdict.ranked[0]!.algorithm;
+
+  return {
+    items,
+    higherWinner: {
+      algorithm: higherWinAlgo,
+      label: DISK_ALGORITHM_MAP[higherWinAlgo].label,
+      total: higherVerdict.ranked[0]!.totalHeadMovement,
+    },
+    lowerWinner: {
+      algorithm: lowerWinAlgo,
+      label: DISK_ALGORITHM_MAP[lowerWinAlgo].label,
+      total: lowerVerdict.ranked[0]!.totalHeadMovement,
+    },
+  };
+}
