@@ -51,7 +51,7 @@ function Deadlock() {
       </Link>
       <div className="grid items-center gap-10 lg:grid-cols-2">
       <div className="space-y-5">
-        <h1 className="font-hand text-6xl font-bold">Deadlock lab</h1>
+        <h1 className="font-hand text-5xl md:text-6xl font-bold">Deadlock Lab</h1>
         <p key={phase} className="animate-rise notebook rounded-md py-4 pl-20 pr-6 font-hand text-2xl leading-8">{steps[phase]}</p>
         <div className="flex gap-3">
           <Button variant="outline" onClick={() => setPhase((p) => (p + 1) % 4)} className="bg-highlight">{phase === 3 ? "↺ restart" : "next →"}</Button>

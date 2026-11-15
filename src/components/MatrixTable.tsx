@@ -30,12 +30,13 @@ export function MatrixTable({ title, resources, data, editable, onChange, active
                   {editable ? (
                     <input
                       type="number"
+                      inputMode="numeric"
                       min={0}
                       step={1}
                       aria-label={`${title} P${i} ${resources[j]}`}
                       value={v}
                       onChange={(e) => onChange?.(i, j, Math.max(0, Math.floor(Number(e.target.value) || 0)))}
-                      className="w-12 rounded border-2 border-input bg-background px-1 text-center focus:border-primary focus:outline-none"
+                      className="w-12 min-h-[44px] rounded border-2 border-input bg-background px-1 text-center text-base focus:border-primary focus:outline-none"
                     />
                   ) : (
                     <span className={v < 0 ? "font-bold text-destructive" : ""}>{v}</span>
@@ -58,7 +59,16 @@ export function VectorRow({ label, resources, values, onChange }: { label: strin
         <label key={j} className="flex items-center gap-1 rounded-md border-2 border-foreground bg-paper px-2 py-1">
           <span className="text-muted-foreground">{resources[j]}</span>
           {onChange ? (
-            <input type="number" min={0} step={1} aria-label={`${label} ${resources[j]}`} value={v} onChange={(e) => onChange(j, Math.max(0, Math.floor(Number(e.target.value) || 0)))} className="w-12 bg-transparent text-center focus:outline-none" />
+            <input
+              type="number"
+              inputMode="numeric"
+              min={0}
+              step={1}
+              aria-label={`${label} ${resources[j]}`}
+              value={v}
+              onChange={(e) => onChange(j, Math.max(0, Math.floor(Number(e.target.value) || 0)))}
+              className="w-12 min-h-[40px] bg-transparent text-center text-base focus:outline-none"
+            />
           ) : (
             <span key={v} className="animate-cell inline-block w-6 text-center font-bold">{v}</span>
           )}

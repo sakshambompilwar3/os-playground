@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
+import { Printer } from "lucide-react";
 import { DISK_SCHEDULING_NOTES as cards } from "@/lib/disk-scheduling-notes";
 
 export const Route = createFileRoute("/notes/disk-scheduling")({
@@ -31,16 +32,27 @@ function DiskSchedulingNotes() {
   return (
     <div className="grid gap-8 lg:grid-cols-[1fr_1.35fr]">
       <div className="space-y-3">
-        <div className="flex items-center gap-3 text-sm text-muted-foreground">
-          <Link to="/disk-scheduling" className="hover:underline">
-            ← Disk Scheduling Hub
-          </Link>
-          <span>·</span>
-          <Link to="/notes" className="hover:underline">
-            all notes
-          </Link>
+        <div className="flex items-center justify-between gap-3 text-sm text-muted-foreground">
+          <div className="flex items-center gap-2">
+            <Link to="/disk-scheduling" className="hover:underline">
+              ← Disk Scheduling Hub
+            </Link>
+            <span>·</span>
+            <Link to="/notes" className="hover:underline">
+              all notes
+            </Link>
+          </div>
+          <button
+            type="button"
+            onClick={() => window.print()}
+            className="press paper-card no-print inline-flex min-h-[44px] items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-foreground"
+            aria-label="Print notes"
+          >
+            <Printer className="h-3.5 w-3.5" aria-hidden="true" />
+            Print
+          </button>
         </div>
-        <h1 className="font-hand text-6xl font-bold">The notes</h1>
+        <h1 className="font-hand text-5xl md:text-6xl font-bold">Disk Scheduling Notes</h1>
         <p className="text-muted-foreground">Tap a section to read it.</p>
         <div className="space-y-2">
           {cards.map((c, i) => (

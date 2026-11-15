@@ -443,7 +443,7 @@ function MemoryAllocationComparisonPage() {
       {/* Header + counts & quick actions */}
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="font-hand text-6xl font-bold">Memory Allocation comparison</h1>
+          <h1 className="font-hand text-5xl md:text-6xl font-bold">Memory Allocation Comparison</h1>
           <p className="text-muted-foreground">
             Run First Fit, Best Fit, Worst Fit, and Next Fit simultaneously on the exact same workload.
           </p>

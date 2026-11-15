@@ -541,7 +541,7 @@ function DiskSchedulingComparisonPage() {
       {/* Header + counts & quick actions */}
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="font-hand text-6xl font-bold">Disk Scheduling comparison</h1>
+          <h1 className="font-hand text-5xl md:text-6xl font-bold">Disk Scheduling Comparison</h1>
           <p className="text-muted-foreground">
             Run all six disk scheduling algorithms simultaneously on identical workloads.
           </p>

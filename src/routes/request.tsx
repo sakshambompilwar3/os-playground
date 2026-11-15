@@ -55,7 +55,7 @@ function RequestPage() {
         <Link to="/bankers" className="text-sm text-muted-foreground hover:underline">
           ← back to Banker's Algorithm
         </Link>
-        <h1 className="mt-2 font-hand text-6xl font-bold">You are the OS</h1>
+        <h1 className="mt-2 font-hand text-5xl md:text-6xl font-bold">Resource Request Simulator</h1>
         <p className="text-muted-foreground">Pick a process, type a request, and let the Banker decide.</p>
       </div>
       <VectorRow label="Available:" resources={R} values={avail} />

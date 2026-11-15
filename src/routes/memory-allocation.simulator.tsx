@@ -472,7 +472,7 @@ function MemoryAllocationSimulatorPage() {
       {/* Header + count & quick-action controls */}
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="font-hand text-6xl font-bold">Memory Allocation simulator</h1>
+          <h1 className="font-hand text-5xl md:text-6xl font-bold">Memory Allocation Simulator</h1>
           <p className="text-muted-foreground">
             Pick a partitioning mode and fit strategy, edit blocks and processes, then press play.
           </p>

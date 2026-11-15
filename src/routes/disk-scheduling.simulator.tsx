@@ -379,7 +379,7 @@ function DiskSchedulingSimulatorPage() {
       {/* Header + counts & quick actions */}
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="font-hand text-6xl font-bold">Disk Scheduling simulator</h1>
+          <h1 className="font-hand text-5xl md:text-6xl font-bold">Disk Scheduling Simulator</h1>
           <p className="text-muted-foreground">
             Watch the disk head sweep and serve cylinder requests across classical algorithms.
           </p>

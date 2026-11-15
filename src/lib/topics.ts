@@ -3,38 +3,8 @@
  * Add a new entry here and it will appear on the Home page, hero carousel, and hubs.
  * Set `ready: false` for placeholder topics that show "Coming soon" pages.
  */
-export interface HubEntry {
-  num: string;
-  title: string;
-  desc: string;
-  to: string;
-  comingSoon?: boolean;
-}
-
-export interface OSTopic {
-  slug: string;
-  title: string;
-  shortTitle: string;
-  description: string;
-  color: string;
-  rotation: string;
-  ready: boolean;
-  notesReady?: boolean;
-  quizReady?: boolean;
-  /** Lecture label shown on the hero chalkboard. */
-  lectureLabel: string;
-  /** Chalk tagline shown on the hero chalkboard. */
-  tagline: string;
-  /** Link to this topic's simulator/hub page from hero board. */
-  simulatorLink: string;
-  /** Link to this topic's notes page. */
-  notesLink: string;
-  /** Optional unit label and quote shown in the topic's Table of Contents hub. */
-  unitLabel?: string | undefined;
-  quote?: string | undefined;
-  /** Numbered entries for the topic hub's Table of Contents. */
-  hubEntries: HubEntry[];
-}
+import type { HubEntry, OSTopic } from "./types";
+export type { HubEntry, OSTopic };
 
 export const OS_TOPICS: OSTopic[] = [
   {
