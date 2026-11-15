@@ -42,16 +42,17 @@ import { assignProcessColors } from "@/lib/palette";
 export const Route = createFileRoute("/comparison/memory-allocation")({
   head: () => ({
     meta: [
-      { title: "Memory Allocation Comparison — OS Playground" },
+      { title: "Memory Allocation Comparison | OS Playground" },
       {
         name: "description",
         content:
-          "Side-by-side synchronized comparison of First Fit, Best Fit, Worst Fit, and Next Fit with live memory maps and best strategy verdict.",
+          "Compare First Fit, Best Fit, Worst Fit, and Next Fit side by side on memory utilization, allocation failures, and external fragmentation.",
       },
-      { property: "og:title", content: "Memory Allocation Comparison" },
+      { property: "og:title", content: "Memory Allocation Comparison | OS Playground" },
       {
         property: "og:description",
-        content: "Run all four memory placement strategies in real-time on identical workloads.",
+        content:
+          "Compare First Fit, Best Fit, Worst Fit, and Next Fit side by side on memory utilization, allocation failures, and external fragmentation.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -442,7 +443,7 @@ function MemoryAllocationComparisonPage() {
       {/* Header + counts & quick actions */}
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="font-hand text-6xl font-bold">Memory Allocation comparison</h1>
+          <h1 className="font-hand text-5xl md:text-6xl font-bold">Memory Allocation Comparison</h1>
           <p className="text-muted-foreground">
             Run First Fit, Best Fit, Worst Fit, and Next Fit simultaneously on the exact same workload.
           </p>

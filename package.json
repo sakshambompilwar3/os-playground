@@ -1,5 +1,6 @@
 {
-  "name": "tanstack_start_ts",
+  "name": "os-playground",
+  "description": "Interactive Operating Systems Playground - Simulators, Notes, Comparisons, and Quizzes",
   "private": true,
   "sideEffects": false,
   "type": "module",

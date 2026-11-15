@@ -4,16 +4,17 @@ import { useState } from "react";
 export const Route = createFileRoute("/quiz/cpu-scheduling")({
   head: () => ({
     meta: [
-      { title: "Pop Quiz — CPU Scheduling" },
+      { title: "Quiz: CPU Scheduling | OS Playground" },
       {
         name: "description",
         content:
-          "Quick 6-question multiple-choice quiz on FCFS, SJF, SRTF, Round Robin, and Priority scheduling.",
+          "Multiple-choice quiz on FCFS, SJF, SRTF, Round Robin, Priority scheduling, and Gantt charts.",
       },
-      { property: "og:title", content: "CPU Scheduling Pop Quiz" },
+      { property: "og:title", content: "Quiz: CPU Scheduling | OS Playground" },
       {
         property: "og:description",
-        content: "Test yourself before the OS exam on CPU scheduling algorithms.",
+        content:
+          "Multiple-choice quiz on FCFS, SJF, SRTF, Round Robin, Priority scheduling, and Gantt charts.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

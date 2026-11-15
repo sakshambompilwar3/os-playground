@@ -31,13 +31,18 @@ import { assignProcessColors } from "@/lib/palette";
 export const Route = createFileRoute("/disk-scheduling/simulator")({
   head: () => ({
     meta: [
-      { title: "Disk Scheduling Simulator — OS Playground" },
+      { title: "Disk Scheduling Simulator | OS Playground" },
       {
         name: "description",
         content:
-          "Interactive Disk Scheduling Simulator for FCFS, SSTF, SCAN, C-SCAN, LOOK, and C-LOOK with chalk visual path, head markers, and real-time step calculations.",
+          "Simulate FCFS, SSTF, SCAN, C-SCAN, LOOK, and C-LOOK with animated cylinder tracks, collision-free label layout, and calculation traces.",
       },
-      { property: "og:title", content: "Disk Scheduling Simulator — OS Playground" },
+      { property: "og:title", content: "Disk Scheduling Simulator | OS Playground" },
+      {
+        property: "og:description",
+        content:
+          "Simulate FCFS, SSTF, SCAN, C-SCAN, LOOK, and C-LOOK with animated cylinder tracks, collision-free label layout, and calculation traces.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -374,7 +379,7 @@ function DiskSchedulingSimulatorPage() {
       {/* Header + counts & quick actions */}
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="font-hand text-6xl font-bold">Disk Scheduling simulator</h1>
+          <h1 className="font-hand text-5xl md:text-6xl font-bold">Disk Scheduling Simulator</h1>
           <p className="text-muted-foreground">
             Watch the disk head sweep and serve cylinder requests across classical algorithms.
           </p>

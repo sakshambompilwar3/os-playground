@@ -84,6 +84,10 @@
     background-image: radial-gradient(oklch(0.6 0.04 80 / 0.12) 1px, transparent 1px);
     background-size: 18px 18px;
   }
+  /* Prevent iOS Safari 16px zoom trigger on focus */
+  input, select, textarea, button {
+    font-size: 16px;
+  }
 }
 
 @utility notebook {
@@ -139,3 +143,73 @@
 @utility overlay-anim { animation: ov-in 1.15s cubic-bezier(.7,0,.3,1) forwards; }
 @keyframes page-in { from { opacity: 0; transform: translateY(14px); filter: blur(4px); } to { opacity: 1; transform: none; filter: none; } }
 @utility page-enter { animation: page-in .55s .6s cubic-bezier(.2,.8,.2,1) both; }
+
+/* Safe area insets & horizontal containment */
+@utility safe-top { padding-top: max(0.75rem, env(safe-area-inset-top)); }
+@utility safe-bottom { padding-bottom: max(0.75rem, env(safe-area-inset-bottom)); }
+
+/* Faded edge for horizontally scrolling wide tables & charts */
+@utility table-scroll-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Clean, high-contrast print styles */
+@media print {
+  header,
+  footer,
+  nav,
+  button,
+  .no-print,
+  [aria-label="OS Topics Interactive Blackboard"] button,
+  .press {
+    display: none !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #111111 !important;
+    background-image: none !important;
+  }
+
+  .paper-card,
+  .notebook,
+  .chalkboard {
+    box-shadow: none !important;
+    border: 1px solid #d1d5db !important;
+    background: #ffffff !important;
+    color: #111111 !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  svg {
+    max-width: 100% !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  table,
+  tr,
+  td,
+  th {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    color: #111111 !important;
+  }
+
+  a[href]::after {
+    content: "" !important;
+  }
+}

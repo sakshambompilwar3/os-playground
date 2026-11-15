@@ -5,10 +5,18 @@ import { OS_TOPICS } from "@/lib/topics";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "OS Playground — Banker's Algorithm & more" },
-      { name: "description", content: "A classroom-style playground to learn OS algorithms: Banker's, CPU Scheduling, Memory Allocation, Disk Scheduling." },
-      { property: "og:title", content: "OS Playground — Banker's Algorithm & more" },
-      { property: "og:description", content: "Learn OS concepts interactively: simulate, request resources, and quiz yourself." },
+      { title: "OS Playground | Learn Operating Systems by Playing" },
+      {
+        name: "description",
+        content:
+          "Simulators, notes and quizzes for Operating Systems: Banker's Algorithm, CPU Scheduling, Memory Allocation, and Disk Scheduling.",
+      },
+      { property: "og:title", content: "OS Playground | Learn Operating Systems by Playing" },
+      {
+        property: "og:description",
+        content:
+          "Simulators, notes and quizzes for Operating Systems: Banker's Algorithm, CPU Scheduling, Memory Allocation, and Disk Scheduling.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -117,10 +125,10 @@ function Home() {
           <p className="font-mono text-xs uppercase tracking-[0.3em] opacity-70">
             {currentTopic.lectureLabel}
           </p>
-          <h1 className="mt-4 font-hand text-6xl font-bold leading-none md:text-8xl">
+          <h1 className="mt-4 font-hand text-5xl sm:text-7xl md:text-8xl font-bold leading-none break-words">
             {currentTopic.title}
           </h1>
-          <svg viewBox="0 0 600 30" className="mt-2 h-6 w-80 md:w-[28rem]" aria-hidden>
+          <svg viewBox="0 0 600 30" className="mt-2 h-6 w-full max-w-sm sm:max-w-md md:w-[28rem]" aria-hidden="true">
             <path
               d="M5 20 C 150 5, 300 30, 595 12"
               fill="none"
@@ -130,19 +138,19 @@ function Home() {
               className="draw"
             />
           </svg>
-          <div className="mt-8 min-h-14">
+          <div className="mt-6 sm:mt-8 min-h-14">
             <ChalkTagline text={currentTopic.tagline} />
           </div>
-          <div className="mt-10 flex flex-wrap gap-3">
+          <div className="mt-8 sm:mt-10 flex flex-wrap gap-3">
             <Link
               to={currentTopic.simulatorLink}
-              className="press paper-card bg-highlight px-5 py-3 font-bold text-foreground"
+              className="press paper-card flex min-h-[44px] items-center justify-center bg-highlight px-5 py-3 font-bold text-foreground"
             >
               Start the simulator →
             </Link>
             <Link
               to={currentTopic.notesLink}
-              className="press paper-card px-5 py-3 font-bold text-foreground"
+              className="press paper-card flex min-h-[44px] items-center justify-center px-5 py-3 font-bold text-foreground"
             >
               Open the notes
             </Link>
@@ -150,35 +158,39 @@ function Home() {
         </div>
 
         {/* chalk controls (arrows + dots) - faint chalk marks styled, top of chalk/eraser */}
-        <div className="absolute bottom-3 left-6 flex items-center gap-3 font-hand text-xl text-chalk-foreground/70 sm:bottom-4 sm:left-14">
+        <div className="absolute bottom-3 left-4 sm:left-14 flex items-center gap-2 sm:gap-3 font-hand text-xl text-chalk-foreground/80 sm:bottom-4">
           <button
             type="button"
             onClick={prevSlide}
             aria-label="Previous topic slide"
-            className="rounded px-2 py-0.5 transition-opacity hover:opacity-100 opacity-60 focus-visible:opacity-100"
+            className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded px-2 py-1 transition-opacity hover:opacity-100 opacity-70 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-chalk-foreground"
           >
             ← prev
           </button>
-          <div className="flex items-center gap-1.5" aria-label={`Slide ${slide + 1} of ${total}`}>
+          <div className="flex items-center gap-1" aria-label={`Slide ${slide + 1} of ${total}`}>
             {OS_TOPICS.map((t, idx) => (
               <button
                 key={t.slug}
                 type="button"
                 onClick={() => setSlide(idx)}
                 aria-label={`Go to ${t.title}`}
-                className={`h-2.5 rounded-full transition-all ${
-                  idx === slide
-                    ? "w-5 bg-chalk-foreground/90"
-                    : "w-2.5 bg-chalk-foreground/30 hover:bg-chalk-foreground/60"
-                }`}
-              />
+                className="flex min-h-[44px] min-w-[28px] items-center justify-center p-1 focus-visible:outline-none"
+              >
+                <span
+                  className={`block h-2.5 rounded-full transition-all ${
+                    idx === slide
+                      ? "w-5 bg-chalk-foreground/90"
+                      : "w-2.5 bg-chalk-foreground/40 hover:bg-chalk-foreground/70"
+                  }`}
+                />
+              </button>
             ))}
           </div>
           <button
             type="button"
             onClick={nextSlide}
             aria-label="Next topic slide"
-            className="rounded px-2 py-0.5 transition-opacity hover:opacity-100 opacity-60 focus-visible:opacity-100"
+            className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded px-2 py-1 transition-opacity hover:opacity-100 opacity-70 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-chalk-foreground"
           >
             next →
           </button>
@@ -194,6 +206,7 @@ function Home() {
       {/* topic cards (preserved exactly) */}
       <section>
         <h2 className="font-hand text-4xl font-bold">Pick a <span className="marker">topic</span></h2>
+        <p className="mt-1 font-hand text-xl text-muted-foreground">Simulators, notes and quizzes for Operating Systems. Pick a topic to start.</p>
         <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {OS_TOPICS.map((topic, i) => {
             const to = `/${topic.slug}`;
@@ -219,10 +232,10 @@ function Home() {
 
       {/* notebook */}
       <section className="notebook rounded-md py-8 pl-20 pr-8 leading-8">
-        <p className="font-hand text-3xl font-bold text-primary">Class notes — why "banker"?</p>
-        <p className="font-hand text-2xl">A bank never lends out cash in a way that leaves it unable to satisfy <span className="marker">all</span> its customers.</p>
-        <p className="font-hand text-2xl">The OS does the same: it only grants a resource request if the system stays in a <b>safe state</b>.</p>
-        <p className="font-hand text-2xl text-accent-foreground">→ invented by Edsger Dijkstra, 1965 ✎</p>
+        <p className="font-hand text-3xl font-bold text-primary">Class notes — what is an Operating System?</p>
+        <p className="font-hand text-2xl">An operating system manages shared hardware resources: <span className="marker">CPU, memory, disk, and devices</span>.</p>
+        <p className="font-hand text-2xl">From scheduling processes to avoiding deadlocks and optimizing disk seeks, smart algorithms keep modern computers responsive and fair.</p>
+        <p className="font-hand text-2xl text-accent-foreground">→ explore the simulators, compare tradeoffs, and master the concepts ✎</p>
       </section>
     </div>
   );

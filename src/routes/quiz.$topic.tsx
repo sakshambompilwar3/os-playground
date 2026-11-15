@@ -4,12 +4,14 @@ import { OS_TOPICS } from "@/lib/topics";
 export const Route = createFileRoute("/quiz/$topic")({
   head: ({ params }) => {
     const topic = OS_TOPICS.find((t) => t.slug === params.topic);
-    const title = topic ? `${topic.title} Quiz` : "Quiz";
+    const title = topic ? `Quiz: ${topic.title}` : "Quiz";
+    const desc = `Test your knowledge of ${topic?.title ?? "Operating Systems"} with self-assessment questions and instant feedback.`;
     return {
       meta: [
-        { title: `${title} — OS Playground` },
-        { name: "description", content: `Take the pop quiz for ${title}.` },
-        { property: "og:title", content: title },
+        { title: `${title} | OS Playground` },
+        { name: "description", content: desc },
+        { property: "og:title", content: `${title} | OS Playground` },
+        { property: "og:description", content: desc },
         { property: "og:type", content: "website" },
         { name: "twitter:card", content: "summary_large_image" },
       ],

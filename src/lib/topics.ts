@@ -3,38 +3,8 @@
  * Add a new entry here and it will appear on the Home page, hero carousel, and hubs.
  * Set `ready: false` for placeholder topics that show "Coming soon" pages.
  */
-export interface HubEntry {
-  num: string;
-  title: string;
-  desc: string;
-  to: string;
-  comingSoon?: boolean;
-}
-
-export interface OSTopic {
-  slug: string;
-  title: string;
-  shortTitle: string;
-  description: string;
-  color: string;
-  rotation: string;
-  ready: boolean;
-  notesReady?: boolean;
-  quizReady?: boolean;
-  /** Lecture label shown on the hero chalkboard. */
-  lectureLabel: string;
-  /** Chalk tagline shown on the hero chalkboard. */
-  tagline: string;
-  /** Link to this topic's simulator/hub page from hero board. */
-  simulatorLink: string;
-  /** Link to this topic's notes page. */
-  notesLink: string;
-  /** Optional unit label and quote shown in the topic's Table of Contents hub. */
-  unitLabel?: string | undefined;
-  quote?: string | undefined;
-  /** Numbered entries for the topic hub's Table of Contents. */
-  hubEntries: HubEntry[];
-}
+import type { HubEntry, OSTopic } from "./types";
+export type { HubEntry, OSTopic };
 
 export const OS_TOPICS: OSTopic[] = [
   {
@@ -45,7 +15,7 @@ export const OS_TOPICS: OSTopic[] = [
     color: "bg-highlight",
     rotation: "-3deg",
     ready: true,
-    lectureLabel: "CS-301 · Operating Systems · Lecture 7",
+    lectureLabel: "OPERATING SYSTEMS · DEADLOCKS",
     tagline: "Safe state ⇒ no deadlock",
     simulatorLink: "/simulator",
     notesLink: "/notes/bankers",
@@ -67,7 +37,7 @@ export const OS_TOPICS: OSTopic[] = [
     color: "bg-accent/70",
     rotation: "2deg",
     ready: true,
-    lectureLabel: "CS-301 · Operating Systems · Lecture 9",
+    lectureLabel: "OPERATING SYSTEMS · CPU SCHEDULING",
     tagline: "Who runs next ⇒ the scheduler decides",
     simulatorLink: "/cpu-scheduling/simulator",
     notesLink: "/notes/cpu-scheduling",
@@ -83,13 +53,13 @@ export const OS_TOPICS: OSTopic[] = [
     slug: "memory-allocation",
     title: "Memory Allocation",
     shortTitle: "Memory",
-    description: "Paging, segmentation & page replacement",
+    description: "First Fit, Best Fit, Worst Fit & Next Fit",
     color: "bg-success/40",
     rotation: "-1.5deg",
     ready: true,
     notesReady: true,
     quizReady: true,
-    lectureLabel: "CS-301 · Operating Systems · Lecture 11",
+    lectureLabel: "OPERATING SYSTEMS · MEMORY MANAGEMENT",
     tagline: "Best fit ⇒ fewer holes",
     simulatorLink: "/memory-allocation/simulator",
     notesLink: "/notes/memory-allocation",
@@ -111,7 +81,7 @@ export const OS_TOPICS: OSTopic[] = [
     ready: true,
     notesReady: true,
     quizReady: true,
-    lectureLabel: "CS-301 · Operating Systems · Lecture 13",
+    lectureLabel: "OPERATING SYSTEMS · DISK SCHEDULING",
     tagline: "Shorter seek ⇒ faster disk",
     simulatorLink: "/disk-scheduling/simulator",
     notesLink: "/notes/disk-scheduling",

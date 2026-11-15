@@ -1,5 +1,28 @@
-# Tasks
-- [ ] Flexible simulator dimensions and complete calculation trace.
-- [ ] Textbook notes pop-up and working personal notes.
-- [ ] Correct detailed Deadlock Lab Banker walkthrough.
-- [ ] Tests and browser verification.
+# OS Playground Roadmap & Milestones
+
+- [x] **Topic 1: Banker's Algorithm (Deadlock Avoidance)**
+  - [x] Safety algorithm simulator with custom matrix editor and step-by-step trace
+  - [x] Resource request testing with state safety validation
+  - [x] Deadlock Lab contrasting unconstrained allocation vs. Banker's avoidance
+  - [x] Conceptual notes and self-assessment pop quiz
+- [x] **Topic 2: CPU Scheduling**
+  - [x] Core algorithmic engine for FCFS, SJF, SRTF, Round Robin, Priority (Non-Preemptive & Preemptive)
+  - [x] Interactive simulator with Gantt chart, ready queue, and calculation trace
+  - [x] Comparison bench with automated, tie-broken best algorithm verdict
+  - [x] Visual lecture notes and pop quiz
+- [x] **Topic 3: Memory Allocation (Contiguous Partitioning)**
+  - [x] Placement engine for First Fit, Best Fit, Worst Fit, and Next Fit
+  - [x] Interactive memory map visualizer with dynamic hole splitting and fragmentation metrics
+  - [x] Multi-algorithm comparison bench evaluating utilization and external fragmentation
+  - [x] Visual lecture notes and pop quiz
+- [x] **Topic 4: Disk Scheduling**
+  - [x] Traversal engine for FCFS, SSTF, SCAN, C-SCAN, LOOK, and C-LOOK
+  - [x] Animated cylinder track visualization with collision-free label layout engine (`src/lib/chartLayout.ts`)
+  - [x] Comparison bench evaluating total seek distance
+  - [x] Visual lecture notes and pop quiz
+- [x] **Platform Foundations & Polish**
+  - [x] Shared notebook-style hub component for all 4 topics
+  - [x] Academic chalkboard theme with unified paper-card and cream-button UI components
+  - [x] Comprehensive test suite (107 unit tests across all algorithmic modules)
+  - [x] Theme-matched icon set, favicon, apple-touch-icon, and social sharing OpenGraph card
+  - [x] Route metadata, distinct page titles, and backward-compatible route redirects

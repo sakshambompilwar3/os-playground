@@ -28,16 +28,17 @@ import {
 export const Route = createFileRoute("/comparison/cpu-scheduling")({
   head: () => ({
     meta: [
-      { title: "CPU Scheduling Comparison — OS Playground" },
+      { title: "CPU Scheduling Comparison | OS Playground" },
       {
         name: "description",
         content:
-          "Run FCFS, SJF, SRTF, Round Robin, and Priority on the exact same input simultaneously with synchronized Gantt charts.",
+          "Compare FCFS, SJF, SRTF, Round Robin, and Priority scheduling side by side with synchronized Gantt charts and best algorithm verdicts.",
       },
-      { property: "og:title", content: "CPU Scheduling Comparison" },
+      { property: "og:title", content: "CPU Scheduling Comparison | OS Playground" },
       {
         property: "og:description",
-        content: "Side-by-side real-time comparison of CPU scheduling algorithms.",
+        content:
+          "Compare FCFS, SJF, SRTF, Round Robin, and Priority scheduling side by side with synchronized Gantt charts and best algorithm verdicts.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -448,7 +449,7 @@ export function CpuSchedulingComparison() {
       {/* Header and inputs control row (matches simulator structure) */}
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="font-hand text-6xl font-bold">Algorithm comparison</h1>
+          <h1 className="font-hand text-5xl md:text-6xl font-bold">CPU Scheduling Comparison</h1>
           <p className="text-muted-foreground">
             Watch all 6 scheduling algorithms race on the exact same workload side by side.
           </p>

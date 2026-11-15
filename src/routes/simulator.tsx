@@ -11,10 +11,18 @@ import { Calculator, Play, Pause, RotateCcw, StepForward, Shuffle } from "lucide
 export const Route = createFileRoute("/simulator")({
   head: () => ({
     meta: [
-      { title: "Safety Simulator — Banker's Algorithm" },
-      { name: "description", content: "Edit Max, Allocation and Available, then step through the safety algorithm." },
-      { property: "og:title", content: "Banker's Safety Simulator" },
-      { property: "og:description", content: "Step-by-step animated safe sequence finder." },
+      { title: "Banker's Safety Simulator | OS Playground" },
+      {
+        name: "description",
+        content:
+          "Edit Max, Allocation, and Available matrices, then step through Dijkstra's safety algorithm with complete calculation traces.",
+      },
+      { property: "og:title", content: "Banker's Safety Simulator | OS Playground" },
+      {
+        property: "og:description",
+        content:
+          "Edit Max, Allocation, and Available matrices, then step through Dijkstra's safety algorithm with complete calculation traces.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -127,7 +135,7 @@ function Simulator() {
       </div>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="font-hand text-6xl font-bold">Safety simulator</h1>
+          <h1 className="font-hand text-5xl md:text-6xl font-bold">Banker's Safety Simulator</h1>
           <p className="text-muted-foreground">Edit the numbers, then press play to find a safe sequence.</p>
         </div>
         <div className="flex flex-wrap items-center gap-3 font-mono text-sm">
@@ -135,26 +143,28 @@ function Simulator() {
             <input
               aria-label="Number of processes"
               type="number"
+              inputMode="numeric"
               min={1}
               max={10}
               step={1}
               value={processCount}
               onChange={(e) => handleProcessChange(e.target.value)}
               onBlur={handleProcessBlur}
-              className="w-20 rounded-md border-2 border-input bg-paper p-2"
+              className="w-20 min-h-[44px] rounded-md border-2 border-input bg-paper p-2 text-base"
             />
           </label>
           <label className="flex items-center gap-2">resources
             <input
               aria-label="Number of resources"
               type="number"
+              inputMode="numeric"
               min={1}
               max={6}
               step={1}
               value={resourceCount}
               onChange={(e) => handleResourceChange(e.target.value)}
               onBlur={handleResourceBlur}
-              className="w-20 rounded-md border-2 border-input bg-paper p-2"
+              className="w-20 min-h-[44px] rounded-md border-2 border-input bg-paper p-2 text-base"
             />
           </label>
           <Button variant="outline" onClick={() => { handleProcessBlur(); handleResourceBlur(); }}>Apply counts</Button>

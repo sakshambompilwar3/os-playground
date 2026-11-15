@@ -5,13 +5,18 @@ import { OS_TOPICS } from "@/lib/topics";
 export const Route = createFileRoute("/memory-allocation/")({
   head: () => ({
     meta: [
-      { title: "Memory Allocation — OS Class" },
+      { title: "Memory Allocation | OS Playground" },
       {
         name: "description",
         content:
-          "Explore memory allocation strategies: First Fit, Best Fit, Worst Fit, paging and fragmentation.",
+          "Explore contiguous memory allocation strategies: First Fit, Best Fit, Worst Fit, Next Fit, notes, and quiz.",
       },
-      { property: "og:title", content: "Memory Allocation — OS Class" },
+      { property: "og:title", content: "Memory Allocation | OS Playground" },
+      {
+        property: "og:description",
+        content:
+          "Explore contiguous memory allocation strategies: First Fit, Best Fit, Worst Fit, Next Fit, notes, and quiz.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

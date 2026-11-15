@@ -4,9 +4,16 @@ import { OS_TOPICS } from "@/lib/topics";
 export const Route = createFileRoute("/notes/")({
   head: () => ({
     meta: [
-      { title: "Notes — OS Playground" },
-      { name: "description", content: "Browse study notes for all OS topics." },
-      { property: "og:title", content: "Notes — OS Playground" },
+      { title: "Notes | OS Playground" },
+      {
+        name: "description",
+        content: "Browse visual lecture notes and chalkboard diagrams for all Operating Systems topics.",
+      },
+      { property: "og:title", content: "Notes | OS Playground" },
+      {
+        property: "og:description",
+        content: "Browse visual lecture notes and chalkboard diagrams for all Operating Systems topics.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

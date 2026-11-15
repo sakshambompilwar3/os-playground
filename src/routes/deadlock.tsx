@@ -8,10 +8,18 @@ import { DEADLOCK_EXAMPLE as example } from "@/lib/deadlock-example";
 export const Route = createFileRoute("/deadlock")({
   head: () => ({
     meta: [
-      { title: "Deadlock Lab — Banker's Algorithm" },
-      { name: "description", content: "See a circular wait form between processes, and how the Banker prevents it." },
-      { property: "og:title", content: "Deadlock Lab" },
-      { property: "og:description", content: "Animated resource allocation graph showing circular wait." },
+      { title: "Deadlock Lab | OS Playground" },
+      {
+        name: "description",
+        content:
+          "Compare unconstrained resource allocation against Dijkstra's Banker's avoidance to watch circular wait form in real time.",
+      },
+      { property: "og:title", content: "Deadlock Lab | OS Playground" },
+      {
+        property: "og:description",
+        content:
+          "Compare unconstrained resource allocation against Dijkstra's Banker's avoidance to watch circular wait form in real time.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -43,7 +51,7 @@ function Deadlock() {
       </Link>
       <div className="grid items-center gap-10 lg:grid-cols-2">
       <div className="space-y-5">
-        <h1 className="font-hand text-6xl font-bold">Deadlock lab</h1>
+        <h1 className="font-hand text-5xl md:text-6xl font-bold">Deadlock Lab</h1>
         <p key={phase} className="animate-rise notebook rounded-md py-4 pl-20 pr-6 font-hand text-2xl leading-8">{steps[phase]}</p>
         <div className="flex gap-3">
           <Button variant="outline" onClick={() => setPhase((p) => (p + 1) % 4)} className="bg-highlight">{phase === 3 ? "↺ restart" : "next →"}</Button>

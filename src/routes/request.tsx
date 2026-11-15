@@ -6,10 +6,18 @@ import { SAMPLE, computeNeed, requestResources, type Matrix, type RequestOutcome
 export const Route = createFileRoute("/request")({
   head: () => ({
     meta: [
-      { title: "Resource Requests — Banker's Algorithm" },
-      { name: "description", content: "Send resource requests from a process and see if the OS grants or denies them." },
-      { property: "og:title", content: "Resource Request Handler" },
-      { property: "og:description", content: "Play the OS: grant or deny requests while keeping the system safe." },
+      { title: "Resource Request Simulator | OS Playground" },
+      {
+        name: "description",
+        content:
+          "Send resource requests from a process and verify whether the Banker's Algorithm grants or denies them safely.",
+      },
+      { property: "og:title", content: "Resource Request Simulator | OS Playground" },
+      {
+        property: "og:description",
+        content:
+          "Send resource requests from a process and verify whether the Banker's Algorithm grants or denies them safely.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -47,7 +55,7 @@ function RequestPage() {
         <Link to="/bankers" className="text-sm text-muted-foreground hover:underline">
           ← back to Banker's Algorithm
         </Link>
-        <h1 className="mt-2 font-hand text-6xl font-bold">You are the OS</h1>
+        <h1 className="mt-2 font-hand text-5xl md:text-6xl font-bold">Resource Request Simulator</h1>
         <p className="text-muted-foreground">Pick a process, type a request, and let the Banker decide.</p>
       </div>
       <VectorRow label="Available:" resources={R} values={avail} />

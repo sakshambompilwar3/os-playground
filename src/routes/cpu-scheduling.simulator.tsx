@@ -26,16 +26,17 @@ import {
 export const Route = createFileRoute("/cpu-scheduling/simulator")({
   head: () => ({
     meta: [
-      { title: "CPU Scheduling Simulator — OS Class" },
+      { title: "CPU Scheduling Simulator | OS Playground" },
       {
         name: "description",
         content:
-          "Edit arrival times, bursts, and priorities, then watch FCFS, SJF, SRTF, Round Robin, or Priority build the Gantt chart.",
+          "Simulate FCFS, SJF, SRTF, Round Robin, and Priority scheduling with interactive Gantt charts, ready queue visualization, and calculation traces.",
       },
-      { property: "og:title", content: "CPU Scheduling Simulator — OS Class" },
+      { property: "og:title", content: "CPU Scheduling Simulator | OS Playground" },
       {
         property: "og:description",
-        content: "Interactive step-by-step CPU scheduling simulator with animated Gantt chart.",
+        content:
+          "Simulate FCFS, SJF, SRTF, Round Robin, and Priority scheduling with interactive Gantt charts, ready queue visualization, and calculation traces.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -322,7 +323,7 @@ function CpuSchedulingSimulator() {
       {/* Header + count & quick-action controls (mirrors Banker's simulator) */}
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="font-hand text-6xl font-bold">CPU Scheduling simulator</h1>
+          <h1 className="font-hand text-5xl md:text-6xl font-bold">CPU Scheduling Simulator</h1>
           <p className="text-muted-foreground">
             Pick an algorithm, edit the processes, then press play to watch the Gantt chart.
           </p>
@@ -334,13 +335,14 @@ function CpuSchedulingSimulator() {
             <input
               aria-label="Number of processes"
               type="number"
+              inputMode="numeric"
               min={1}
               max={10}
               step={1}
               value={processCountStr}
               onChange={(e) => handleProcessCountChange(e.target.value)}
               onBlur={handleProcessCountBlur}
-              className="w-20 rounded-md border-2 border-input bg-paper p-2 focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="w-20 min-h-[44px] rounded-md border-2 border-input bg-paper p-2 text-base focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             />
           </label>
           <label className="flex items-center gap-2">
@@ -348,13 +350,14 @@ function CpuSchedulingSimulator() {
             <input
               aria-label="Context switch time"
               type="number"
+              inputMode="numeric"
               min={0}
               max={5}
               step={1}
               value={csStr}
               onChange={(e) => setCsStr(e.target.value)}
               onBlur={handleCsBlur}
-              className="w-20 rounded-md border-2 border-input bg-paper p-2 focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="w-20 min-h-[44px] rounded-md border-2 border-input bg-paper p-2 text-base focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             />
           </label>
           <Button
@@ -404,12 +407,13 @@ function CpuSchedulingSimulator() {
               <input
                 aria-label="Time quantum"
                 type="number"
+                inputMode="numeric"
                 min={1}
                 step={1}
                 value={quantumStr}
                 onChange={(e) => setQuantumStr(e.target.value)}
                 onBlur={handleQuantumBlur}
-                className="w-20 rounded-md border-2 border-input bg-background px-2 py-1.5 focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="w-20 min-h-[44px] rounded-md border-2 border-input bg-background px-2 py-1.5 text-base focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               />
             </label>
           )}
@@ -542,38 +546,41 @@ function CpuSchedulingSimulator() {
                     <td className="px-3 py-2 text-center">
                       <input
                         type="number"
+                        inputMode="numeric"
                         min={0}
                         step={1}
                         aria-label={`Arrival Time for ${resolvedName}`}
                         value={row.atStr}
                         onChange={(e) => updateRowField(idx, "atStr", e.target.value)}
                         onBlur={() => clampRowField(idx, "atStr")}
-                        className="w-20 rounded border-2 border-input bg-background px-2 py-1 text-center focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                        className="w-20 min-h-[44px] rounded border-2 border-input bg-background px-2 py-1 text-center text-base focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                       />
                     </td>
                     <td className="px-3 py-2 text-center">
                       <input
                         type="number"
+                        inputMode="numeric"
                         min={1}
                         step={1}
                         aria-label={`Burst Time for ${resolvedName}`}
                         value={row.btStr}
                         onChange={(e) => updateRowField(idx, "btStr", e.target.value)}
                         onBlur={() => clampRowField(idx, "btStr")}
-                        className="w-20 rounded border-2 border-input bg-background px-2 py-1 text-center focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                        className="w-20 min-h-[44px] rounded border-2 border-input bg-background px-2 py-1 text-center text-base focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                       />
                     </td>
                     {topAlgo === "priority" && (
                       <td className="px-3 py-2 text-center">
                         <input
                           type="number"
+                          inputMode="numeric"
                           min={0}
                           step={1}
                           aria-label={`Priority for ${resolvedName}`}
                           value={row.prioStr}
                           onChange={(e) => updateRowField(idx, "prioStr", e.target.value)}
                           onBlur={() => clampRowField(idx, "prioStr")}
-                          className="w-20 rounded border-2 border-input bg-background px-2 py-1 text-center focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                          className="w-20 min-h-[44px] rounded border-2 border-input bg-background px-2 py-1 text-center text-base focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                         />
                       </td>
                     )}
