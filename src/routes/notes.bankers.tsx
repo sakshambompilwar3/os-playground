@@ -46,7 +46,7 @@ function BankersNotes() {
             Print
           </button>
         </div>
-        <h1 className="font-hand text-5xl md:text-6xl font-bold">Banker's Algorithm Notes</h1>
+        <h1 className="font-hand text-5xl md:text-6xl font-bold">The notes</h1>
         <p className="text-muted-foreground">Tap a page to read it.</p>
         {cards.map((c, i) => (
           <button

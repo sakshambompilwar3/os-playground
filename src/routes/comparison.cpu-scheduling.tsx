@@ -449,7 +449,7 @@ export function CpuSchedulingComparison() {
       {/* Header and inputs control row (matches simulator structure) */}
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="font-hand text-5xl md:text-6xl font-bold">CPU Scheduling Comparison</h1>
+          <h1 className="font-hand text-5xl md:text-6xl font-bold">Algorithm comparison</h1>
           <p className="text-muted-foreground">
             Watch all 6 scheduling algorithms race on the exact same workload side by side.
           </p>

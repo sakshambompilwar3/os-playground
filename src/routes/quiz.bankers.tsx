@@ -78,7 +78,7 @@ function BankersQuiz() {
                 key={a}
                 disabled={pick !== null}
                 onClick={() => { setPick(k); if (k === q.c) setScore(score + 1); }}
-                className={`press paper-card px-4 py-2 text-left font-medium ${state}`}
+                className={`press paper-card flex min-h-[44px] items-center px-4 py-2.5 text-left font-medium ${state}`}
               >
                 {String.fromCharCode(65 + k)}. {a}
               </button>
@@ -86,7 +86,13 @@ function BankersQuiz() {
           })}
         </div>
         {pick !== null && (
-          <button onClick={() => { setI(i + 1); setPick(null); }} className="press paper-card animate-rise mt-6 bg-highlight px-5 py-2 font-bold">next →</button>
+          <button
+            type="button"
+            onClick={() => { setI(i + 1); setPick(null); }}
+            className="press paper-card animate-rise mt-6 inline-flex min-h-[44px] items-center justify-center bg-highlight px-5 py-2.5 font-bold"
+          >
+            next →
+          </button>
         )}
       </div>
     </div>
