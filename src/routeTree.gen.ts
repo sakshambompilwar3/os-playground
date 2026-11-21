@@ -20,13 +20,17 @@ import { Route as DiskSchedulingRouteImport } from './routes/disk-scheduling'
 import { Route as LearnRouteImport } from './routes/learn'
 import { Route as MemoryAllocationRouteImport } from './routes/memory-allocation'
 import { Route as NotesRouteImport } from './routes/notes'
+import { Route as PageReplacementRouteImport } from './routes/page-replacement'
 import { Route as QuizRouteImport } from './routes/quiz'
 import { Route as RequestRouteImport } from './routes/request'
 import { Route as RequestsRouteImport } from './routes/requests'
 import { Route as SimulatorRouteImport } from './routes/simulator'
+import { Route as SynchronizationRouteImport } from './routes/synchronization'
 import { Route as ComparisonCpuSchedulingRouteImport } from './routes/comparison.cpu-scheduling'
 import { Route as ComparisonDiskSchedulingRouteImport } from './routes/comparison.disk-scheduling'
 import { Route as ComparisonMemoryAllocationRouteImport } from './routes/comparison.memory-allocation'
+import { Route as ComparisonPageReplacementRouteImport } from './routes/comparison.page-replacement'
+import { Route as ComparisonSynchronizationRouteImport } from './routes/comparison.synchronization'
 import { Route as CpuSchedulingIndexRouteImport } from './routes/cpu-scheduling.index'
 import { Route as CpuSchedulingComparisonRouteImport } from './routes/cpu-scheduling.comparison'
 import { Route as CpuSchedulingSimulatorRouteImport } from './routes/cpu-scheduling.simulator'
@@ -40,12 +44,23 @@ import { Route as NotesBankersRouteImport } from './routes/notes.bankers'
 import { Route as NotesCpuSchedulingRouteImport } from './routes/notes.cpu-scheduling'
 import { Route as NotesDiskSchedulingRouteImport } from './routes/notes.disk-scheduling'
 import { Route as NotesMemoryAllocationRouteImport } from './routes/notes.memory-allocation'
+import { Route as NotesPageReplacementRouteImport } from './routes/notes.page-replacement'
+import { Route as NotesSynchronizationRouteImport } from './routes/notes.synchronization'
+import { Route as PageReplacementIndexRouteImport } from './routes/page-replacement.index'
+import { Route as PageReplacementComparisonRouteImport } from './routes/page-replacement.comparison'
+import { Route as PageReplacementSimulatorRouteImport } from './routes/page-replacement.simulator'
 import { Route as QuizIndexRouteImport } from './routes/quiz.index'
 import { Route as QuizTopicRouteImport } from './routes/quiz.$topic'
 import { Route as QuizBankersRouteImport } from './routes/quiz.bankers'
 import { Route as QuizCpuSchedulingRouteImport } from './routes/quiz.cpu-scheduling'
 import { Route as QuizDiskSchedulingRouteImport } from './routes/quiz.disk-scheduling'
 import { Route as QuizMemoryAllocationRouteImport } from './routes/quiz.memory-allocation'
+import { Route as QuizPageReplacementRouteImport } from './routes/quiz.page-replacement'
+import { Route as QuizSynchronizationRouteImport } from './routes/quiz.synchronization'
+import { Route as SynchronizationIndexRouteImport } from './routes/synchronization.index'
+import { Route as SynchronizationComparisonRouteImport } from './routes/synchronization.comparison'
+import { Route as SynchronizationDiningPhilosophersRouteImport } from './routes/synchronization.dining-philosophers'
+import { Route as SynchronizationProducerConsumerRouteImport } from './routes/synchronization.producer-consumer'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -102,6 +117,11 @@ const NotesRoute = NotesRouteImport.update({
   path: '/notes',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PageReplacementRoute = PageReplacementRouteImport.update({
+  id: '/page-replacement',
+  path: '/page-replacement',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const QuizRoute = QuizRouteImport.update({
   id: '/quiz',
   path: '/quiz',
@@ -122,6 +142,11 @@ const SimulatorRoute = SimulatorRouteImport.update({
   path: '/simulator',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SynchronizationRoute = SynchronizationRouteImport.update({
+  id: '/synchronization',
+  path: '/synchronization',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ComparisonCpuSchedulingRoute = ComparisonCpuSchedulingRouteImport.update({
   id: '/cpu-scheduling',
   path: '/cpu-scheduling',
@@ -137,6 +162,18 @@ const ComparisonMemoryAllocationRoute =
   ComparisonMemoryAllocationRouteImport.update({
     id: '/memory-allocation',
     path: '/memory-allocation',
+    getParentRoute: () => ComparisonRoute,
+  } as any)
+const ComparisonPageReplacementRoute =
+  ComparisonPageReplacementRouteImport.update({
+    id: '/page-replacement',
+    path: '/page-replacement',
+    getParentRoute: () => ComparisonRoute,
+  } as any)
+const ComparisonSynchronizationRoute =
+  ComparisonSynchronizationRouteImport.update({
+    id: '/synchronization',
+    path: '/synchronization',
     getParentRoute: () => ComparisonRoute,
   } as any)
 const CpuSchedulingIndexRoute = CpuSchedulingIndexRouteImport.update({
@@ -205,6 +242,33 @@ const NotesMemoryAllocationRoute = NotesMemoryAllocationRouteImport.update({
   path: '/memory-allocation',
   getParentRoute: () => NotesRoute,
 } as any)
+const NotesPageReplacementRoute = NotesPageReplacementRouteImport.update({
+  id: '/page-replacement',
+  path: '/page-replacement',
+  getParentRoute: () => NotesRoute,
+} as any)
+const NotesSynchronizationRoute = NotesSynchronizationRouteImport.update({
+  id: '/synchronization',
+  path: '/synchronization',
+  getParentRoute: () => NotesRoute,
+} as any)
+const PageReplacementIndexRoute = PageReplacementIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PageReplacementRoute,
+} as any)
+const PageReplacementComparisonRoute =
+  PageReplacementComparisonRouteImport.update({
+    id: '/comparison',
+    path: '/comparison',
+    getParentRoute: () => PageReplacementRoute,
+  } as any)
+const PageReplacementSimulatorRoute =
+  PageReplacementSimulatorRouteImport.update({
+    id: '/simulator',
+    path: '/simulator',
+    getParentRoute: () => PageReplacementRoute,
+  } as any)
 const QuizIndexRoute = QuizIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -235,6 +299,39 @@ const QuizMemoryAllocationRoute = QuizMemoryAllocationRouteImport.update({
   path: '/memory-allocation',
   getParentRoute: () => QuizRoute,
 } as any)
+const QuizPageReplacementRoute = QuizPageReplacementRouteImport.update({
+  id: '/page-replacement',
+  path: '/page-replacement',
+  getParentRoute: () => QuizRoute,
+} as any)
+const QuizSynchronizationRoute = QuizSynchronizationRouteImport.update({
+  id: '/synchronization',
+  path: '/synchronization',
+  getParentRoute: () => QuizRoute,
+} as any)
+const SynchronizationIndexRoute = SynchronizationIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => SynchronizationRoute,
+} as any)
+const SynchronizationComparisonRoute =
+  SynchronizationComparisonRouteImport.update({
+    id: '/comparison',
+    path: '/comparison',
+    getParentRoute: () => SynchronizationRoute,
+  } as any)
+const SynchronizationDiningPhilosophersRoute =
+  SynchronizationDiningPhilosophersRouteImport.update({
+    id: '/dining-philosophers',
+    path: '/dining-philosophers',
+    getParentRoute: () => SynchronizationRoute,
+  } as any)
+const SynchronizationProducerConsumerRoute =
+  SynchronizationProducerConsumerRouteImport.update({
+    id: '/producer-consumer',
+    path: '/producer-consumer',
+    getParentRoute: () => SynchronizationRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -248,13 +345,17 @@ export interface FileRoutesByFullPath {
   '/learn': typeof LearnRoute
   '/memory-allocation': typeof MemoryAllocationRouteWithChildren
   '/notes': typeof NotesRouteWithChildren
+  '/page-replacement': typeof PageReplacementRouteWithChildren
   '/quiz': typeof QuizRouteWithChildren
   '/request': typeof RequestRoute
   '/requests': typeof RequestsRoute
   '/simulator': typeof SimulatorRoute
+  '/synchronization': typeof SynchronizationRouteWithChildren
   '/comparison/cpu-scheduling': typeof ComparisonCpuSchedulingRoute
   '/comparison/disk-scheduling': typeof ComparisonDiskSchedulingRoute
   '/comparison/memory-allocation': typeof ComparisonMemoryAllocationRoute
+  '/comparison/page-replacement': typeof ComparisonPageReplacementRoute
+  '/comparison/synchronization': typeof ComparisonSynchronizationRoute
   '/cpu-scheduling/comparison': typeof CpuSchedulingComparisonRoute
   '/cpu-scheduling/simulator': typeof CpuSchedulingSimulatorRoute
   '/disk-scheduling/simulator': typeof DiskSchedulingSimulatorRoute
@@ -264,16 +365,27 @@ export interface FileRoutesByFullPath {
   '/notes/cpu-scheduling': typeof NotesCpuSchedulingRoute
   '/notes/disk-scheduling': typeof NotesDiskSchedulingRoute
   '/notes/memory-allocation': typeof NotesMemoryAllocationRoute
+  '/notes/page-replacement': typeof NotesPageReplacementRoute
+  '/notes/synchronization': typeof NotesSynchronizationRoute
+  '/page-replacement/comparison': typeof PageReplacementComparisonRoute
+  '/page-replacement/simulator': typeof PageReplacementSimulatorRoute
   '/quiz/$topic': typeof QuizTopicRoute
   '/quiz/bankers': typeof QuizBankersRoute
   '/quiz/cpu-scheduling': typeof QuizCpuSchedulingRoute
   '/quiz/disk-scheduling': typeof QuizDiskSchedulingRoute
   '/quiz/memory-allocation': typeof QuizMemoryAllocationRoute
+  '/quiz/page-replacement': typeof QuizPageReplacementRoute
+  '/quiz/synchronization': typeof QuizSynchronizationRoute
+  '/synchronization/comparison': typeof SynchronizationComparisonRoute
+  '/synchronization/dining-philosophers': typeof SynchronizationDiningPhilosophersRoute
+  '/synchronization/producer-consumer': typeof SynchronizationProducerConsumerRoute
   '/cpu-scheduling/': typeof CpuSchedulingIndexRoute
   '/disk-scheduling/': typeof DiskSchedulingIndexRoute
   '/memory-allocation/': typeof MemoryAllocationIndexRoute
   '/notes/': typeof NotesIndexRoute
+  '/page-replacement/': typeof PageReplacementIndexRoute
   '/quiz/': typeof QuizIndexRoute
+  '/synchronization/': typeof SynchronizationIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -289,6 +401,8 @@ export interface FileRoutesByTo {
   '/comparison/cpu-scheduling': typeof ComparisonCpuSchedulingRoute
   '/comparison/disk-scheduling': typeof ComparisonDiskSchedulingRoute
   '/comparison/memory-allocation': typeof ComparisonMemoryAllocationRoute
+  '/comparison/page-replacement': typeof ComparisonPageReplacementRoute
+  '/comparison/synchronization': typeof ComparisonSynchronizationRoute
   '/cpu-scheduling/comparison': typeof CpuSchedulingComparisonRoute
   '/cpu-scheduling/simulator': typeof CpuSchedulingSimulatorRoute
   '/disk-scheduling/simulator': typeof DiskSchedulingSimulatorRoute
@@ -298,16 +412,27 @@ export interface FileRoutesByTo {
   '/notes/cpu-scheduling': typeof NotesCpuSchedulingRoute
   '/notes/disk-scheduling': typeof NotesDiskSchedulingRoute
   '/notes/memory-allocation': typeof NotesMemoryAllocationRoute
+  '/notes/page-replacement': typeof NotesPageReplacementRoute
+  '/notes/synchronization': typeof NotesSynchronizationRoute
+  '/page-replacement/comparison': typeof PageReplacementComparisonRoute
+  '/page-replacement/simulator': typeof PageReplacementSimulatorRoute
   '/quiz/$topic': typeof QuizTopicRoute
   '/quiz/bankers': typeof QuizBankersRoute
   '/quiz/cpu-scheduling': typeof QuizCpuSchedulingRoute
   '/quiz/disk-scheduling': typeof QuizDiskSchedulingRoute
   '/quiz/memory-allocation': typeof QuizMemoryAllocationRoute
+  '/quiz/page-replacement': typeof QuizPageReplacementRoute
+  '/quiz/synchronization': typeof QuizSynchronizationRoute
+  '/synchronization/comparison': typeof SynchronizationComparisonRoute
+  '/synchronization/dining-philosophers': typeof SynchronizationDiningPhilosophersRoute
+  '/synchronization/producer-consumer': typeof SynchronizationProducerConsumerRoute
   '/cpu-scheduling': typeof CpuSchedulingIndexRoute
   '/disk-scheduling': typeof DiskSchedulingIndexRoute
   '/memory-allocation': typeof MemoryAllocationIndexRoute
   '/notes': typeof NotesIndexRoute
+  '/page-replacement': typeof PageReplacementIndexRoute
   '/quiz': typeof QuizIndexRoute
+  '/synchronization': typeof SynchronizationIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -322,13 +447,17 @@ export interface FileRoutesById {
   '/learn': typeof LearnRoute
   '/memory-allocation': typeof MemoryAllocationRouteWithChildren
   '/notes': typeof NotesRouteWithChildren
+  '/page-replacement': typeof PageReplacementRouteWithChildren
   '/quiz': typeof QuizRouteWithChildren
   '/request': typeof RequestRoute
   '/requests': typeof RequestsRoute
   '/simulator': typeof SimulatorRoute
+  '/synchronization': typeof SynchronizationRouteWithChildren
   '/comparison/cpu-scheduling': typeof ComparisonCpuSchedulingRoute
   '/comparison/disk-scheduling': typeof ComparisonDiskSchedulingRoute
   '/comparison/memory-allocation': typeof ComparisonMemoryAllocationRoute
+  '/comparison/page-replacement': typeof ComparisonPageReplacementRoute
+  '/comparison/synchronization': typeof ComparisonSynchronizationRoute
   '/cpu-scheduling/comparison': typeof CpuSchedulingComparisonRoute
   '/cpu-scheduling/simulator': typeof CpuSchedulingSimulatorRoute
   '/disk-scheduling/simulator': typeof DiskSchedulingSimulatorRoute
@@ -338,16 +467,27 @@ export interface FileRoutesById {
   '/notes/cpu-scheduling': typeof NotesCpuSchedulingRoute
   '/notes/disk-scheduling': typeof NotesDiskSchedulingRoute
   '/notes/memory-allocation': typeof NotesMemoryAllocationRoute
+  '/notes/page-replacement': typeof NotesPageReplacementRoute
+  '/notes/synchronization': typeof NotesSynchronizationRoute
+  '/page-replacement/comparison': typeof PageReplacementComparisonRoute
+  '/page-replacement/simulator': typeof PageReplacementSimulatorRoute
   '/quiz/$topic': typeof QuizTopicRoute
   '/quiz/bankers': typeof QuizBankersRoute
   '/quiz/cpu-scheduling': typeof QuizCpuSchedulingRoute
   '/quiz/disk-scheduling': typeof QuizDiskSchedulingRoute
   '/quiz/memory-allocation': typeof QuizMemoryAllocationRoute
+  '/quiz/page-replacement': typeof QuizPageReplacementRoute
+  '/quiz/synchronization': typeof QuizSynchronizationRoute
+  '/synchronization/comparison': typeof SynchronizationComparisonRoute
+  '/synchronization/dining-philosophers': typeof SynchronizationDiningPhilosophersRoute
+  '/synchronization/producer-consumer': typeof SynchronizationProducerConsumerRoute
   '/cpu-scheduling/': typeof CpuSchedulingIndexRoute
   '/disk-scheduling/': typeof DiskSchedulingIndexRoute
   '/memory-allocation/': typeof MemoryAllocationIndexRoute
   '/notes/': typeof NotesIndexRoute
+  '/page-replacement/': typeof PageReplacementIndexRoute
   '/quiz/': typeof QuizIndexRoute
+  '/synchronization/': typeof SynchronizationIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -363,13 +503,17 @@ export interface FileRouteTypes {
     | '/learn'
     | '/memory-allocation'
     | '/notes'
+    | '/page-replacement'
     | '/quiz'
     | '/request'
     | '/requests'
     | '/simulator'
+    | '/synchronization'
     | '/comparison/cpu-scheduling'
     | '/comparison/disk-scheduling'
     | '/comparison/memory-allocation'
+    | '/comparison/page-replacement'
+    | '/comparison/synchronization'
     | '/cpu-scheduling/comparison'
     | '/cpu-scheduling/simulator'
     | '/disk-scheduling/simulator'
@@ -379,16 +523,27 @@ export interface FileRouteTypes {
     | '/notes/cpu-scheduling'
     | '/notes/disk-scheduling'
     | '/notes/memory-allocation'
+    | '/notes/page-replacement'
+    | '/notes/synchronization'
+    | '/page-replacement/comparison'
+    | '/page-replacement/simulator'
     | '/quiz/$topic'
     | '/quiz/bankers'
     | '/quiz/cpu-scheduling'
     | '/quiz/disk-scheduling'
     | '/quiz/memory-allocation'
+    | '/quiz/page-replacement'
+    | '/quiz/synchronization'
+    | '/synchronization/comparison'
+    | '/synchronization/dining-philosophers'
+    | '/synchronization/producer-consumer'
     | '/cpu-scheduling/'
     | '/disk-scheduling/'
     | '/memory-allocation/'
     | '/notes/'
+    | '/page-replacement/'
     | '/quiz/'
+    | '/synchronization/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -404,6 +559,8 @@ export interface FileRouteTypes {
     | '/comparison/cpu-scheduling'
     | '/comparison/disk-scheduling'
     | '/comparison/memory-allocation'
+    | '/comparison/page-replacement'
+    | '/comparison/synchronization'
     | '/cpu-scheduling/comparison'
     | '/cpu-scheduling/simulator'
     | '/disk-scheduling/simulator'
@@ -413,16 +570,27 @@ export interface FileRouteTypes {
     | '/notes/cpu-scheduling'
     | '/notes/disk-scheduling'
     | '/notes/memory-allocation'
+    | '/notes/page-replacement'
+    | '/notes/synchronization'
+    | '/page-replacement/comparison'
+    | '/page-replacement/simulator'
     | '/quiz/$topic'
     | '/quiz/bankers'
     | '/quiz/cpu-scheduling'
     | '/quiz/disk-scheduling'
     | '/quiz/memory-allocation'
+    | '/quiz/page-replacement'
+    | '/quiz/synchronization'
+    | '/synchronization/comparison'
+    | '/synchronization/dining-philosophers'
+    | '/synchronization/producer-consumer'
     | '/cpu-scheduling'
     | '/disk-scheduling'
     | '/memory-allocation'
     | '/notes'
+    | '/page-replacement'
     | '/quiz'
+    | '/synchronization'
   id:
     | '__root__'
     | '/'
@@ -436,13 +604,17 @@ export interface FileRouteTypes {
     | '/learn'
     | '/memory-allocation'
     | '/notes'
+    | '/page-replacement'
     | '/quiz'
     | '/request'
     | '/requests'
     | '/simulator'
+    | '/synchronization'
     | '/comparison/cpu-scheduling'
     | '/comparison/disk-scheduling'
     | '/comparison/memory-allocation'
+    | '/comparison/page-replacement'
+    | '/comparison/synchronization'
     | '/cpu-scheduling/comparison'
     | '/cpu-scheduling/simulator'
     | '/disk-scheduling/simulator'
@@ -452,16 +624,27 @@ export interface FileRouteTypes {
     | '/notes/cpu-scheduling'
     | '/notes/disk-scheduling'
     | '/notes/memory-allocation'
+    | '/notes/page-replacement'
+    | '/notes/synchronization'
+    | '/page-replacement/comparison'
+    | '/page-replacement/simulator'
     | '/quiz/$topic'
     | '/quiz/bankers'
     | '/quiz/cpu-scheduling'
     | '/quiz/disk-scheduling'
     | '/quiz/memory-allocation'
+    | '/quiz/page-replacement'
+    | '/quiz/synchronization'
+    | '/synchronization/comparison'
+    | '/synchronization/dining-philosophers'
+    | '/synchronization/producer-consumer'
     | '/cpu-scheduling/'
     | '/disk-scheduling/'
     | '/memory-allocation/'
     | '/notes/'
+    | '/page-replacement/'
     | '/quiz/'
+    | '/synchronization/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -476,10 +659,12 @@ export interface RootRouteChildren {
   LearnRoute: typeof LearnRoute
   MemoryAllocationRoute: typeof MemoryAllocationRouteWithChildren
   NotesRoute: typeof NotesRouteWithChildren
+  PageReplacementRoute: typeof PageReplacementRouteWithChildren
   QuizRoute: typeof QuizRouteWithChildren
   RequestRoute: typeof RequestRoute
   RequestsRoute: typeof RequestsRoute
   SimulatorRoute: typeof SimulatorRoute
+  SynchronizationRoute: typeof SynchronizationRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -561,6 +746,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NotesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/page-replacement': {
+      id: '/page-replacement'
+      path: '/page-replacement'
+      fullPath: '/page-replacement'
+      preLoaderRoute: typeof PageReplacementRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/quiz': {
       id: '/quiz'
       path: '/quiz'
@@ -589,6 +781,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SimulatorRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/synchronization': {
+      id: '/synchronization'
+      path: '/synchronization'
+      fullPath: '/synchronization'
+      preLoaderRoute: typeof SynchronizationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/comparison/cpu-scheduling': {
       id: '/comparison/cpu-scheduling'
       path: '/cpu-scheduling'
@@ -608,6 +807,20 @@ declare module '@tanstack/react-router' {
       path: '/memory-allocation'
       fullPath: '/comparison/memory-allocation'
       preLoaderRoute: typeof ComparisonMemoryAllocationRouteImport
+      parentRoute: typeof ComparisonRoute
+    }
+    '/comparison/page-replacement': {
+      id: '/comparison/page-replacement'
+      path: '/page-replacement'
+      fullPath: '/comparison/page-replacement'
+      preLoaderRoute: typeof ComparisonPageReplacementRouteImport
+      parentRoute: typeof ComparisonRoute
+    }
+    '/comparison/synchronization': {
+      id: '/comparison/synchronization'
+      path: '/synchronization'
+      fullPath: '/comparison/synchronization'
+      preLoaderRoute: typeof ComparisonSynchronizationRouteImport
       parentRoute: typeof ComparisonRoute
     }
     '/cpu-scheduling/': {
@@ -701,6 +914,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NotesMemoryAllocationRouteImport
       parentRoute: typeof NotesRoute
     }
+    '/notes/page-replacement': {
+      id: '/notes/page-replacement'
+      path: '/page-replacement'
+      fullPath: '/notes/page-replacement'
+      preLoaderRoute: typeof NotesPageReplacementRouteImport
+      parentRoute: typeof NotesRoute
+    }
+    '/notes/synchronization': {
+      id: '/notes/synchronization'
+      path: '/synchronization'
+      fullPath: '/notes/synchronization'
+      preLoaderRoute: typeof NotesSynchronizationRouteImport
+      parentRoute: typeof NotesRoute
+    }
+    '/page-replacement/': {
+      id: '/page-replacement/'
+      path: '/'
+      fullPath: '/page-replacement/'
+      preLoaderRoute: typeof PageReplacementIndexRouteImport
+      parentRoute: typeof PageReplacementRoute
+    }
+    '/page-replacement/comparison': {
+      id: '/page-replacement/comparison'
+      path: '/comparison'
+      fullPath: '/page-replacement/comparison'
+      preLoaderRoute: typeof PageReplacementComparisonRouteImport
+      parentRoute: typeof PageReplacementRoute
+    }
+    '/page-replacement/simulator': {
+      id: '/page-replacement/simulator'
+      path: '/simulator'
+      fullPath: '/page-replacement/simulator'
+      preLoaderRoute: typeof PageReplacementSimulatorRouteImport
+      parentRoute: typeof PageReplacementRoute
+    }
     '/quiz/': {
       id: '/quiz/'
       path: '/'
@@ -743,6 +991,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof QuizMemoryAllocationRouteImport
       parentRoute: typeof QuizRoute
     }
+    '/quiz/page-replacement': {
+      id: '/quiz/page-replacement'
+      path: '/page-replacement'
+      fullPath: '/quiz/page-replacement'
+      preLoaderRoute: typeof QuizPageReplacementRouteImport
+      parentRoute: typeof QuizRoute
+    }
+    '/quiz/synchronization': {
+      id: '/quiz/synchronization'
+      path: '/synchronization'
+      fullPath: '/quiz/synchronization'
+      preLoaderRoute: typeof QuizSynchronizationRouteImport
+      parentRoute: typeof QuizRoute
+    }
+    '/synchronization/': {
+      id: '/synchronization/'
+      path: '/'
+      fullPath: '/synchronization/'
+      preLoaderRoute: typeof SynchronizationIndexRouteImport
+      parentRoute: typeof SynchronizationRoute
+    }
+    '/synchronization/comparison': {
+      id: '/synchronization/comparison'
+      path: '/comparison'
+      fullPath: '/synchronization/comparison'
+      preLoaderRoute: typeof SynchronizationComparisonRouteImport
+      parentRoute: typeof SynchronizationRoute
+    }
+    '/synchronization/dining-philosophers': {
+      id: '/synchronization/dining-philosophers'
+      path: '/dining-philosophers'
+      fullPath: '/synchronization/dining-philosophers'
+      preLoaderRoute: typeof SynchronizationDiningPhilosophersRouteImport
+      parentRoute: typeof SynchronizationRoute
+    }
+    '/synchronization/producer-consumer': {
+      id: '/synchronization/producer-consumer'
+      path: '/producer-consumer'
+      fullPath: '/synchronization/producer-consumer'
+      preLoaderRoute: typeof SynchronizationProducerConsumerRouteImport
+      parentRoute: typeof SynchronizationRoute
+    }
   }
 }
 
@@ -750,12 +1040,16 @@ interface ComparisonRouteChildren {
   ComparisonCpuSchedulingRoute: typeof ComparisonCpuSchedulingRoute
   ComparisonDiskSchedulingRoute: typeof ComparisonDiskSchedulingRoute
   ComparisonMemoryAllocationRoute: typeof ComparisonMemoryAllocationRoute
+  ComparisonPageReplacementRoute: typeof ComparisonPageReplacementRoute
+  ComparisonSynchronizationRoute: typeof ComparisonSynchronizationRoute
 }
 
 const ComparisonRouteChildren: ComparisonRouteChildren = {
   ComparisonCpuSchedulingRoute: ComparisonCpuSchedulingRoute,
   ComparisonDiskSchedulingRoute: ComparisonDiskSchedulingRoute,
   ComparisonMemoryAllocationRoute: ComparisonMemoryAllocationRoute,
+  ComparisonPageReplacementRoute: ComparisonPageReplacementRoute,
+  ComparisonSynchronizationRoute: ComparisonSynchronizationRoute,
 }
 
 const ComparisonRouteWithChildren = ComparisonRoute._addFileChildren(
@@ -811,6 +1105,8 @@ interface NotesRouteChildren {
   NotesCpuSchedulingRoute: typeof NotesCpuSchedulingRoute
   NotesDiskSchedulingRoute: typeof NotesDiskSchedulingRoute
   NotesMemoryAllocationRoute: typeof NotesMemoryAllocationRoute
+  NotesPageReplacementRoute: typeof NotesPageReplacementRoute
+  NotesSynchronizationRoute: typeof NotesSynchronizationRoute
   NotesIndexRoute: typeof NotesIndexRoute
 }
 
@@ -820,10 +1116,28 @@ const NotesRouteChildren: NotesRouteChildren = {
   NotesCpuSchedulingRoute: NotesCpuSchedulingRoute,
   NotesDiskSchedulingRoute: NotesDiskSchedulingRoute,
   NotesMemoryAllocationRoute: NotesMemoryAllocationRoute,
+  NotesPageReplacementRoute: NotesPageReplacementRoute,
+  NotesSynchronizationRoute: NotesSynchronizationRoute,
   NotesIndexRoute: NotesIndexRoute,
 }
 
 const NotesRouteWithChildren = NotesRoute._addFileChildren(NotesRouteChildren)
+
+interface PageReplacementRouteChildren {
+  PageReplacementComparisonRoute: typeof PageReplacementComparisonRoute
+  PageReplacementSimulatorRoute: typeof PageReplacementSimulatorRoute
+  PageReplacementIndexRoute: typeof PageReplacementIndexRoute
+}
+
+const PageReplacementRouteChildren: PageReplacementRouteChildren = {
+  PageReplacementComparisonRoute: PageReplacementComparisonRoute,
+  PageReplacementSimulatorRoute: PageReplacementSimulatorRoute,
+  PageReplacementIndexRoute: PageReplacementIndexRoute,
+}
+
+const PageReplacementRouteWithChildren = PageReplacementRoute._addFileChildren(
+  PageReplacementRouteChildren,
+)
 
 interface QuizRouteChildren {
   QuizTopicRoute: typeof QuizTopicRoute
@@ -831,6 +1145,8 @@ interface QuizRouteChildren {
   QuizCpuSchedulingRoute: typeof QuizCpuSchedulingRoute
   QuizDiskSchedulingRoute: typeof QuizDiskSchedulingRoute
   QuizMemoryAllocationRoute: typeof QuizMemoryAllocationRoute
+  QuizPageReplacementRoute: typeof QuizPageReplacementRoute
+  QuizSynchronizationRoute: typeof QuizSynchronizationRoute
   QuizIndexRoute: typeof QuizIndexRoute
 }
 
@@ -840,10 +1156,31 @@ const QuizRouteChildren: QuizRouteChildren = {
   QuizCpuSchedulingRoute: QuizCpuSchedulingRoute,
   QuizDiskSchedulingRoute: QuizDiskSchedulingRoute,
   QuizMemoryAllocationRoute: QuizMemoryAllocationRoute,
+  QuizPageReplacementRoute: QuizPageReplacementRoute,
+  QuizSynchronizationRoute: QuizSynchronizationRoute,
   QuizIndexRoute: QuizIndexRoute,
 }
 
 const QuizRouteWithChildren = QuizRoute._addFileChildren(QuizRouteChildren)
+
+interface SynchronizationRouteChildren {
+  SynchronizationComparisonRoute: typeof SynchronizationComparisonRoute
+  SynchronizationDiningPhilosophersRoute: typeof SynchronizationDiningPhilosophersRoute
+  SynchronizationProducerConsumerRoute: typeof SynchronizationProducerConsumerRoute
+  SynchronizationIndexRoute: typeof SynchronizationIndexRoute
+}
+
+const SynchronizationRouteChildren: SynchronizationRouteChildren = {
+  SynchronizationComparisonRoute: SynchronizationComparisonRoute,
+  SynchronizationDiningPhilosophersRoute:
+    SynchronizationDiningPhilosophersRoute,
+  SynchronizationProducerConsumerRoute: SynchronizationProducerConsumerRoute,
+  SynchronizationIndexRoute: SynchronizationIndexRoute,
+}
+
+const SynchronizationRouteWithChildren = SynchronizationRoute._addFileChildren(
+  SynchronizationRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -857,10 +1194,12 @@ const rootRouteChildren: RootRouteChildren = {
   LearnRoute: LearnRoute,
   MemoryAllocationRoute: MemoryAllocationRouteWithChildren,
   NotesRoute: NotesRouteWithChildren,
+  PageReplacementRoute: PageReplacementRouteWithChildren,
   QuizRoute: QuizRouteWithChildren,
   RequestRoute: RequestRoute,
   RequestsRoute: RequestsRoute,
   SimulatorRoute: SimulatorRoute,
+  SynchronizationRoute: SynchronizationRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

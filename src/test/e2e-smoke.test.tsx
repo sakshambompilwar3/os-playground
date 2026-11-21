@@ -7,6 +7,8 @@ import { runScheduling } from "@/lib/scheduling";
 import { simulateMemoryAllocation, DEFAULT_EXAMPLE_BLOCKS, DEFAULT_EXAMPLE_MEM_PROCESSES } from "@/lib/memory";
 import { simulateDiskScheduling, DEFAULT_EXAMPLE_CYLINDERS, DEFAULT_EXAMPLE_HEAD, DEFAULT_EXAMPLE_REQUEST_CYLINDERS } from "@/lib/disk";
 import { runSafety, SAMPLE } from "@/lib/bankers";
+import { simulatePaging } from "@/lib/paging";
+import { simulateDining } from "@/lib/sync/philosophers";
 
 vi.mock("@/components/PageTransition", () => ({
   PageTransition: () => null,
@@ -80,6 +82,32 @@ describe("End-to-End Smoke & Correctness Tests", () => {
       expect(result.safe).toBe(true);
       expect(result.sequence).toEqual([1, 3, 4, 0, 2]);
     });
+
+    it("Page Replacement comparison benchmark: FIFO 15, LRU 12, Optimal 9", () => {
+      const refs = [7, 0, 1, 2, 0, 3, 0, 4, 2, 3, 0, 3, 2, 1, 2, 0, 1, 7, 0, 1];
+      const fifo = simulatePaging("fifo", refs, 3);
+      const lru = simulatePaging("lru", refs, 3);
+      const opt = simulatePaging("optimal", refs, 3);
+
+      expect(fifo.faults).toBe(15);
+      expect(lru.faults).toBe(12);
+      expect(opt.faults).toBe(9);
+    });
+
+    it("Dining Philosophers NAIVE N = 5 round-robin deadlock at step 10", () => {
+      const res = simulateDining({
+        philosophers: 5,
+        strategy: "naive",
+        scheduler: "round_robin",
+        thinkSteps: 1,
+        eatSteps: 1,
+        maxSteps: 50,
+      });
+
+      expect(res.deadlock.isDeadlocked).toBe(true);
+      expect(res.deadlock.step).toBe(10);
+      expect(res.totalMeals).toBe(0);
+    });
   });
 
   describe("Task 1 & 3: Mobile Navigation & Accessibility Smoke Tests", () => {
@@ -128,6 +156,17 @@ describe("End-to-End Smoke & Correctness Tests", () => {
         "/memory-allocation/simulator",
         "/disk-scheduling",
         "/disk-scheduling/simulator",
+        "/page-replacement",
+        "/page-replacement/simulator",
+        "/comparison/page-replacement",
+        "/notes/page-replacement",
+        "/quiz/page-replacement",
+        "/synchronization",
+        "/synchronization/producer-consumer",
+        "/synchronization/dining-philosophers",
+        "/comparison/synchronization",
+        "/notes/synchronization",
+        "/quiz/synchronization",
         "/notes",
         "/quiz",
       ];

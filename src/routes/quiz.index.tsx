@@ -28,7 +28,7 @@ function QuizIndex() {
     <div className="space-y-8">
       <h1 className="font-hand text-6xl font-bold">Pop Quiz</h1>
       <p className="text-muted-foreground">Pick a topic to test yourself.</p>
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {OS_TOPICS.map((topic, i) => (
           <Link
             key={topic.slug}

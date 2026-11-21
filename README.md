@@ -8,10 +8,30 @@
  │   [2] CPU Scheduling       ─ FCFS, SJF, SRTF, RR, Priority  │
  │   [3] Memory Allocation    ─ Contiguous fit & fragmentation │
  │   [4] Disk Scheduling      ─ Head sweeps: SCAN, LOOK, SSTF  │
+ │   [5] Page Replacement     ─ FIFO, LRU, Optimal & Belady's  │
+ │   [6] Process Sync         ─ Semaphores, Dining Philo       │
  └─────────────────────────────────────────────────────────────┘
 ```
 
+> **Live Demo**: [https://os-banker-s-algo.vercel.app](https://os-banker-s-algo.vercel.app)
+
 An interactive, visual Operating Systems learning platform designed for computer science students and educators. Explore core OS concepts through hands-on step-by-step chalkboard simulators, interactive notebook lecture notes, side-by-side algorithm comparison benches, and self-assessment pop quizzes.
+
+---
+
+## Visual Tour
+
+### Home & Topic Directory
+![OS Playground Hero & Topic Hubs](docs/screenshots/home-hero.png)
+
+### Side-by-Side Algorithm Comparisons
+![CPU Scheduling Comparison Bench](docs/screenshots/cpu-comparison.png)
+
+### Interactive Chalkboard Simulators
+![Disk Scheduling Head Movement Simulator](docs/screenshots/disk-simulator.png)
+
+### Synchronous Multi-Algorithm Benchmarks
+![Page Replacement Tri-Algorithm Comparison](docs/screenshots/page-replacement-comparison.png)
 
 ---
 
@@ -25,7 +45,7 @@ An interactive, visual Operating Systems learning platform designed for computer
 
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone https://github.com/SakshamBompilwar/OS-Banker-s-Algo.git
 cd OS-Banker-s-Algo
 
 # Install dependencies
@@ -42,7 +62,7 @@ npm run preview
 ### Running Tests
 
 ```bash
-# Run the complete test suite (unit + UI tests)
+# Run the complete test suite (unit + component UI tests)
 npm test
 
 # Run end-to-end smoke & mathematical benchmark tests
@@ -63,13 +83,19 @@ The application is built on a clean, decoupled architecture:
 - **Testing**: [Vitest](https://vitest.dev/) and `@testing-library/react`
 
 ### The Pure-Functions Rule
-A foundational design principle of this repository is that **all operating system algorithmic logic must reside strictly in pure TypeScript functions under `src/lib/*.ts`**, completely decoupled from React components, hooks, or DOM APIs:
+A foundational design principle of this repository is that **all operating system algorithmic logic must reside strictly in pure TypeScript functions under `src/lib/*.ts` and `src/lib/sync/`**, completely decoupled from React components, hooks, or DOM APIs:
 
 - `src/lib/bankers.ts`: Dijkstra's Banker's algorithm, safety verification, and resource-request vector arithmetic.
 - `src/lib/scheduling.ts`: Pure scheduling simulation engines (FCFS, SJF, SRTF, RR, Priority Preemptive/Non-preemptive) generating deterministic timelines, metrics (TAT, WT, RT), context switch counts, and tie-break verdict comparisons (`pickBest`).
 - `src/lib/memory.ts`: Contiguous memory partition managers (First Fit, Best Fit, Worst Fit, Next Fit), hole coalescing, compaction, internal/external fragmentation calculators, and strategy verdict rankers (`pickBestMemory`).
 - `src/lib/disk.ts`: Pure disk arm sweep engines (FCFS, SSTF, SCAN, C-SCAN, LOOK, C-LOOK) computing total cylinder head movement, seek sequences, and comparison verdicts (`pickBestDisk`).
 - `src/lib/chartLayout.ts`: Conflict-free label placement engine for collision-free head markers across responsive viewports.
+- `src/lib/paging.ts`: Pure page replacement simulation (FIFO, LRU, Optimal), Belady's anomaly detector, frame sweep curves, effective access time ($EAT$) calculator, and automated tie-break verdicts (`pickBest`).
+- `src/lib/sync/`: Concurrency and synchronization engine:
+  - `rng.ts`: Deterministic Mulberry32 seeded pseudo-random generator.
+  - `semaphore.ts`: Counting semaphore with FIFO thread queue.
+  - `pc.ts`: Producer-Consumer bounded buffer simulator with 4 execution modes (Correct, No Mutex, No Empty/Full, Swapped Waits), 3 schedulers, race monitors, and deadlock detection.
+  - `philosophers.ts`: Dining Philosophers engine with 4 strategies (Naive, Resource Hierarchy, Waiter Limit, Asymmetric), deadlock cycle detection, starvation tracking, and fairness gap metrics (`pickBestDining`).
 
 React components act purely as the presentation layer: rendering state, stepping timelines, and handling input. No business logic or mathematical formulas are hard-coded in views.
 
@@ -103,26 +129,26 @@ Every topic is organized into a consistent notebook-style topic hub containing f
 - **Comparison Bench** (`/comparison/disk-scheduling`): Side-by-side head-traversal charts and seek-distance metrics.
 - **Visual Notes** (`/notes/disk-scheduling`) & **Pop Quiz** (`/quiz/disk-scheduling`): 13 illustrated sections and 6 quiz questions.
 
+### 5. Page Replacement
+- **Algorithms**: First-In, First-Out (FIFO), Least Recently Used (LRU), Optimal (Belady's Theoretical Minimum).
+- **Interactive Simulator** (`/page-replacement/simulator`): Step-by-step frame matrix tracking, live hit/fault chips, frame-sweep curves, and Effective Access Time ($EAT = (1-p)\cdot m + p\cdot S$) calculator.
+- **Comparison Bench** (`/comparison/page-replacement`): Synchronous tri-algorithm execution on identical reference strings, Belady's anomaly detector, and deterministic winner verdict logic.
+- **Visual Notes** (`/notes/page-replacement`) & **Pop Quiz** (`/quiz/page-replacement`): 11 comprehensive lecture cards and self-grading quiz.
+
+### 6. Process Synchronization
+- **Simulators**:
+  - **Producer-Consumer** (`/synchronization/producer-consumer`): Bounded circular buffer with Dijkstra counting semaphores (`mutex`, `empty`, `full`), 4 execution modes demonstrating race conditions and deadlocks, and 3 scheduler engines (Round-Robin, Producer-Biased, Consumer-Biased).
+  - **Dining Philosophers** (`/synchronization/dining-philosophers`): Round dining table SVG with animated philosopher states (thinking, hungry, eating), held fork tracking, and resource allocation cycle detection.
+- **Comparison Bench** (`/comparison/synchronization`): Side-by-side synchronization benchmark evaluating 4 deadlock prevention strategies (Naive, Resource Hierarchy, Waiter Limit, Asymmetric) with meal throughput, fairness gap, and starvation metrics.
+- **Visual Notes** (`/notes/synchronization`) & **Pop Quiz** (`/quiz/synchronization`): 8 comprehensive lecture sections and 6 quiz questions.
+
 ---
 
-## Database Schema & Extensibility
+## Contributing & Extensibility
 
-To prepare for future persistence (e.g. Supabase, PostgreSQL) without rewriting components, a unified schema is defined in `src/lib/types.ts`:
-- `OSTopic`: Central registry definition including routes, chalkboard metadata, and hub entries.
-- `HubEntry`: Structured table-of-contents entry for topic navigation.
-- `NotesSection`: Structured lesson content including markdown sections, SVG diagrams, and summary takeaways.
-- `QuizQuestion`: Question text, options, answer index, and pedagogical explanation.
-
-For adding a 5th topic to the platform, follow the complete guide in [`docs/adding-a-topic.md`](./docs/adding-a-topic.md).
-
----
-
-## Environment Configuration
-
-A sample `.env.example` file is provided in the repository root documenting optional environment variables:
-- `VITE_SITE_URL`: Production canonical URL for metadata and OpenGraph tags.
-- `NITRO_PRESET`: Deployment engine target (default: `vercel`).
-- `GEMINI_API_KEY`: Server-side API key for the AI assistant chatbot route.
+Contributions are welcomed! Before contributing, please review:
+- [`CONTRIBUTING.md`](./CONTRIBUTING.md): Architectural rules, coding standards, and testing requirements.
+- [`docs/adding-a-topic.md`](./docs/adding-a-topic.md): Step-by-step guide for adding a new Operating Systems topic to the platform.
 
 ---
 
@@ -146,7 +172,7 @@ node .output/server/index.mjs
 
 ---
 
-## Package Manager & Lockfile Policy
+## License
 
-- This repository maintains standard `package.json` configurations compatible with `npm` and `bun`.
-- During automated passes and test runs, package lockfiles (`bun.lock` and `package-lock.json`) are preserved untouched to avoid unintended dependency drift or breaking changes.
+This project is open-source under the [MIT License](LICENSE).
+Copyright (c) 2026 Saksham Bompilwar.

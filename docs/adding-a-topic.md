@@ -1,6 +1,6 @@
 # Adding a New Topic to OS Playground
 
-This guide outlines the standard architectural pattern for adding a 5th Operating Systems topic (e.g. *Page Replacement: FIFO, LRU, Optimal* or *File System Allocation: Contiguous, Linked, Indexed*).
+This guide outlines the standard architectural pattern for adding a new Operating Systems topic (e.g. *File System Allocation: Contiguous, Linked, Indexed* or *Inter-Process Communication: Pipes, Message Queues, Shared Memory*), following the established design pattern of the platform's 6 existing topics: Banker's Algorithm, CPU Scheduling, Memory Allocation, Disk Scheduling, Page Replacement, and Process Synchronization.
 
 ---
 
