@@ -3,7 +3,6 @@
 - [x] **Topic 1: Banker's Algorithm (Deadlock Avoidance)**
   - [x] Safety algorithm simulator with custom matrix editor and step-by-step trace
   - [x] Resource request testing with state safety validation
-  - [x] Deadlock Lab contrasting unconstrained allocation vs. Banker's avoidance
   - [x] Conceptual notes and self-assessment pop quiz
 - [x] **Topic 2: CPU Scheduling**
   - [x] Core algorithmic engine for FCFS, SJF, SRTF, Round Robin, Priority (Non-Preemptive & Preemptive)
@@ -20,9 +19,19 @@
   - [x] Animated cylinder track visualization with collision-free label layout engine (`src/lib/chartLayout.ts`)
   - [x] Comparison bench evaluating total seek distance
   - [x] Visual lecture notes and pop quiz
+- [x] **Topic 5: Page Replacement**
+  - [x] Simulation engine for FIFO, LRU, and Optimal algorithms
+  - [x] Interactive simulator with frame matrix, Belady anomaly detection, and EAT calculator
+  - [x] Tri-algorithm comparison bench with automated verdict logic
+  - [x] Visual lecture notes and pop quiz
+- [x] **Labs Section (Hands-on Experiments)**
+  - [x] Labs hub (`/labs`) with notebook contents navigation
+  - [x] Deadlock Lab (`/labs/deadlock`) contrasting unconstrained allocation vs. Banker's avoidance
+  - [x] Producer-Consumer Lab (`/labs/producer-consumer`) with counting semaphores and rate metrics
+  - [x] Dining Philosophers Lab (`/labs/dining-philosophers`) with round table visualizer and asymmetric fix
 - [x] **Platform Foundations & Polish**
-  - [x] Shared notebook-style hub component for all 4 topics
+  - [x] Shared notebook-style hub component for topics and labs
   - [x] Academic chalkboard theme with unified paper-card and cream-button UI components
-  - [x] Comprehensive test suite (107 unit tests across all algorithmic modules)
+  - [x] Comprehensive test suite across all algorithmic modules
   - [x] Theme-matched icon set, favicon, apple-touch-icon, and social sharing OpenGraph card
   - [x] Route metadata, distinct page titles, and backward-compatible route redirects

@@ -8,7 +8,6 @@ import { simulateMemoryAllocation, DEFAULT_EXAMPLE_BLOCKS, DEFAULT_EXAMPLE_MEM_P
 import { simulateDiskScheduling, DEFAULT_EXAMPLE_CYLINDERS, DEFAULT_EXAMPLE_HEAD, DEFAULT_EXAMPLE_REQUEST_CYLINDERS } from "@/lib/disk";
 import { runSafety, SAMPLE } from "@/lib/bankers";
 import { simulatePaging } from "@/lib/paging";
-import { simulateDining } from "@/lib/sync/philosophers";
 
 vi.mock("@/components/PageTransition", () => ({
   PageTransition: () => null,
@@ -93,21 +92,6 @@ describe("End-to-End Smoke & Correctness Tests", () => {
       expect(lru.faults).toBe(12);
       expect(opt.faults).toBe(9);
     });
-
-    it("Dining Philosophers NAIVE N = 5 round-robin deadlock at step 10", () => {
-      const res = simulateDining({
-        philosophers: 5,
-        strategy: "naive",
-        scheduler: "round_robin",
-        thinkSteps: 1,
-        eatSteps: 1,
-        maxSteps: 50,
-      });
-
-      expect(res.deadlock.isDeadlocked).toBe(true);
-      expect(res.deadlock.step).toBe(10);
-      expect(res.totalMeals).toBe(0);
-    });
   });
 
   describe("Task 1 & 3: Mobile Navigation & Accessibility Smoke Tests", () => {
@@ -161,12 +145,10 @@ describe("End-to-End Smoke & Correctness Tests", () => {
         "/comparison/page-replacement",
         "/notes/page-replacement",
         "/quiz/page-replacement",
-        "/synchronization",
-        "/synchronization/producer-consumer",
-        "/synchronization/dining-philosophers",
-        "/comparison/synchronization",
-        "/notes/synchronization",
-        "/quiz/synchronization",
+        "/labs",
+        "/labs/deadlock",
+        "/labs/producer-consumer",
+        "/labs/dining-philosophers",
         "/notes",
         "/quiz",
       ];
@@ -180,6 +162,72 @@ describe("End-to-End Smoke & Correctness Tests", () => {
         const headings = screen.getAllByRole("heading", { level: 1 });
         expect(headings).toHaveLength(1);
       }
+    });
+
+    it("verifies /labs lists 3 labs and links to them", async () => {
+      cleanup();
+      const router = createTestRouter("/labs");
+      await router.load();
+      render(<RouterProvider router={router} />);
+
+      expect(screen.getByRole("heading", { level: 1, name: /labs/i })).toBeInTheDocument();
+      expect(screen.getByText("Deadlock Lab")).toBeInTheDocument();
+      expect(screen.getByText("Producer-Consumer Lab")).toBeInTheDocument();
+      expect(screen.getByText("Dining Philosophers Lab")).toBeInTheDocument();
+    });
+
+    it("verifies Producer-Consumer after Load example and 10 ticks shows produced 8, consumed 5, in buffer 3", async () => {
+      cleanup();
+      const router = createTestRouter("/labs/producer-consumer");
+      await router.load();
+      render(<RouterProvider router={router} />);
+
+      // Load example
+      const loadExampleBtn = screen.getByRole("button", { name: /load example/i });
+      fireEvent.click(loadExampleBtn);
+
+      // Step 10 times
+      const stepBtn = screen.getByRole("button", { name: /^step$/i });
+      for (let i = 0; i < 10; i++) {
+        fireEvent.click(stepBtn);
+      }
+
+      // Check text in DOM
+      expect(screen.getByText(/8 produced · 5 consumed/i)).toBeInTheDocument();
+      expect(screen.getByText(/in buffer: 3 \/ 3/i)).toBeInTheDocument();
+    });
+
+    it("verifies Dining Philosophers NAIVE shows deadlock banner after round 2", async () => {
+      cleanup();
+      const router = createTestRouter("/labs/dining-philosophers");
+      await router.load();
+      render(<RouterProvider router={router} />);
+
+      const loadExampleBtn = screen.getByRole("button", { name: /load example/i });
+      fireEvent.click(loadExampleBtn);
+
+      const stepBtn = screen.getByRole("button", { name: /step \(round\)/i });
+      fireEvent.click(stepBtn); // Round 1
+      fireEvent.click(stepBtn); // Round 2
+
+      expect(screen.getByText(/deadlock: everyone holds one fork and waits for the next/i)).toBeInTheDocument();
+      expect(screen.getByText(/Plato → Aristotle → Socrates → Kant → Descartes → Plato/i)).toBeInTheDocument();
+    });
+
+    it("verifies Deadlock Lab works at /labs/deadlock and redirect from /deadlock", async () => {
+      cleanup();
+      const router = createTestRouter("/deadlock");
+      await router.load();
+      expect(router.state.location.pathname).toBe("/labs/deadlock");
+
+      render(<RouterProvider router={router} />);
+      expect(screen.getByRole("heading", { level: 1, name: /deadlock lab/i })).toBeInTheDocument();
+      expect(screen.getByText(/Three processes, three single-instance resources/i)).toBeInTheDocument();
+
+      // Step through
+      const nextBtn = screen.getByRole("button", { name: /next →/i });
+      fireEvent.click(nextBtn);
+      expect(screen.getByText(/Each process grabs one resource/i)).toBeInTheDocument();
     });
   });
 });

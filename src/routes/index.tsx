@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState, useCallback } from "react";
 import { OS_TOPICS } from "@/lib/topics";
+import { OS_LABS } from "@/lib/labs";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -9,13 +10,13 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Simulators, notes and quizzes for Operating Systems: Banker's Algorithm, CPU Scheduling, Memory Allocation, Disk Scheduling, Page Replacement, and Process Synchronization.",
+          "Simulators, notes and quizzes for Operating Systems: Banker's Algorithm, CPU Scheduling, Memory Allocation, Disk Scheduling, and Page Replacement.",
       },
       { property: "og:title", content: "OS Playground | Learn Operating Systems by Playing" },
       {
         property: "og:description",
         content:
-          "Simulators, notes and quizzes for Operating Systems: Banker's Algorithm, CPU Scheduling, Memory Allocation, Disk Scheduling, Page Replacement, and Process Synchronization.",
+          "Simulators, notes and quizzes for Operating Systems: Banker's Algorithm, CPU Scheduling, Memory Allocation, Disk Scheduling, and Page Replacement.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -227,6 +228,34 @@ function Home() {
               </Link>
             );
           })}
+        </div>
+      </section>
+
+      {/* labs cards */}
+      <section>
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <div>
+            <h2 className="font-hand text-4xl font-bold">Labs</h2>
+            <p className="mt-1 font-hand text-xl text-muted-foreground">Hands-on experiments you can play with</p>
+          </div>
+          <Link to="/labs" className="font-hand text-xl text-primary hover:underline">
+            See all labs →
+          </Link>
+        </div>
+        <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {OS_LABS.map((lab, i) => (
+            <Link
+              key={lab.slug}
+              to={lab.to}
+              className={`animate-float group relative block min-h-44 p-5 shadow-[var(--shadow-paper)] transition-transform hover:scale-105 ${lab.color ?? "bg-highlight"}`}
+              style={{ ["--r" as string]: lab.rotation ?? "0deg", animationDelay: `${i * 0.4}s` }}
+            >
+              <span className="absolute -top-3 left-1/2 h-6 w-16 -translate-x-1/2 rotate-2 bg-paper/70" />
+              <p className="font-hand text-3xl font-bold">{lab.title}</p>
+              <p className="mt-2 text-sm">{lab.description}</p>
+              <p className="mt-4 font-mono text-xs opacity-0 transition-opacity group-hover:opacity-100">open lab →</p>
+            </Link>
+          ))}
         </div>
       </section>
 

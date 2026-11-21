@@ -64,7 +64,7 @@ const homeHeroSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 7
   <!-- Hero Content -->
   <text x="80" y="76" class="font-mono" font-size="13" font-weight="700" fill="${THEME.chalkMuted}" letter-spacing="1.5">OPERATING SYSTEMS · INTERACTIVE PLAYGROUND</text>
   <text x="80" y="132" class="font-sans" font-size="44" font-weight="900" fill="${THEME.chalkYellow}" letter-spacing="-1">OS Playground</text>
-  <text x="80" y="172" class="font-sans" font-size="18" fill="${THEME.chalkWhite}" fill-opacity="0.92">Six interactive chalkboard simulators, synchronized comparison benches, lecture notes &amp; pop quizzes.</text>
+  <text x="80" y="172" class="font-sans" font-size="18" fill="${THEME.chalkWhite}" fill-opacity="0.92">Five interactive chalkboard simulators, hands-on labs, lecture notes &amp; pop quizzes.</text>
 
   <!-- Hero Badges -->
   <rect x="80" y="200" width="160" height="34" rx="8" fill="#ffffff" fill-opacity="0.12"/>
@@ -138,16 +138,16 @@ const homeHeroSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 7
       <text x="20" y="154" class="font-mono" font-size="11" font-weight="600" fill="${THEME.chalkGreen}">SIMULATOR · COMPARISON · NOTES · QUIZ</text>
     </g>
 
-    <!-- 6. Process Synchronization -->
+    <!-- 6. Hands-On Labs -->
     <g transform="translate(820, 195)" filter="url(#cardShadow)">
       <rect width="380" height="175" rx="12" fill="${THEME.paperCard}" stroke="${THEME.border}" stroke-width="1.5"/>
       <rect x="18" y="18" width="40" height="40" rx="8" fill="#2d7d9a" fill-opacity="0.15"/>
-      <text x="38" y="44" class="font-mono" font-size="18" font-weight="bold" fill="#2d7d9a" text-anchor="middle">6</text>
-      <text x="70" y="38" class="font-sans" font-size="18" font-weight="800" fill="${THEME.textDark}">Process Synchronization</text>
-      <text x="70" y="55" class="font-sans" font-size="12" fill="${THEME.textMuted}">Semaphores, Race Conditions &amp; Deadlocks</text>
-      <text x="20" y="95" class="font-sans" font-size="13" fill="${THEME.textDark}">Producer-Consumer circular buffer, Dining Philosophers round table, and 4-strategy comparison bench.</text>
+      <text x="38" y="44" class="font-mono" font-size="18" font-weight="bold" fill="#2d7d9a" text-anchor="middle">★</text>
+      <text x="70" y="38" class="font-sans" font-size="18" font-weight="800" fill="${THEME.textDark}">Hands-On Labs</text>
+      <text x="70" y="55" class="font-sans" font-size="12" fill="${THEME.textMuted}">Deadlocks, Buffers &amp; Philosophers</text>
+      <text x="20" y="95" class="font-sans" font-size="13" fill="${THEME.textDark}">Interactive experiments: Deadlock Lab, Producer-Consumer buffer, and Dining Philosophers.</text>
       <line x1="20" y1="130" x2="360" y2="130" stroke="${THEME.border}"/>
-      <text x="20" y="154" class="font-mono" font-size="11" font-weight="600" fill="${THEME.chalkGreen}">PRODUCER-CONSUMER · DINING · COMPARISON</text>
+      <text x="20" y="154" class="font-mono" font-size="11" font-weight="600" fill="${THEME.chalkGreen}">DEADLOCK · PRODUCER-CONSUMER · DINING</text>
     </g>
   </g>
 </svg>`;
