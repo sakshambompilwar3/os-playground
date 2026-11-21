@@ -9,13 +9,13 @@ export const Route = createFileRoute("/bankers")({
       {
         name: "description",
         content:
-          "Explore the Banker's Algorithm: notes, safety simulator, resource requests, deadlock lab, and pop quiz.",
+          "Explore the Banker's Algorithm: notes, safety simulator, resource requests, and pop quiz.",
       },
       { property: "og:title", content: "Banker's Algorithm | OS Playground" },
       {
         property: "og:description",
         content:
-          "Explore the Banker's Algorithm: notes, safety simulator, resource requests, deadlock lab, and pop quiz.",
+          "Explore the Banker's Algorithm: notes, safety simulator, resource requests, and pop quiz.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

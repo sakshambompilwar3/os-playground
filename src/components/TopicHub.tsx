@@ -6,22 +6,48 @@ export type { HubEntry };
 export interface TopicHubProps {
   title: string;
   lectureLabel?: string | undefined;
+  subtitle?: string | undefined;
   unitLabel?: string | undefined;
   quote?: string | undefined;
   entries: HubEntry[];
+  backLink?: string | undefined;
+  backText?: string | undefined;
 }
 
-export function TopicHub({ title, lectureLabel, unitLabel, quote, entries }: TopicHubProps) {
+export function TopicHub({
+  title,
+  lectureLabel,
+  subtitle,
+  unitLabel,
+  quote,
+  entries,
+  backLink = "/",
+  backText = "← back to topics",
+}: TopicHubProps) {
   return (
     <div className="space-y-8">
       <div>
-        <Link to="/" className="inline-flex min-h-[44px] items-center text-sm text-muted-foreground hover:underline">
-          ← back to topics
+        <Link to={backLink} className="inline-flex min-h-[44px] items-center text-sm text-muted-foreground hover:underline">
+          {backText}
         </Link>
-        <h1 className="mt-1 font-hand text-5xl md:text-6xl font-bold">{title}</h1>
-        <p className="text-muted-foreground">
-          {lectureLabel ?? "CS-301 · Operating Systems · Table of Contents"}
-        </p>
+        {subtitle ? (
+          <>
+            {lectureLabel && (
+              <p className="mt-2 font-mono text-xs uppercase tracking-widest text-muted-foreground">
+                {lectureLabel}
+              </p>
+            )}
+            <h1 className="mt-1 font-hand text-5xl md:text-6xl font-bold">{title}</h1>
+            <p className="mt-1 text-muted-foreground">{subtitle}</p>
+          </>
+        ) : (
+          <>
+            <h1 className="mt-1 font-hand text-5xl md:text-6xl font-bold">{title}</h1>
+            <p className="text-muted-foreground">
+              {lectureLabel ?? "CS-301 · Operating Systems · Table of Contents"}
+            </p>
+          </>
+        )}
       </div>
 
       {/* Notebook contents page */}
@@ -60,31 +86,28 @@ export function TopicHub({ title, lectureLabel, unitLabel, quote, entries }: Top
                   <span className="w-7 font-mono text-base font-bold text-accent-foreground sm:text-lg">
                     {entry.num}
                   </span>
-                  <span className="font-hand text-3xl font-bold text-foreground transition-all duration-150 group-hover:text-primary group-hover:underline decoration-wavy decoration-accent decoration-2 underline-offset-4 group-focus-visible:underline">
-                    {entry.title}
-                  </span>
-                  {entry.comingSoon && (
-                    <span className="rounded-full border border-foreground/30 px-2 py-0.5 font-mono text-[11px] text-muted-foreground">
-                      coming soon
+                  <div>
+                    <span className="font-hand text-2xl font-bold group-hover:underline">
+                      {entry.title}
                     </span>
-                  )}
+                    <span className="ml-2 hidden text-muted-foreground sm:inline">—</span>
+                    <span className="block text-sm text-muted-foreground sm:inline sm:ml-2">
+                      {entry.desc}
+                    </span>
+                  </div>
                 </div>
 
-                {/* Dotted leader line on larger screens */}
-                <span
-                  aria-hidden
-                  className="hidden flex-1 border-b border-dotted border-foreground/40 sm:block mx-2 self-end mb-1"
-                />
-
-                <div className="flex items-center justify-between gap-3 pl-10 sm:pl-0 sm:justify-end">
-                  <span className="font-sans text-xs text-muted-foreground sm:text-sm">
-                    {entry.desc}
-                  </span>
+                <div className="flex items-center gap-2 self-end sm:self-auto">
+                  {entry.comingSoon && (
+                    <span className="rounded-full border border-foreground/30 px-2 py-0.5 font-mono text-xs text-muted-foreground">
+                      Coming soon
+                    </span>
+                  )}
                   <span
                     aria-hidden
-                    className="font-hand text-2xl font-bold text-foreground transition-transform duration-150 group-hover:translate-x-1.5 group-focus-visible:translate-x-1.5"
+                    className="font-mono text-xs text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100"
                   >
-                    →
+                    jump ➔
                   </span>
                 </div>
               </Link>
@@ -93,10 +116,8 @@ export function TopicHub({ title, lectureLabel, unitLabel, quote, entries }: Top
         </ol>
 
         {quote && (
-          <div className="mt-8 border-t border-foreground/20 pt-4 text-right">
-            <span className="font-hand text-xl text-muted-foreground">
-              {quote}
-            </span>
+          <div className="mt-8 border-t border-rule/50 pt-4">
+            <p className="font-hand text-lg italic text-muted-foreground">{quote}</p>
           </div>
         )}
       </section>

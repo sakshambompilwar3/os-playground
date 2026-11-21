@@ -38,6 +38,15 @@ export interface OSTopic {
   hubEntries: HubEntry[];
 }
 
+export interface Lab {
+  slug: string;
+  title: string;
+  description: string;
+  to: string;
+  color?: string;
+  rotation?: string;
+}
+
 export interface NotesSection {
   id: string;
   title: string;

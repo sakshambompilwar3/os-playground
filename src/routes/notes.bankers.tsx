@@ -69,6 +69,14 @@ function BankersNotes() {
             <Link to="/simulator" className="press paper-card bg-highlight px-4 py-2 text-sm">Try it in the simulator →</Link>
           )}
         </div>
+        <div className="mt-8 border-t border-rule/50 pt-4">
+          <Link
+            to="/labs/deadlock"
+            className="font-hand text-xl text-primary hover:underline"
+          >
+            Want to see a deadlock happen? Try the Deadlock Lab. →
+          </Link>
+        </div>
       </div>
     </div>
   );

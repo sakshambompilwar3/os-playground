@@ -66,6 +66,14 @@ export function SiteNav() {
           </Link>
 
           <Link
+            to="/labs"
+            className="flex min-h-[44px] items-center rounded-md border-2 border-transparent px-3.5 py-1.5 text-sm font-medium transition-colors hover:border-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            activeProps={{ className: "!border-foreground bg-highlight font-bold" }}
+          >
+            Labs
+          </Link>
+
+          <Link
             to="/chatbot"
             className="press flex min-h-[44px] items-center rounded-md border-2 border-foreground bg-highlight px-3.5 py-1.5 text-sm font-bold transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring shadow-[2px_2px_0_var(--foreground)]"
           >
@@ -139,6 +147,15 @@ export function SiteNav() {
               activeProps={{ className: "!border-foreground bg-highlight font-bold" }}
             >
               Quiz
+            </Link>
+
+            <Link
+              to="/labs"
+              onClick={closeMenu}
+              className="flex min-h-[44px] items-center rounded-md border-2 border-transparent px-4 py-2 font-hand text-2xl font-bold transition-colors hover:border-foreground hover:bg-highlight"
+              activeProps={{ className: "!border-foreground bg-highlight font-bold" }}
+            >
+              Labs
             </Link>
 
             <Link

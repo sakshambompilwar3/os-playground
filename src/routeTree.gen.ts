@@ -17,6 +17,7 @@ import { Route as CpuSchedulingRouteImport } from './routes/cpu-scheduling'
 import { Route as DeadlockRouteImport } from './routes/deadlock'
 import { Route as DeadlockLabRouteImport } from './routes/deadlock-lab'
 import { Route as DiskSchedulingRouteImport } from './routes/disk-scheduling'
+import { Route as LabsRouteImport } from './routes/labs'
 import { Route as LearnRouteImport } from './routes/learn'
 import { Route as MemoryAllocationRouteImport } from './routes/memory-allocation'
 import { Route as NotesRouteImport } from './routes/notes'
@@ -36,6 +37,10 @@ import { Route as CpuSchedulingComparisonRouteImport } from './routes/cpu-schedu
 import { Route as CpuSchedulingSimulatorRouteImport } from './routes/cpu-scheduling.simulator'
 import { Route as DiskSchedulingIndexRouteImport } from './routes/disk-scheduling.index'
 import { Route as DiskSchedulingSimulatorRouteImport } from './routes/disk-scheduling.simulator'
+import { Route as LabsIndexRouteImport } from './routes/labs.index'
+import { Route as LabsDeadlockRouteImport } from './routes/labs.deadlock'
+import { Route as LabsDiningPhilosophersRouteImport } from './routes/labs.dining-philosophers'
+import { Route as LabsProducerConsumerRouteImport } from './routes/labs.producer-consumer'
 import { Route as MemoryAllocationIndexRouteImport } from './routes/memory-allocation.index'
 import { Route as MemoryAllocationSimulatorRouteImport } from './routes/memory-allocation.simulator'
 import { Route as NotesIndexRouteImport } from './routes/notes.index'
@@ -100,6 +105,11 @@ const DeadlockLabRoute = DeadlockLabRouteImport.update({
 const DiskSchedulingRoute = DiskSchedulingRouteImport.update({
   id: '/disk-scheduling',
   path: '/disk-scheduling',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LabsRoute = LabsRouteImport.update({
+  id: '/labs',
+  path: '/labs',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LearnRoute = LearnRouteImport.update({
@@ -200,6 +210,26 @@ const DiskSchedulingSimulatorRoute = DiskSchedulingSimulatorRouteImport.update({
   id: '/simulator',
   path: '/simulator',
   getParentRoute: () => DiskSchedulingRoute,
+} as any)
+const LabsIndexRoute = LabsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => LabsRoute,
+} as any)
+const LabsDeadlockRoute = LabsDeadlockRouteImport.update({
+  id: '/deadlock',
+  path: '/deadlock',
+  getParentRoute: () => LabsRoute,
+} as any)
+const LabsDiningPhilosophersRoute = LabsDiningPhilosophersRouteImport.update({
+  id: '/dining-philosophers',
+  path: '/dining-philosophers',
+  getParentRoute: () => LabsRoute,
+} as any)
+const LabsProducerConsumerRoute = LabsProducerConsumerRouteImport.update({
+  id: '/producer-consumer',
+  path: '/producer-consumer',
+  getParentRoute: () => LabsRoute,
 } as any)
 const MemoryAllocationIndexRoute = MemoryAllocationIndexRouteImport.update({
   id: '/',
@@ -342,6 +372,7 @@ export interface FileRoutesByFullPath {
   '/deadlock': typeof DeadlockRoute
   '/deadlock-lab': typeof DeadlockLabRoute
   '/disk-scheduling': typeof DiskSchedulingRouteWithChildren
+  '/labs': typeof LabsRouteWithChildren
   '/learn': typeof LearnRoute
   '/memory-allocation': typeof MemoryAllocationRouteWithChildren
   '/notes': typeof NotesRouteWithChildren
@@ -359,6 +390,9 @@ export interface FileRoutesByFullPath {
   '/cpu-scheduling/comparison': typeof CpuSchedulingComparisonRoute
   '/cpu-scheduling/simulator': typeof CpuSchedulingSimulatorRoute
   '/disk-scheduling/simulator': typeof DiskSchedulingSimulatorRoute
+  '/labs/deadlock': typeof LabsDeadlockRoute
+  '/labs/dining-philosophers': typeof LabsDiningPhilosophersRoute
+  '/labs/producer-consumer': typeof LabsProducerConsumerRoute
   '/memory-allocation/simulator': typeof MemoryAllocationSimulatorRoute
   '/notes/$topic': typeof NotesTopicRoute
   '/notes/bankers': typeof NotesBankersRoute
@@ -381,6 +415,7 @@ export interface FileRoutesByFullPath {
   '/synchronization/producer-consumer': typeof SynchronizationProducerConsumerRoute
   '/cpu-scheduling/': typeof CpuSchedulingIndexRoute
   '/disk-scheduling/': typeof DiskSchedulingIndexRoute
+  '/labs/': typeof LabsIndexRoute
   '/memory-allocation/': typeof MemoryAllocationIndexRoute
   '/notes/': typeof NotesIndexRoute
   '/page-replacement/': typeof PageReplacementIndexRoute
@@ -406,6 +441,9 @@ export interface FileRoutesByTo {
   '/cpu-scheduling/comparison': typeof CpuSchedulingComparisonRoute
   '/cpu-scheduling/simulator': typeof CpuSchedulingSimulatorRoute
   '/disk-scheduling/simulator': typeof DiskSchedulingSimulatorRoute
+  '/labs/deadlock': typeof LabsDeadlockRoute
+  '/labs/dining-philosophers': typeof LabsDiningPhilosophersRoute
+  '/labs/producer-consumer': typeof LabsProducerConsumerRoute
   '/memory-allocation/simulator': typeof MemoryAllocationSimulatorRoute
   '/notes/$topic': typeof NotesTopicRoute
   '/notes/bankers': typeof NotesBankersRoute
@@ -428,6 +466,7 @@ export interface FileRoutesByTo {
   '/synchronization/producer-consumer': typeof SynchronizationProducerConsumerRoute
   '/cpu-scheduling': typeof CpuSchedulingIndexRoute
   '/disk-scheduling': typeof DiskSchedulingIndexRoute
+  '/labs': typeof LabsIndexRoute
   '/memory-allocation': typeof MemoryAllocationIndexRoute
   '/notes': typeof NotesIndexRoute
   '/page-replacement': typeof PageReplacementIndexRoute
@@ -444,6 +483,7 @@ export interface FileRoutesById {
   '/deadlock': typeof DeadlockRoute
   '/deadlock-lab': typeof DeadlockLabRoute
   '/disk-scheduling': typeof DiskSchedulingRouteWithChildren
+  '/labs': typeof LabsRouteWithChildren
   '/learn': typeof LearnRoute
   '/memory-allocation': typeof MemoryAllocationRouteWithChildren
   '/notes': typeof NotesRouteWithChildren
@@ -461,6 +501,9 @@ export interface FileRoutesById {
   '/cpu-scheduling/comparison': typeof CpuSchedulingComparisonRoute
   '/cpu-scheduling/simulator': typeof CpuSchedulingSimulatorRoute
   '/disk-scheduling/simulator': typeof DiskSchedulingSimulatorRoute
+  '/labs/deadlock': typeof LabsDeadlockRoute
+  '/labs/dining-philosophers': typeof LabsDiningPhilosophersRoute
+  '/labs/producer-consumer': typeof LabsProducerConsumerRoute
   '/memory-allocation/simulator': typeof MemoryAllocationSimulatorRoute
   '/notes/$topic': typeof NotesTopicRoute
   '/notes/bankers': typeof NotesBankersRoute
@@ -483,6 +526,7 @@ export interface FileRoutesById {
   '/synchronization/producer-consumer': typeof SynchronizationProducerConsumerRoute
   '/cpu-scheduling/': typeof CpuSchedulingIndexRoute
   '/disk-scheduling/': typeof DiskSchedulingIndexRoute
+  '/labs/': typeof LabsIndexRoute
   '/memory-allocation/': typeof MemoryAllocationIndexRoute
   '/notes/': typeof NotesIndexRoute
   '/page-replacement/': typeof PageReplacementIndexRoute
@@ -500,6 +544,7 @@ export interface FileRouteTypes {
     | '/deadlock'
     | '/deadlock-lab'
     | '/disk-scheduling'
+    | '/labs'
     | '/learn'
     | '/memory-allocation'
     | '/notes'
@@ -517,6 +562,9 @@ export interface FileRouteTypes {
     | '/cpu-scheduling/comparison'
     | '/cpu-scheduling/simulator'
     | '/disk-scheduling/simulator'
+    | '/labs/deadlock'
+    | '/labs/dining-philosophers'
+    | '/labs/producer-consumer'
     | '/memory-allocation/simulator'
     | '/notes/$topic'
     | '/notes/bankers'
@@ -539,6 +587,7 @@ export interface FileRouteTypes {
     | '/synchronization/producer-consumer'
     | '/cpu-scheduling/'
     | '/disk-scheduling/'
+    | '/labs/'
     | '/memory-allocation/'
     | '/notes/'
     | '/page-replacement/'
@@ -564,6 +613,9 @@ export interface FileRouteTypes {
     | '/cpu-scheduling/comparison'
     | '/cpu-scheduling/simulator'
     | '/disk-scheduling/simulator'
+    | '/labs/deadlock'
+    | '/labs/dining-philosophers'
+    | '/labs/producer-consumer'
     | '/memory-allocation/simulator'
     | '/notes/$topic'
     | '/notes/bankers'
@@ -586,6 +638,7 @@ export interface FileRouteTypes {
     | '/synchronization/producer-consumer'
     | '/cpu-scheduling'
     | '/disk-scheduling'
+    | '/labs'
     | '/memory-allocation'
     | '/notes'
     | '/page-replacement'
@@ -601,6 +654,7 @@ export interface FileRouteTypes {
     | '/deadlock'
     | '/deadlock-lab'
     | '/disk-scheduling'
+    | '/labs'
     | '/learn'
     | '/memory-allocation'
     | '/notes'
@@ -618,6 +672,9 @@ export interface FileRouteTypes {
     | '/cpu-scheduling/comparison'
     | '/cpu-scheduling/simulator'
     | '/disk-scheduling/simulator'
+    | '/labs/deadlock'
+    | '/labs/dining-philosophers'
+    | '/labs/producer-consumer'
     | '/memory-allocation/simulator'
     | '/notes/$topic'
     | '/notes/bankers'
@@ -640,6 +697,7 @@ export interface FileRouteTypes {
     | '/synchronization/producer-consumer'
     | '/cpu-scheduling/'
     | '/disk-scheduling/'
+    | '/labs/'
     | '/memory-allocation/'
     | '/notes/'
     | '/page-replacement/'
@@ -656,6 +714,7 @@ export interface RootRouteChildren {
   DeadlockRoute: typeof DeadlockRoute
   DeadlockLabRoute: typeof DeadlockLabRoute
   DiskSchedulingRoute: typeof DiskSchedulingRouteWithChildren
+  LabsRoute: typeof LabsRouteWithChildren
   LearnRoute: typeof LearnRoute
   MemoryAllocationRoute: typeof MemoryAllocationRouteWithChildren
   NotesRoute: typeof NotesRouteWithChildren
@@ -723,6 +782,13 @@ declare module '@tanstack/react-router' {
       path: '/disk-scheduling'
       fullPath: '/disk-scheduling'
       preLoaderRoute: typeof DiskSchedulingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/labs': {
+      id: '/labs'
+      path: '/labs'
+      fullPath: '/labs'
+      preLoaderRoute: typeof LabsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/learn': {
@@ -857,6 +923,34 @@ declare module '@tanstack/react-router' {
       fullPath: '/disk-scheduling/simulator'
       preLoaderRoute: typeof DiskSchedulingSimulatorRouteImport
       parentRoute: typeof DiskSchedulingRoute
+    }
+    '/labs/': {
+      id: '/labs/'
+      path: '/'
+      fullPath: '/labs/'
+      preLoaderRoute: typeof LabsIndexRouteImport
+      parentRoute: typeof LabsRoute
+    }
+    '/labs/deadlock': {
+      id: '/labs/deadlock'
+      path: '/deadlock'
+      fullPath: '/labs/deadlock'
+      preLoaderRoute: typeof LabsDeadlockRouteImport
+      parentRoute: typeof LabsRoute
+    }
+    '/labs/dining-philosophers': {
+      id: '/labs/dining-philosophers'
+      path: '/dining-philosophers'
+      fullPath: '/labs/dining-philosophers'
+      preLoaderRoute: typeof LabsDiningPhilosophersRouteImport
+      parentRoute: typeof LabsRoute
+    }
+    '/labs/producer-consumer': {
+      id: '/labs/producer-consumer'
+      path: '/producer-consumer'
+      fullPath: '/labs/producer-consumer'
+      preLoaderRoute: typeof LabsProducerConsumerRouteImport
+      parentRoute: typeof LabsRoute
     }
     '/memory-allocation/': {
       id: '/memory-allocation/'
@@ -1086,6 +1180,22 @@ const DiskSchedulingRouteWithChildren = DiskSchedulingRoute._addFileChildren(
   DiskSchedulingRouteChildren,
 )
 
+interface LabsRouteChildren {
+  LabsDeadlockRoute: typeof LabsDeadlockRoute
+  LabsDiningPhilosophersRoute: typeof LabsDiningPhilosophersRoute
+  LabsProducerConsumerRoute: typeof LabsProducerConsumerRoute
+  LabsIndexRoute: typeof LabsIndexRoute
+}
+
+const LabsRouteChildren: LabsRouteChildren = {
+  LabsDeadlockRoute: LabsDeadlockRoute,
+  LabsDiningPhilosophersRoute: LabsDiningPhilosophersRoute,
+  LabsProducerConsumerRoute: LabsProducerConsumerRoute,
+  LabsIndexRoute: LabsIndexRoute,
+}
+
+const LabsRouteWithChildren = LabsRoute._addFileChildren(LabsRouteChildren)
+
 interface MemoryAllocationRouteChildren {
   MemoryAllocationSimulatorRoute: typeof MemoryAllocationSimulatorRoute
   MemoryAllocationIndexRoute: typeof MemoryAllocationIndexRoute
@@ -1191,6 +1301,7 @@ const rootRouteChildren: RootRouteChildren = {
   DeadlockRoute: DeadlockRoute,
   DeadlockLabRoute: DeadlockLabRoute,
   DiskSchedulingRoute: DiskSchedulingRouteWithChildren,
+  LabsRoute: LabsRouteWithChildren,
   LearnRoute: LearnRoute,
   MemoryAllocationRoute: MemoryAllocationRouteWithChildren,
   NotesRoute: NotesRouteWithChildren,
