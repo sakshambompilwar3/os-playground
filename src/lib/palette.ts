@@ -84,3 +84,16 @@ export function assignProcessColors(
 
   return result;
 }
+
+/**
+ * Assigns a distinct palette color to each unique page number.
+ */
+export function assignPageColors(pages: number[]): Record<number, PaletteColor> {
+  const unique = Array.from(new Set(pages)).sort((a, b) => a - b);
+  const map: Record<number, PaletteColor> = {};
+  unique.forEach((p, idx) => {
+    map[p] = PROCESS_PALETTE[idx % PROCESS_PALETTE.length]!;
+  });
+  return map;
+}
+

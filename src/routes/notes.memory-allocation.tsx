@@ -52,7 +52,7 @@ function MemoryAllocationNotes() {
             Print
           </button>
         </div>
-        <h1 className="font-hand text-5xl md:text-6xl font-bold">Memory Allocation Notes</h1>
+        <h1 className="font-hand text-5xl md:text-6xl font-bold">The notes</h1>
         <p className="text-muted-foreground">Tap a section to read it.</p>
         <div className="space-y-2">
           {cards.map((c, i) => (

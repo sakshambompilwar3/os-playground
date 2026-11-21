@@ -15,10 +15,10 @@ export function TopicHub({ title, lectureLabel, unitLabel, quote, entries }: Top
   return (
     <div className="space-y-8">
       <div>
-        <Link to="/" className="text-sm text-muted-foreground hover:underline">
+        <Link to="/" className="inline-flex min-h-[44px] items-center text-sm text-muted-foreground hover:underline">
           ← back to topics
         </Link>
-        <h1 className="mt-2 font-hand text-6xl font-bold">{title}</h1>
+        <h1 className="mt-1 font-hand text-5xl md:text-6xl font-bold">{title}</h1>
         <p className="text-muted-foreground">
           {lectureLabel ?? "CS-301 · Operating Systems · Table of Contents"}
         </p>

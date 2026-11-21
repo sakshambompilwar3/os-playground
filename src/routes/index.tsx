@@ -9,13 +9,13 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Simulators, notes and quizzes for Operating Systems: Banker's Algorithm, CPU Scheduling, Memory Allocation, and Disk Scheduling.",
+          "Simulators, notes and quizzes for Operating Systems: Banker's Algorithm, CPU Scheduling, Memory Allocation, Disk Scheduling, Page Replacement, and Process Synchronization.",
       },
       { property: "og:title", content: "OS Playground | Learn Operating Systems by Playing" },
       {
         property: "og:description",
         content:
-          "Simulators, notes and quizzes for Operating Systems: Banker's Algorithm, CPU Scheduling, Memory Allocation, and Disk Scheduling.",
+          "Simulators, notes and quizzes for Operating Systems: Banker's Algorithm, CPU Scheduling, Memory Allocation, Disk Scheduling, Page Replacement, and Process Synchronization.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -207,7 +207,7 @@ function Home() {
       <section>
         <h2 className="font-hand text-4xl font-bold">Pick a <span className="marker">topic</span></h2>
         <p className="mt-1 font-hand text-xl text-muted-foreground">Simulators, notes and quizzes for Operating Systems. Pick a topic to start.</p>
-        <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {OS_TOPICS.map((topic, i) => {
             const to = `/${topic.slug}`;
             return (

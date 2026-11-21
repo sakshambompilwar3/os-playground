@@ -155,7 +155,7 @@ function CpuSchedulingQuiz() {
                   setPick(k);
                   if (k === q.c) setScore((s) => s + 1);
                 }}
-                className={`press paper-card px-4 py-2.5 text-left font-medium transition-colors ${state}`}
+                className={`press paper-card flex min-h-[44px] items-center px-4 py-2.5 text-left font-medium transition-colors ${state}`}
               >
                 {String.fromCharCode(65 + k)}. {a}
               </button>
@@ -169,11 +169,12 @@ function CpuSchedulingQuiz() {
               <span className="font-bold text-primary">Explanation:</span> {q.exp}
             </div>
             <button
+              type="button"
               onClick={() => {
                 setI((prev) => prev + 1);
                 setPick(null);
               }}
-              className="press paper-card bg-highlight px-5 py-2 font-bold text-foreground"
+              className="press paper-card inline-flex min-h-[44px] items-center justify-center bg-highlight px-5 py-2.5 font-bold text-foreground"
             >
               next →
             </button>
