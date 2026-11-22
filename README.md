@@ -3,11 +3,6 @@
 Learn Operating Systems by playing with them: simulators, notes and quizzes for the OS syllabus.
 
 Live site: https://os-banker-s-algo.vercel.app
-
-![OS Playground Home and Topics](docs/screenshots/home-hero.png)
-
-![CPU Scheduling Comparison Bench](docs/screenshots/cpu-comparison.png)
-
 ---
 
 ## What is inside
