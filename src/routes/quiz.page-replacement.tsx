@@ -142,7 +142,7 @@ function PageReplacementQuiz() {
             if (answered) {
               if (isCorrect) state = "bg-success/30 font-bold border-success text-foreground";
               else if (isSelected) state = "bg-destructive/30 border-destructive text-foreground";
-              else state = "opacity-50";
+              else state = "text-ink-muted";
             }
             return (
               <button

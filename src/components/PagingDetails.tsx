@@ -20,6 +20,7 @@ interface FrameTableProps {
   colors: Record<number, PaletteColor>;
   title?: string;
   compact?: boolean;
+  variant?: "chalkboard" | "paper";
 }
 
 export function FrameTable({
@@ -28,7 +29,9 @@ export function FrameTable({
   colors,
   title,
   compact = false,
+  variant = "chalkboard",
 }: FrameTableProps) {
+  const isPaper = variant === "paper";
   const { frameCount, referenceString, steps } = result;
   const activeSteps = steps.slice(0, currentStepIndex);
 
@@ -36,18 +39,44 @@ export function FrameTable({
     <div className="space-y-2">
       {title && (
         <div className="flex items-center justify-between">
-          <span className="font-hand text-2xl font-bold text-chalk-foreground">{title}</span>
-          <span className="font-mono text-xs text-chalk-foreground/70">
+          <span
+            className={`font-hand text-2xl font-bold ${
+              isPaper ? "text-foreground" : "text-chalk-foreground"
+            }`}
+          >
+            {title}
+          </span>
+          <span
+            className={`font-mono text-xs ${
+              isPaper ? "text-ink-muted" : "text-chalk-muted"
+            }`}
+          >
             {activeSteps.length}/{referenceString.length} references
           </span>
         </div>
       )}
-      <div className="table-scroll-container overflow-x-auto rounded border border-chalk-foreground/20 bg-black/20 p-2">
-        <table className="min-w-full border-collapse font-mono text-xs">
+      <div
+        className={`table-scroll-container overflow-x-auto rounded border p-2 ${
+          isPaper
+            ? "border-2 border-foreground bg-paper shadow-[var(--shadow-paper)]"
+            : "border-chalk-muted bg-black/20"
+        }`}
+      >
+        <table className={`min-w-full border-collapse font-mono text-sm ${isPaper ? "text-foreground" : ""}`}>
           <thead>
             {/* Reference string row */}
-            <tr className="border-b border-chalk-foreground/30 text-chalk-foreground/80">
-              <th className="sticky left-0 z-10 bg-black/80 px-2 py-1 text-left font-bold">
+            <tr
+              className={`border-b ${
+                isPaper
+                  ? "border-foreground/30 text-foreground"
+                  : "border-chalk-muted text-chalk-foreground"
+              }`}
+            >
+              <th
+                className={`sticky left-0 z-10 px-2 py-1 text-left font-bold ${
+                  isPaper ? "bg-secondary text-foreground border-r border-foreground/30" : "bg-black/80 text-chalk-foreground"
+                }`}
+              >
                 Ref
               </th>
               {referenceString.map((ref, idx) => {
@@ -57,16 +86,22 @@ export function FrameTable({
                 return (
                   <th
                     key={idx}
-                    className={`min-w-[36px] px-1.5 py-1 text-center transition-colors ${
+                    className={`min-w-[44px] px-1.5 py-1 text-center transition-colors ${
                       isCurrent
-                        ? "bg-highlight/30 text-highlight font-bold ring-1 ring-highlight"
+                        ? isPaper
+                          ? "bg-highlight text-foreground font-bold ring-2 ring-foreground"
+                          : "bg-highlight/30 text-highlight font-bold ring-1 ring-highlight"
                         : isPast
-                          ? "text-chalk-foreground"
-                          : "text-chalk-foreground/40"
+                          ? isPaper
+                            ? "text-foreground"
+                            : "text-chalk-foreground"
+                          : isPaper
+                            ? "text-ink-muted"
+                            : "text-chalk-muted"
                     }`}
                   >
                     <span
-                      className="inline-block rounded px-1.5 py-0.5 text-xs font-bold"
+                      className="inline-block rounded px-2 py-0.5 text-sm font-bold"
                       style={
                         isPast
                           ? { backgroundColor: color?.bg ?? "#e2e8f0", color: color?.ink ?? "#0f172a" }
@@ -83,8 +118,21 @@ export function FrameTable({
           <tbody>
             {/* Frame rows */}
             {Array.from({ length: frameCount }, (_, fIdx) => (
-              <tr key={fIdx} className="border-b border-chalk-foreground/10 text-chalk-foreground">
-                <td className="sticky left-0 z-10 bg-black/80 px-2 py-1 font-bold text-chalk-foreground/70">
+              <tr
+                key={fIdx}
+                className={`border-b ${
+                  isPaper
+                    ? "border-foreground/15 text-foreground"
+                    : "border-chalk-muted/40 text-chalk-foreground"
+                }`}
+              >
+                <td
+                  className={`sticky left-0 z-10 px-2 py-1 font-bold ${
+                    isPaper
+                      ? "bg-secondary/70 text-foreground border-r border-foreground/30"
+                      : "bg-black/80 text-chalk-foreground"
+                  }`}
+                >
                   F{fIdx + 1}
                 </td>
                 {referenceString.map((_, colIdx) => {
@@ -98,25 +146,29 @@ export function FrameTable({
                     <td
                       key={colIdx}
                       className={`px-1 py-1 text-center font-mono ${
-                        isCurrent ? "bg-highlight/10 font-bold" : ""
+                        isCurrent ? (isPaper ? "bg-highlight/20 font-bold" : "bg-highlight/10 font-bold") : ""
                       }`}
                     >
                       {page !== null ? (
                         <span
-                          className={`inline-block min-w-[26px] rounded px-1 py-0.5 text-xs ${
+                          className={`inline-block min-w-[28px] rounded px-1.5 py-0.5 text-sm font-bold ${
                             isLoadedHere && isCurrent
-                              ? "ring-2 ring-highlight font-bold scale-105"
+                              ? isPaper
+                                ? "ring-2 ring-foreground scale-105"
+                                : "ring-2 ring-highlight scale-105"
                               : ""
                           }`}
                           style={{
-                            backgroundColor: color?.bg ?? "transparent",
-                            color: color?.ink ?? "inherit",
+                            backgroundColor: color?.bg ?? (isPaper ? "#e2e8f0" : "transparent"),
+                            color: color?.ink ?? (isPaper ? "#0f172a" : "inherit"),
                           }}
                         >
                           {page}
                         </span>
                       ) : (
-                        <span className="text-chalk-foreground/20">·</span>
+                        <span className={isPaper ? "text-ink-muted" : "text-chalk-muted"}>
+                          ·
+                        </span>
                       )}
                     </td>
                   );
@@ -125,21 +177,33 @@ export function FrameTable({
             ))}
 
             {/* Evicted row */}
-            <tr className="border-b border-chalk-foreground/20 text-xs text-chalk-foreground/70">
-              <td className="sticky left-0 z-10 bg-black/80 px-2 py-1 font-bold">
+            <tr
+              className={`border-b text-sm ${
+                isPaper
+                  ? "border-foreground/25 text-ink-muted"
+                  : "border-chalk-muted text-chalk-muted"
+              }`}
+            >
+              <td
+                className={`sticky left-0 z-10 px-2 py-1 font-bold ${
+                  isPaper
+                    ? "bg-secondary/70 text-foreground border-r border-foreground/30"
+                    : "bg-black/80 text-chalk-foreground"
+                }`}
+              >
                 Evict
               </td>
               {referenceString.map((_, colIdx) => {
                 const step = activeSteps[colIdx];
                 const evicted = step?.evictedPage;
                 return (
-                  <td key={colIdx} className="px-1 py-0.5 text-center font-mono">
+                  <td key={colIdx} className="px-1 py-1 text-center font-mono">
                     {evicted !== undefined && evicted !== null ? (
-                      <span className="rounded bg-destructive/20 px-1 text-[10px] text-destructive-foreground line-through font-bold">
+                      <span className="rounded bg-destructive px-1.5 py-0.5 text-xs text-destructive-foreground line-through font-bold shadow-sm">
                         {evicted}
                       </span>
                     ) : (
-                      <span className="text-chalk-foreground/20">-</span>
+                      <span className={isPaper ? "text-ink-muted" : "text-chalk-muted"}>-</span>
                     )}
                   </td>
                 );
@@ -147,15 +211,26 @@ export function FrameTable({
             </tr>
 
             {/* Hit / Fault row */}
-            <tr className="text-xs font-bold">
-              <td className="sticky left-0 z-10 bg-black/80 px-2 py-1 text-chalk-foreground/80">
+            <tr className="text-sm font-bold">
+              <td
+                className={`sticky left-0 z-10 px-2 py-1 ${
+                  isPaper
+                    ? "bg-secondary text-foreground font-bold border-r border-foreground/30"
+                    : "bg-black/80 text-chalk-foreground"
+                }`}
+              >
                 Status
               </td>
               {referenceString.map((_, colIdx) => {
                 const step = activeSteps[colIdx];
                 if (!step) {
                   return (
-                    <td key={colIdx} className="px-1 py-1 text-center text-chalk-foreground/20">
+                    <td
+                      key={colIdx}
+                      className={`px-1 py-1 text-center ${
+                        isPaper ? "text-ink-muted" : "text-chalk-muted"
+                      }`}
+                    >
                       -
                     </td>
                   );
@@ -163,11 +238,19 @@ export function FrameTable({
                 return (
                   <td
                     key={colIdx}
-                    className={`px-1 py-1 text-center ${
-                      step.hit ? "text-success" : "text-highlight"
-                    }`}
+                    className="px-1 py-1 text-center"
                   >
-                    {step.hit ? "✓" : "✗"}
+                    {step.hit ? (
+                      <span className="inline-flex items-center gap-0.5 text-xs font-black text-success">
+                        <span>✓</span>
+                        <span className="text-xs uppercase">Hit</span>
+                      </span>
+                    ) : (
+                      <span className={`inline-flex items-center gap-0.5 text-xs font-bold ${isPaper ? "text-[#a64024]" : "text-highlight"}`}>
+                        <span>✗</span>
+                        <span className="text-xs uppercase">Fault</span>
+                      </span>
+                    )}
                   </td>
                 );
               })}
@@ -212,23 +295,23 @@ export function PagingResultsPanel({
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-5 font-mono text-xs">
         <div className="rounded border border-foreground/20 bg-background/50 p-2.5 text-center">
-          <p className="text-muted-foreground uppercase text-[10px]">Page Faults</p>
+          <p className="text-muted-foreground uppercase text-xs">Page Faults</p>
           <p className="mt-1 font-hand text-3xl font-bold text-primary">{faults}</p>
         </div>
         <div className="rounded border border-foreground/20 bg-background/50 p-2.5 text-center">
-          <p className="text-muted-foreground uppercase text-[10px]">Page Hits</p>
+          <p className="text-muted-foreground uppercase text-xs">Page Hits</p>
           <p className="mt-1 font-hand text-3xl font-bold text-success">{hits}</p>
         </div>
         <div className="rounded border border-foreground/20 bg-background/50 p-2.5 text-center">
-          <p className="text-muted-foreground uppercase text-[10px]">Hit Ratio</p>
+          <p className="text-muted-foreground uppercase text-xs">Hit Ratio</p>
           <p className="mt-1 font-hand text-3xl font-bold">{hitRatio.toFixed(1)}%</p>
         </div>
         <div className="rounded border border-foreground/20 bg-background/50 p-2.5 text-center">
-          <p className="text-muted-foreground uppercase text-[10px]">Fault Ratio</p>
+          <p className="text-muted-foreground uppercase text-xs">Fault Ratio</p>
           <p className="mt-1 font-hand text-3xl font-bold">{faultRatio.toFixed(1)}%</p>
         </div>
         <div className="col-span-2 sm:col-span-1 rounded border border-foreground/20 bg-background/50 p-2.5 text-center">
-          <p className="text-muted-foreground uppercase text-[10px]">Evictions</p>
+          <p className="text-muted-foreground uppercase text-xs">Evictions</p>
           <p className="mt-1 font-hand text-3xl font-bold text-destructive">{evictions}</p>
         </div>
       </div>

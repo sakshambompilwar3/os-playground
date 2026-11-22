@@ -33,6 +33,11 @@
   --color-highlight: var(--highlight);
   --color-chalk: var(--chalk);
   --color-chalk-foreground: var(--chalk-foreground);
+  --color-chalk-text: var(--chalk-text);
+  --color-chalk-muted: var(--chalk-muted);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-on-accent: var(--on-accent);
   --color-paper: var(--paper);
   --color-rule: var(--rule);
   --color-margin: var(--margin);
@@ -45,27 +50,32 @@
   --radius: 0.75rem;
   /* warm parchment — not stark white, not dark */
   --background: oklch(0.94 0.025 85);
-  --foreground: oklch(0.27 0.04 260);
+  --foreground: oklch(0.20 0.04 260);
+  --ink: oklch(0.20 0.04 260);
+  --ink-muted: oklch(0.38 0.04 260);
   --paper: oklch(0.965 0.02 88);
   --card: oklch(0.965 0.02 88);
-  --card-foreground: oklch(0.27 0.04 260);
+  --card-foreground: oklch(0.20 0.04 260);
   --popover: oklch(0.965 0.02 88);
-  --popover-foreground: oklch(0.27 0.04 260);
+  --popover-foreground: oklch(0.20 0.04 260);
   --primary: oklch(0.45 0.13 255); /* ink blue */
-  --primary-foreground: oklch(0.97 0.015 88);
+  --primary-foreground: oklch(0.98 0.015 88);
   --secondary: oklch(0.89 0.04 80);
-  --secondary-foreground: oklch(0.3 0.04 260);
+  --secondary-foreground: oklch(0.20 0.04 260);
   --muted: oklch(0.9 0.03 85);
-  --muted-foreground: oklch(0.48 0.03 260);
+  --muted-foreground: oklch(0.38 0.04 260);
   --accent: oklch(0.72 0.15 50); /* pencil orange */
-  --accent-foreground: oklch(0.22 0.04 50);
+  --accent-foreground: oklch(0.20 0.04 50);
   --highlight: oklch(0.9 0.13 98); /* highlighter yellow */
-  --success: oklch(0.55 0.13 150);
-  --success-foreground: oklch(0.97 0.015 88);
+  --on-accent: oklch(0.18 0.04 260);
+  --success: oklch(0.50 0.13 150);
+  --success-foreground: oklch(0.98 0.015 88);
   --destructive: oklch(0.56 0.19 25);
-  --destructive-foreground: oklch(0.97 0.015 88);
+  --destructive-foreground: oklch(0.98 0.015 88);
   --chalk: oklch(0.38 0.06 160); /* chalkboard green */
-  --chalk-foreground: oklch(0.95 0.02 100);
+  --chalk-foreground: oklch(0.98 0.015 88);
+  --chalk-text: var(--chalk-foreground);
+  --chalk-muted: oklch(0.85 0.03 140);
   --rule: oklch(0.8 0.05 240 / 0.45);
   --margin: oklch(0.65 0.16 20 / 0.5);
   --border: oklch(0.8 0.04 80);

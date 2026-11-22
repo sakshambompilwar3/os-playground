@@ -72,7 +72,7 @@ function BankersQuiz() {
         <p className="font-hand text-3xl font-bold leading-8">{q.q}</p>
         <div className="mt-6 grid gap-3">
           {q.a.map((a, k) => {
-            const state = pick === null ? "" : k === q.c ? "bg-success/30" : k === pick ? "bg-destructive/30" : "opacity-60";
+            const state = pick === null ? "" : k === q.c ? "bg-success/30 font-bold border-success" : k === pick ? "bg-destructive/30 border-destructive" : "text-ink-muted";
             return (
               <button
                 key={a}

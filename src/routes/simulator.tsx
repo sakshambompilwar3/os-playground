@@ -199,7 +199,7 @@ function Simulator() {
               {i < done.length - 1 && <span className="font-hand text-3xl">→</span>}
             </span>
           ))}
-          {step < 0 && <span className="font-hand text-3xl opacity-70">press play to begin…</span>}
+          {step < 0 && <span className="font-hand text-3xl text-chalk-muted">press play to begin…</span>}
         </div>
 
         <p key={step} className="animate-rise mt-4 font-hand text-2xl">

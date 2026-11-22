@@ -532,9 +532,10 @@ function DiskSchedulingSimulatorPage() {
           {/* Return jump toggle & seek time */}
           <div className="flex flex-wrap items-center gap-3">
             <label
+              aria-disabled={algorithm !== "c-scan" && algorithm !== "c-look"}
               className={`flex items-center gap-1.5 cursor-pointer ${
                 algorithm !== "c-scan" && algorithm !== "c-look"
-                  ? "opacity-50 cursor-not-allowed"
+                  ? "text-ink-muted cursor-not-allowed"
                   : ""
               }`}
               title="When ON, includes the circular jump distance in the total head movement"
@@ -743,7 +744,7 @@ function DiskSchedulingSimulatorPage() {
           </Button>
 
           <div className="flex flex-wrap items-center gap-2 font-mono text-xs sm:ml-auto">
-            <span className="opacity-80">speed</span>
+            <span className="text-chalk-muted font-bold">speed</span>
             <div className="inline-flex rounded-md border border-chalk-foreground/40 p-0.5">
               {SPEEDS.map((s) => (
                 <button
@@ -769,9 +770,9 @@ function DiskSchedulingSimulatorPage() {
 
         {/* Pending Requests Queue (Colored chips that shrink as served) */}
         <div className="flex min-h-9 flex-wrap items-center gap-2 font-mono text-xs">
-          <span className="text-chalk-foreground/80">Pending requests:</span>
+          <span className="text-chalk-muted font-bold">Pending requests:</span>
           {pendingRequests.length === 0 ? (
-            <span className="italic text-chalk-foreground/65">all served</span>
+            <span className="italic text-chalk-muted">all served</span>
           ) : (
             pendingRequests.map((r) => {
               const color = colors[r.id];

@@ -22,6 +22,7 @@ import { Route as LearnRouteImport } from './routes/learn'
 import { Route as MemoryAllocationRouteImport } from './routes/memory-allocation'
 import { Route as NotesRouteImport } from './routes/notes'
 import { Route as PageReplacementRouteImport } from './routes/page-replacement'
+import { Route as PracticeRouteImport } from './routes/practice'
 import { Route as QuizRouteImport } from './routes/quiz'
 import { Route as RequestRouteImport } from './routes/request'
 import { Route as RequestsRouteImport } from './routes/requests'
@@ -54,6 +55,8 @@ import { Route as NotesSynchronizationRouteImport } from './routes/notes.synchro
 import { Route as PageReplacementIndexRouteImport } from './routes/page-replacement.index'
 import { Route as PageReplacementComparisonRouteImport } from './routes/page-replacement.comparison'
 import { Route as PageReplacementSimulatorRouteImport } from './routes/page-replacement.simulator'
+import { Route as PracticeIndexRouteImport } from './routes/practice.index'
+import { Route as PracticeTopicRouteImport } from './routes/practice.$topic'
 import { Route as QuizIndexRouteImport } from './routes/quiz.index'
 import { Route as QuizTopicRouteImport } from './routes/quiz.$topic'
 import { Route as QuizBankersRouteImport } from './routes/quiz.bankers'
@@ -130,6 +133,11 @@ const NotesRoute = NotesRouteImport.update({
 const PageReplacementRoute = PageReplacementRouteImport.update({
   id: '/page-replacement',
   path: '/page-replacement',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PracticeRoute = PracticeRouteImport.update({
+  id: '/practice',
+  path: '/practice',
   getParentRoute: () => rootRouteImport,
 } as any)
 const QuizRoute = QuizRouteImport.update({
@@ -299,6 +307,16 @@ const PageReplacementSimulatorRoute =
     path: '/simulator',
     getParentRoute: () => PageReplacementRoute,
   } as any)
+const PracticeIndexRoute = PracticeIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PracticeRoute,
+} as any)
+const PracticeTopicRoute = PracticeTopicRouteImport.update({
+  id: '/$topic',
+  path: '/$topic',
+  getParentRoute: () => PracticeRoute,
+} as any)
 const QuizIndexRoute = QuizIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -377,6 +395,7 @@ export interface FileRoutesByFullPath {
   '/memory-allocation': typeof MemoryAllocationRouteWithChildren
   '/notes': typeof NotesRouteWithChildren
   '/page-replacement': typeof PageReplacementRouteWithChildren
+  '/practice': typeof PracticeRouteWithChildren
   '/quiz': typeof QuizRouteWithChildren
   '/request': typeof RequestRoute
   '/requests': typeof RequestsRoute
@@ -403,6 +422,7 @@ export interface FileRoutesByFullPath {
   '/notes/synchronization': typeof NotesSynchronizationRoute
   '/page-replacement/comparison': typeof PageReplacementComparisonRoute
   '/page-replacement/simulator': typeof PageReplacementSimulatorRoute
+  '/practice/$topic': typeof PracticeTopicRoute
   '/quiz/$topic': typeof QuizTopicRoute
   '/quiz/bankers': typeof QuizBankersRoute
   '/quiz/cpu-scheduling': typeof QuizCpuSchedulingRoute
@@ -419,6 +439,7 @@ export interface FileRoutesByFullPath {
   '/memory-allocation/': typeof MemoryAllocationIndexRoute
   '/notes/': typeof NotesIndexRoute
   '/page-replacement/': typeof PageReplacementIndexRoute
+  '/practice/': typeof PracticeIndexRoute
   '/quiz/': typeof QuizIndexRoute
   '/synchronization/': typeof SynchronizationIndexRoute
 }
@@ -454,6 +475,7 @@ export interface FileRoutesByTo {
   '/notes/synchronization': typeof NotesSynchronizationRoute
   '/page-replacement/comparison': typeof PageReplacementComparisonRoute
   '/page-replacement/simulator': typeof PageReplacementSimulatorRoute
+  '/practice/$topic': typeof PracticeTopicRoute
   '/quiz/$topic': typeof QuizTopicRoute
   '/quiz/bankers': typeof QuizBankersRoute
   '/quiz/cpu-scheduling': typeof QuizCpuSchedulingRoute
@@ -470,6 +492,7 @@ export interface FileRoutesByTo {
   '/memory-allocation': typeof MemoryAllocationIndexRoute
   '/notes': typeof NotesIndexRoute
   '/page-replacement': typeof PageReplacementIndexRoute
+  '/practice': typeof PracticeIndexRoute
   '/quiz': typeof QuizIndexRoute
   '/synchronization': typeof SynchronizationIndexRoute
 }
@@ -488,6 +511,7 @@ export interface FileRoutesById {
   '/memory-allocation': typeof MemoryAllocationRouteWithChildren
   '/notes': typeof NotesRouteWithChildren
   '/page-replacement': typeof PageReplacementRouteWithChildren
+  '/practice': typeof PracticeRouteWithChildren
   '/quiz': typeof QuizRouteWithChildren
   '/request': typeof RequestRoute
   '/requests': typeof RequestsRoute
@@ -514,6 +538,7 @@ export interface FileRoutesById {
   '/notes/synchronization': typeof NotesSynchronizationRoute
   '/page-replacement/comparison': typeof PageReplacementComparisonRoute
   '/page-replacement/simulator': typeof PageReplacementSimulatorRoute
+  '/practice/$topic': typeof PracticeTopicRoute
   '/quiz/$topic': typeof QuizTopicRoute
   '/quiz/bankers': typeof QuizBankersRoute
   '/quiz/cpu-scheduling': typeof QuizCpuSchedulingRoute
@@ -530,6 +555,7 @@ export interface FileRoutesById {
   '/memory-allocation/': typeof MemoryAllocationIndexRoute
   '/notes/': typeof NotesIndexRoute
   '/page-replacement/': typeof PageReplacementIndexRoute
+  '/practice/': typeof PracticeIndexRoute
   '/quiz/': typeof QuizIndexRoute
   '/synchronization/': typeof SynchronizationIndexRoute
 }
@@ -549,6 +575,7 @@ export interface FileRouteTypes {
     | '/memory-allocation'
     | '/notes'
     | '/page-replacement'
+    | '/practice'
     | '/quiz'
     | '/request'
     | '/requests'
@@ -575,6 +602,7 @@ export interface FileRouteTypes {
     | '/notes/synchronization'
     | '/page-replacement/comparison'
     | '/page-replacement/simulator'
+    | '/practice/$topic'
     | '/quiz/$topic'
     | '/quiz/bankers'
     | '/quiz/cpu-scheduling'
@@ -591,6 +619,7 @@ export interface FileRouteTypes {
     | '/memory-allocation/'
     | '/notes/'
     | '/page-replacement/'
+    | '/practice/'
     | '/quiz/'
     | '/synchronization/'
   fileRoutesByTo: FileRoutesByTo
@@ -626,6 +655,7 @@ export interface FileRouteTypes {
     | '/notes/synchronization'
     | '/page-replacement/comparison'
     | '/page-replacement/simulator'
+    | '/practice/$topic'
     | '/quiz/$topic'
     | '/quiz/bankers'
     | '/quiz/cpu-scheduling'
@@ -642,6 +672,7 @@ export interface FileRouteTypes {
     | '/memory-allocation'
     | '/notes'
     | '/page-replacement'
+    | '/practice'
     | '/quiz'
     | '/synchronization'
   id:
@@ -659,6 +690,7 @@ export interface FileRouteTypes {
     | '/memory-allocation'
     | '/notes'
     | '/page-replacement'
+    | '/practice'
     | '/quiz'
     | '/request'
     | '/requests'
@@ -685,6 +717,7 @@ export interface FileRouteTypes {
     | '/notes/synchronization'
     | '/page-replacement/comparison'
     | '/page-replacement/simulator'
+    | '/practice/$topic'
     | '/quiz/$topic'
     | '/quiz/bankers'
     | '/quiz/cpu-scheduling'
@@ -701,6 +734,7 @@ export interface FileRouteTypes {
     | '/memory-allocation/'
     | '/notes/'
     | '/page-replacement/'
+    | '/practice/'
     | '/quiz/'
     | '/synchronization/'
   fileRoutesById: FileRoutesById
@@ -719,6 +753,7 @@ export interface RootRouteChildren {
   MemoryAllocationRoute: typeof MemoryAllocationRouteWithChildren
   NotesRoute: typeof NotesRouteWithChildren
   PageReplacementRoute: typeof PageReplacementRouteWithChildren
+  PracticeRoute: typeof PracticeRouteWithChildren
   QuizRoute: typeof QuizRouteWithChildren
   RequestRoute: typeof RequestRoute
   RequestsRoute: typeof RequestsRoute
@@ -817,6 +852,13 @@ declare module '@tanstack/react-router' {
       path: '/page-replacement'
       fullPath: '/page-replacement'
       preLoaderRoute: typeof PageReplacementRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/practice': {
+      id: '/practice'
+      path: '/practice'
+      fullPath: '/practice'
+      preLoaderRoute: typeof PracticeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/quiz': {
@@ -1043,6 +1085,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PageReplacementSimulatorRouteImport
       parentRoute: typeof PageReplacementRoute
     }
+    '/practice/': {
+      id: '/practice/'
+      path: '/'
+      fullPath: '/practice/'
+      preLoaderRoute: typeof PracticeIndexRouteImport
+      parentRoute: typeof PracticeRoute
+    }
+    '/practice/$topic': {
+      id: '/practice/$topic'
+      path: '/$topic'
+      fullPath: '/practice/$topic'
+      preLoaderRoute: typeof PracticeTopicRouteImport
+      parentRoute: typeof PracticeRoute
+    }
     '/quiz/': {
       id: '/quiz/'
       path: '/'
@@ -1249,6 +1305,20 @@ const PageReplacementRouteWithChildren = PageReplacementRoute._addFileChildren(
   PageReplacementRouteChildren,
 )
 
+interface PracticeRouteChildren {
+  PracticeTopicRoute: typeof PracticeTopicRoute
+  PracticeIndexRoute: typeof PracticeIndexRoute
+}
+
+const PracticeRouteChildren: PracticeRouteChildren = {
+  PracticeTopicRoute: PracticeTopicRoute,
+  PracticeIndexRoute: PracticeIndexRoute,
+}
+
+const PracticeRouteWithChildren = PracticeRoute._addFileChildren(
+  PracticeRouteChildren,
+)
+
 interface QuizRouteChildren {
   QuizTopicRoute: typeof QuizTopicRoute
   QuizBankersRoute: typeof QuizBankersRoute
@@ -1306,6 +1376,7 @@ const rootRouteChildren: RootRouteChildren = {
   MemoryAllocationRoute: MemoryAllocationRouteWithChildren,
   NotesRoute: NotesRouteWithChildren,
   PageReplacementRoute: PageReplacementRouteWithChildren,
+  PracticeRoute: PracticeRouteWithChildren,
   QuizRoute: QuizRouteWithChildren,
   RequestRoute: RequestRoute,
   RequestsRoute: RequestsRoute,

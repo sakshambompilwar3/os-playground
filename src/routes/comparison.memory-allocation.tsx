@@ -756,7 +756,7 @@ function MemoryAllocationComparisonPage() {
           )}
 
           <div className="flex flex-wrap items-center gap-2 font-mono text-xs sm:ml-auto">
-            <span className="opacity-80">speed</span>
+            <span className="text-chalk-muted font-bold">speed</span>
             <div className="inline-flex rounded-md border border-chalk-foreground/40 p-0.5">
               {SPEEDS.map((s) => (
                 <button
@@ -811,7 +811,7 @@ function MemoryAllocationComparisonPage() {
                       </span>
                     )}
                   </div>
-                  <span className="font-mono text-xs text-chalk-foreground/80">
+                  <span className="font-mono text-xs text-chalk-muted font-bold">
                     Util: {item.utilizationPercent.toFixed(2)}% · Placed: {item.placedCount} / {parsedProcesses.length}
                   </span>
                 </div>
@@ -930,7 +930,7 @@ function MemoryAllocationComparisonPage() {
                       <div className="flex items-center gap-1.5">
                         <span className="font-bold">{STRATEGY_META[row.strategy].label}</span>
                         {(isWinner || isTiedWinner) && (
-                          <span className="rounded bg-primary px-1.5 py-0.2 font-mono text-[10px] text-primary-foreground font-bold">
+                          <span className="rounded bg-primary px-1.5 py-0.5 font-mono text-xs text-primary-foreground font-bold">
                             WIN
                           </span>
                         )}

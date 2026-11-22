@@ -123,7 +123,7 @@ function Home() {
         className="chalkboard relative overflow-hidden rounded-md px-6 py-14 outline-none focus-visible:ring-2 focus-visible:ring-chalk-foreground/50 md:px-14"
       >
         <div key={currentTopic.slug} className="animate-rise">
-          <p className="font-mono text-xs uppercase tracking-[0.3em] opacity-70">
+          <p className="font-mono text-xs uppercase tracking-[0.3em] text-chalk-muted font-bold">
             {currentTopic.lectureLabel}
           </p>
           <h1 className="mt-4 font-hand text-5xl sm:text-7xl md:text-8xl font-bold leading-none break-words">
@@ -158,13 +158,13 @@ function Home() {
           </div>
         </div>
 
-        {/* chalk controls (arrows + dots) - faint chalk marks styled, top of chalk/eraser */}
-        <div className="absolute bottom-3 left-4 sm:left-14 flex items-center gap-2 sm:gap-3 font-hand text-xl text-chalk-foreground/80 sm:bottom-4">
+        {/* chalk controls (arrows + dots) */}
+        <div className="absolute bottom-3 left-4 sm:left-14 flex items-center gap-2 sm:gap-3 font-hand text-xl text-chalk-muted sm:bottom-4">
           <button
             type="button"
             onClick={prevSlide}
             aria-label="Previous topic slide"
-            className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded px-2 py-1 transition-opacity hover:opacity-100 opacity-70 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-chalk-foreground"
+            className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded px-2 py-1 text-chalk-muted hover:text-chalk-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-chalk-foreground"
           >
             ← prev
           </button>
@@ -180,8 +180,8 @@ function Home() {
                 <span
                   className={`block h-2.5 rounded-full transition-all ${
                     idx === slide
-                      ? "w-5 bg-chalk-foreground/90"
-                      : "w-2.5 bg-chalk-foreground/40 hover:bg-chalk-foreground/70"
+                      ? "w-5 bg-chalk-foreground"
+                      : "w-2.5 bg-chalk-muted hover:bg-chalk-foreground"
                   }`}
                 />
               </button>
@@ -191,7 +191,7 @@ function Home() {
             type="button"
             onClick={nextSlide}
             aria-label="Next topic slide"
-            className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded px-2 py-1 transition-opacity hover:opacity-100 opacity-70 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-chalk-foreground"
+            className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded px-2 py-1 text-chalk-muted hover:text-chalk-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-chalk-foreground"
           >
             next →
           </button>
@@ -199,15 +199,24 @@ function Home() {
 
         {/* chalk + eraser */}
         <div className="absolute bottom-3 right-6 flex items-end gap-3 pointer-events-none">
-          <span className="block h-3 w-16 rounded-full bg-chalk-foreground/90" />
+          <span className="block h-3 w-16 rounded-full bg-chalk-foreground" />
           <span className="block h-6 w-20 rounded-sm bg-accent" />
         </div>
       </section>
 
       {/* topic cards (preserved exactly) */}
       <section>
-        <h2 className="font-hand text-4xl font-bold">Pick a <span className="marker">topic</span></h2>
-        <p className="mt-1 font-hand text-xl text-muted-foreground">Simulators, notes and quizzes for Operating Systems. Pick a topic to start.</p>
+        <div className="flex flex-wrap items-baseline justify-between gap-3">
+          <div>
+            <h2 className="font-hand text-4xl font-bold">Pick a <span className="marker">topic</span></h2>
+            <p className="mt-1 font-hand text-xl text-muted-foreground">
+              Simulators, notes and quizzes for Operating Systems. Or jump into{" "}
+              <Link to="/practice" className="font-bold underline decoration-2 hover:text-foreground">
+                Practice Mode →
+              </Link>
+            </p>
+          </div>
+        </div>
         <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {OS_TOPICS.map((topic, i) => {
             const to = `/${topic.slug}`;
@@ -224,7 +233,7 @@ function Home() {
                 {!topic.ready && (
                   <span className="mt-3 inline-block rounded-full border-2 border-foreground/30 px-2 py-0.5 font-mono text-xs">coming soon</span>
                 )}
-                <p className="mt-4 font-mono text-xs opacity-0 transition-opacity group-hover:opacity-100">open →</p>
+                <p className="mt-4 font-mono text-xs font-bold text-foreground">open →</p>
               </Link>
             );
           })}
@@ -253,7 +262,7 @@ function Home() {
               <span className="absolute -top-3 left-1/2 h-6 w-16 -translate-x-1/2 rotate-2 bg-paper/70" />
               <p className="font-hand text-3xl font-bold">{lab.title}</p>
               <p className="mt-2 text-sm">{lab.description}</p>
-              <p className="mt-4 font-mono text-xs opacity-0 transition-opacity group-hover:opacity-100">open lab →</p>
+              <p className="mt-4 font-mono text-xs font-bold text-foreground">open lab →</p>
             </Link>
           ))}
         </div>

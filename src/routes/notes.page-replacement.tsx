@@ -77,7 +77,7 @@ function PageReplacementNotes() {
 
         <div className="mt-4 space-y-3 font-sans text-sm">
           {card.content.map((paragraph, idx) => (
-            <p key={idx} className="leading-relaxed text-foreground/90">
+            <p key={idx} className="leading-relaxed text-foreground">
               {paragraph}
             </p>
           ))}

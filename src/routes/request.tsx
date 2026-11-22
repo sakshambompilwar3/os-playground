@@ -80,8 +80,8 @@ function RequestPage() {
           </div>
         </div>
         <div className="chalkboard rounded-md p-6 font-mono text-sm">
-          <p className="mb-3 opacity-70">$ tail -f /var/log/banker</p>
-          {log.length === 0 && <p className="opacity-60">waiting for requests… <span className="animate-blink">▌</span></p>}
+          <p className="mb-3 text-chalk-muted">$ tail -f /var/log/banker</p>
+          {log.length === 0 && <p className="text-chalk-muted">waiting for requests… <span className="animate-blink">▌</span></p>}
           <ul className="space-y-2">
             {log.map((l) => (
               <li key={l.id} className={`animate-rise rounded px-3 py-2 text-foreground ${tone[l.outcome]}`}>{l.text}</li>

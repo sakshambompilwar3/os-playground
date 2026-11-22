@@ -651,7 +651,7 @@ export function CpuSchedulingComparison() {
           </Button>
 
           <div className="flex flex-wrap items-center gap-2 font-mono text-xs sm:ml-auto">
-            <span className="opacity-80">speed</span>
+            <span className="text-chalk-muted font-bold">speed</span>
             <div className="inline-flex rounded-md border border-chalk-foreground/40 p-0.5">
               {SPEEDS.map((s) => (
                 <button
@@ -689,7 +689,7 @@ export function CpuSchedulingComparison() {
 
         <p className="animate-rise mt-4 min-h-8 font-hand text-2xl">
           {!started && (
-            <span className="opacity-75">
+            <span className="text-chalk-muted">
               Press Play or Step to watch all 6 schedulers race on the timeline.
             </span>
           )}
@@ -751,7 +751,7 @@ export function CpuSchedulingComparison() {
                       <div className="flex items-center gap-1.5">
                         <span>{row.meta.label}</span>
                         {isOverallWinner && (
-                          <span className="rounded bg-highlight px-1.5 py-0.5 text-[10px] font-mono font-bold text-foreground">
+                          <span className="rounded bg-highlight px-1.5 py-0.5 text-xs font-mono font-bold text-foreground">
                             {verdict.isTie ? "Tied Best" : "Best"}
                           </span>
                         )}
@@ -823,7 +823,7 @@ export function CpuSchedulingComparison() {
       {/* Small chalk-style visual bar comparison */}
       <div className="chalkboard rounded-md p-6 space-y-4">
         <p className="font-hand text-3xl font-bold">Chalk visual comparison</p>
-        <p className="font-mono text-xs opacity-75">
+        <p className="font-mono text-xs text-chalk-muted">
           Shorter bar = lower waiting time (better performance):
         </p>
         <div className="space-y-2.5 font-mono text-xs">
@@ -835,7 +835,7 @@ export function CpuSchedulingComparison() {
 
             return (
               <div key={r.meta.id} className="space-y-1">
-                <div className="flex items-center justify-between text-[11px] text-chalk-foreground/90">
+                <div className="flex items-center justify-between text-xs text-chalk-foreground">
                   <span className="font-bold">{r.meta.short}</span>
                   <span>
                     Avg WT: {wtVal.toFixed(2)} ms · Avg TAT: {tatVal.toFixed(2)} ms
@@ -901,7 +901,7 @@ export function CpuSchedulingComparison() {
                   {verdict.isTie ? "Tied Winners" : "Winner"}
                 </span>
               </div>
-              <p className="mt-1 font-mono text-sm text-foreground/80">
+              <p className="mt-1 font-mono text-sm text-ink-muted">
                 Avg WT: <b className="text-foreground">{verdict.winner.avgWaitingTime.toFixed(2)} ms</b> · Avg TAT:{" "}
                 <b className="text-foreground">{verdict.winner.avgTurnaroundTime.toFixed(2)} ms</b> · Avg RT:{" "}
                 <b className="text-foreground">{verdict.winner.avgResponseTime.toFixed(2)} ms</b>
@@ -994,7 +994,7 @@ export function CpuSchedulingComparison() {
                 <p>3. <b>Tie-break 2 — Lowest total response time (RT):</b> Sum of all first-CPU response times.</p>
                 <p>4. <b>Tie-break 3 — Fewest context switches:</b> Number of preemptions or process switches.</p>
                 <p>5. <b>Deterministic canonical ordering:</b> FCFS → SJF → SRTF → Round Robin → Priority (NP) → Priority (P).</p>
-                <p className="pt-1 text-[11px] italic">
+                <p className="pt-1 text-xs italic">
                   * If two or more algorithms tie on total WT, TAT, and RT, the verdict reports a shared tie rather than pretending one wins.
                 </p>
               </div>
@@ -1073,7 +1073,7 @@ export function CpuSchedulingComparison() {
                             <td className="py-2 px-2.5">
                               <span>{ALGORITHM_META[r.result.algorithm].label}</span>
                               {isWinner && (
-                                <span className="ml-1.5 rounded bg-highlight px-1 text-[10px]">
+                                <span className="ml-1.5 rounded bg-highlight px-1 text-xs font-bold text-foreground">
                                   {verdict.isTie ? "TIE" : "WINNER"}
                                 </span>
                               )}

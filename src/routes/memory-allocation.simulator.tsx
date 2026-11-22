@@ -849,7 +849,7 @@ function MemoryAllocationSimulatorPage() {
           </Button>
 
           <div className="flex flex-wrap items-center gap-2 font-mono text-xs sm:ml-auto">
-            <span className="opacity-80">speed</span>
+            <span className="text-chalk-muted font-bold">speed</span>
             <div className="inline-flex rounded-md border border-chalk-foreground/40 p-0.5">
               {SPEEDS.map((s) => (
                 <button
@@ -913,7 +913,7 @@ function MemoryAllocationSimulatorPage() {
                 <Button variant="outline" onClick={handleRetryWaiting} className="bg-highlight text-foreground">
                   Try waiting processes again
                 </Button>
-                <span className="font-mono text-xs text-chalk-foreground/80">
+                <span className="font-mono text-xs text-chalk-muted">
                   Merged free space: {compaction.mergedHoleSize} KB at the end of memory.
                 </span>
               </div>

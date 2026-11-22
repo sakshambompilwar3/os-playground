@@ -29,6 +29,14 @@
   - [x] Deadlock Lab (`/labs/deadlock`) contrasting unconstrained allocation vs. Banker's avoidance
   - [x] Producer-Consumer Lab (`/labs/producer-consumer`) with counting semaphores and rate metrics
   - [x] Dining Philosophers Lab (`/labs/dining-philosophers`) with round table visualizer and asymmetric fix
+- [x] **Practice Mode (Infinite Deterministic Problem Generator)**
+  - [x] Pure deterministic PRNG with Mulberry32, xmur3 hash, and 31-char collision-free seed encoding
+  - [x] Dual-solver verification gate enforcing agreement between production adapters and clean-room reference solvers
+  - [x] Tie-freedom verification across reference solver tie variants for Easy and Medium difficulties
+  - [x] Problem generators covering all 5 core topics across Easy, Medium, and Hard tiers
+  - [x] Flexible answer checker supporting decimals, fractions, percentages, sets, sequences, and common student mistakes
+  - [x] Interactive Practice UI (`/practice` and `/practice/$topic`) with subtopic selectors (algorithm/type or random), difficulty segmented controls, seed replay, high-contrast verdict banners, and dynamic origin-aware back links
+  - [x] High-contrast paper solution visualizations (Gantt chart with narrow block leader lines and collision-free time axis, stacked Initial & After Memory maps, Disk head trajectory chart, and Frame history table)
 - [x] **Platform Foundations & Polish**
   - [x] Shared notebook-style hub component for topics and labs
   - [x] Academic chalkboard theme with unified paper-card and cream-button UI components

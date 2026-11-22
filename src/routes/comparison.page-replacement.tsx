@@ -418,14 +418,14 @@ export function PageReplacementComparisonPage() {
 
           <div className="grid gap-3 sm:grid-cols-2 font-mono text-xs">
             <div className="rounded border border-foreground/20 bg-background/60 p-3 space-y-1">
-              <p className="text-muted-foreground uppercase text-[10px]">Best Possible (Theoretical)</p>
+              <p className="text-muted-foreground uppercase text-xs">Best Possible (Theoretical)</p>
               <p className="font-hand text-2xl font-bold text-primary">Optimal Algorithm</p>
               <p className="text-muted-foreground">
                 Lowest possible faults ({results?.optimal.faults}), but requires prescient future knowledge. Unusable in production OS kernels.
               </p>
             </div>
             <div className="rounded border border-foreground/20 bg-background/60 p-3 space-y-1">
-              <p className="text-muted-foreground uppercase text-[10px]">Best Practical (Production)</p>
+              <p className="text-muted-foreground uppercase text-xs">Best Practical (Production)</p>
               <p className="font-hand text-2xl font-bold text-success">
                 {verdict.bestPractical === "tie"
                   ? "TIE: FIFO and LRU Equal"
@@ -441,7 +441,7 @@ export function PageReplacementComparisonPage() {
             </div>
           </div>
 
-          <div className="rounded border border-foreground/20 bg-background/50 p-4 font-mono text-xs text-foreground/90 space-y-2">
+          <div className="rounded border border-foreground/20 bg-background/50 p-4 font-mono text-xs text-foreground space-y-2">
             <p className="font-bold text-primary font-hand text-xl">Why this algorithm won:</p>
             <p className="leading-relaxed">{verdict.explanation}</p>
           </div>
@@ -493,7 +493,7 @@ export function PageReplacementComparisonPage() {
 
           {/* Speed selector */}
           <div className="flex items-center gap-1 rounded border border-chalk-foreground/30 bg-black/20 p-1 font-mono text-xs text-chalk-foreground">
-            <span className="px-1 text-chalk-foreground/70">Speed:</span>
+            <span className="px-1 text-chalk-muted">Speed:</span>
             {SPEEDS.map((s) => (
               <button
                 key={s}
@@ -524,7 +524,7 @@ export function PageReplacementComparisonPage() {
               <span className="text-highlight font-bold">{parsed.refs[stepIndex - 1]}</span>
             </p>
           ) : (
-            <p className="text-chalk-foreground/70">Press Play or Step to advance all three algorithms synchronously.</p>
+            <p className="text-chalk-muted">Press Play or Step to advance all three algorithms synchronously.</p>
           )}
         </div>
 

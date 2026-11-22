@@ -146,7 +146,7 @@ function MemoryAllocationQuiz() {
                   ? "bg-success/30 font-bold border-success"
                   : k === pick
                     ? "bg-destructive/30 border-destructive"
-                    : "opacity-60";
+                    : "text-ink-muted";
             return (
               <button
                 key={a}
