@@ -39,4 +39,6 @@ dist-ssr
 *.sln
 *.sw?
 docs/contrast-report.md
+docs/layout-report.md
+gallery/
 

@@ -14,7 +14,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "vitest run src/test/e2e-smoke.test.tsx",
-    "audit:contrast": "node scripts/contrast-audit.mjs"
+    "audit:contrast": "node scripts/contrast-audit.mjs",
+    "audit:layout": "node scripts/layout-audit.mjs"
   },
   "overrides": {
     "rolldown": "1.2.1"
