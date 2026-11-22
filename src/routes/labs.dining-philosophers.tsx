@@ -354,7 +354,7 @@ function DiningPhilosophersLabPage() {
 
           {/* Speed Selector */}
           <div className="flex items-center gap-1 rounded border border-chalk-foreground/30 bg-black/20 p-1 font-mono text-xs text-chalk-foreground">
-            <span className="px-1 text-chalk-foreground/70">Speed:</span>
+            <span className="px-1 text-chalk-muted">Speed:</span>
             {SPEEDS.map((s) => (
               <button
                 key={s}
@@ -422,7 +422,7 @@ function DiningPhilosophersLabPage() {
                   <circle
                     cx={fx}
                     cy={fy}
-                    r={12}
+                    r={13}
                     fill={holderColor ? holderColor.bg : "#224c37"}
                     stroke="#f1efe0"
                     strokeWidth="1.5"
@@ -431,7 +431,7 @@ function DiningPhilosophersLabPage() {
                     x={fx}
                     y={fy + 4}
                     textAnchor="middle"
-                    className="font-mono text-[10px] font-bold"
+                    className="font-mono text-xs font-bold"
                     fill={holderColor ? holderColor.ink : "#f1efe0"}
                   >
                     F{forkIdx}
@@ -494,7 +494,7 @@ function DiningPhilosophersLabPage() {
                     x={px}
                     y={py + 12}
                     textAnchor="middle"
-                    className="font-mono text-[9px]"
+                    className="font-mono text-xs font-bold"
                     fill={isEating ? color.ink : "#b8c9bc"}
                   >
                     {status === "eating" ? "EATING" : status === "thinking" ? "THINK" : heldCount === 1 ? "1 FORK" : "HUNGRY"}
@@ -515,7 +515,7 @@ function DiningPhilosophersLabPage() {
                     x={px}
                     y={py + (py > CY ? 58 : -22)}
                     textAnchor="middle"
-                    className="font-mono text-[10px] fill-chalk-foreground/75"
+                    className="font-mono text-xs font-semibold fill-chalk-foreground"
                   >
                     {philState ? philState.meals : 0} meal{(philState ? philState.meals : 0) === 1 ? "" : "s"}
                   </text>
@@ -535,7 +535,7 @@ function DiningPhilosophersLabPage() {
             {activeLog ? (
               activeLog.narration
             ) : (
-              <span className="text-chalk-foreground/60">
+              <span className="text-chalk-muted">
                 Press "Play" or "Step (Round)" to simulate philosophers eating and thinking.
               </span>
             )}
@@ -548,7 +548,7 @@ function DiningPhilosophersLabPage() {
               </span>
               {activeLog.actions.map((act, i) => (
                 <div key={i} className="flex items-center gap-2">
-                  <span className="opacity-50">[{i}]</span>
+                  <span className="text-chalk-muted">[{i}]</span>
                   <span>{act}</span>
                 </div>
               ))}

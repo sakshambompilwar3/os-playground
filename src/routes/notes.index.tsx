@@ -40,7 +40,7 @@ function NotesIndex() {
             {!(topic.notesReady ?? topic.ready) && (
               <span className="mt-3 inline-block rounded-full border-2 border-foreground/30 px-2 py-0.5 font-mono text-xs">coming soon</span>
             )}
-            <p className="mt-4 font-mono text-xs opacity-0 transition-opacity group-hover:opacity-100">open →</p>
+            <p className="mt-4 font-mono text-xs font-bold text-foreground">open →</p>
           </Link>
         ))}
       </div>

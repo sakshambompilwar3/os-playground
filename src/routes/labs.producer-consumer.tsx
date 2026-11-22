@@ -316,7 +316,7 @@ function ProducerConsumerLabPage() {
 
           {/* Speed Selector */}
           <div className="flex items-center gap-1 rounded border border-chalk-foreground/30 bg-black/20 p-1 font-mono text-xs text-chalk-foreground">
-            <span className="px-1 text-chalk-foreground/70">Speed:</span>
+            <span className="px-1 text-chalk-muted">Speed:</span>
             {SPEEDS.map((s) => (
               <button
                 key={s}
@@ -345,17 +345,17 @@ function ProducerConsumerLabPage() {
                 ? "border-chalk-yellow bg-highlight/30 text-chalk-foreground shadow-[0_0_12px_rgba(245,223,116,0.3)]"
                 : currentProducerState === "waiting"
                 ? "border-destructive bg-destructive/20 text-chalk-foreground"
-                : "border-chalk-foreground/30 bg-white/5 text-chalk-foreground/70"
+                : "border-chalk-foreground/30 bg-white/5 text-chalk-muted"
             }`}>
               <span className="font-mono text-xs uppercase tracking-wider block">PRODUCER</span>
               <span className="font-hand text-2xl font-bold block mt-1">
                 {currentProducerState === "working" ? "Working" : currentProducerState === "waiting" ? "Waiting (Full)" : "Resting"}
               </span>
-              <span className="font-mono text-xs opacity-75 mt-2 block">
+              <span className={`font-mono text-xs mt-2 block ${currentProducerState === "working" ? "text-chalk-foreground font-semibold" : "text-chalk-muted"}`}>
                 Period P = {producerPeriod} tick{producerPeriod > 1 ? "s" : ""}
               </span>
               {activeLog?.producedItem && currentProducerState === "working" && (
-                <span className="mt-2 inline-block rounded bg-chalk-yellow text-chalk px-2 py-0.5 font-mono text-xs font-bold">
+                <span className="mt-2 inline-block rounded bg-highlight text-foreground px-2 py-0.5 font-mono text-xs font-bold">
                   + Item {activeLog.producedItem}
                 </span>
               )}
@@ -392,7 +392,7 @@ function ProducerConsumerLabPage() {
                           {item}
                         </span>
                       ) : (
-                        <span className="font-mono text-xs opacity-40">
+                        <span className="font-mono text-xs text-chalk-muted">
                           [{slotIdx}]
                         </span>
                       )}
@@ -404,16 +404,16 @@ function ProducerConsumerLabPage() {
               {/* Semaphores Gauges */}
               <div className="flex flex-wrap items-center justify-center gap-6 pt-2">
                 <div className="flex items-center gap-2 rounded border border-chalk-foreground/30 bg-black/30 px-3 py-1.5 text-xs font-mono text-chalk-foreground">
-                  <span className="text-chalk-foreground/70">empty semaphore:</span>
+                  <span className="text-chalk-muted">empty semaphore:</span>
                   <span className="font-bold text-chalk-yellow text-sm">{currentEmptySlots}</span>
                 </div>
                 <div className="flex items-center gap-2 rounded border border-chalk-foreground/30 bg-black/30 px-3 py-1.5 text-xs font-mono text-chalk-foreground">
-                  <span className="text-chalk-foreground/70">full semaphore:</span>
+                  <span className="text-chalk-muted">full semaphore:</span>
                   <span className="font-bold text-chalk-yellow text-sm">{currentFullSlots}</span>
                 </div>
               </div>
 
-              <p className="text-center font-hand text-lg text-chalk-foreground/80 italic">
+              <p className="text-center font-hand text-lg text-chalk-foreground italic">
                 These two counters are the semaphores empty and full.
               </p>
             </div>
@@ -424,17 +424,17 @@ function ProducerConsumerLabPage() {
                 ? "border-chalk-yellow bg-highlight/30 text-chalk-foreground shadow-[0_0_12px_rgba(245,223,116,0.3)]"
                 : currentConsumerState === "waiting"
                 ? "border-destructive bg-destructive/20 text-chalk-foreground"
-                : "border-chalk-foreground/30 bg-white/5 text-chalk-foreground/70"
+                : "border-chalk-foreground/30 bg-white/5 text-chalk-muted"
             }`}>
               <span className="font-mono text-xs uppercase tracking-wider block">CONSUMER</span>
               <span className="font-hand text-2xl font-bold block mt-1">
                 {currentConsumerState === "working" ? "Working" : currentConsumerState === "waiting" ? "Waiting (Empty)" : "Resting"}
               </span>
-              <span className="font-mono text-xs opacity-75 mt-2 block">
+              <span className={`font-mono text-xs mt-2 block ${currentConsumerState === "working" ? "text-chalk-foreground font-semibold" : "text-chalk-muted"}`}>
                 Period C = {consumerPeriod} tick{consumerPeriod > 1 ? "s" : ""}
               </span>
               {activeLog?.consumedItem && currentConsumerState === "working" && (
-                <span className="mt-2 inline-block rounded bg-chalk-yellow text-chalk px-2 py-0.5 font-mono text-xs font-bold">
+                <span className="mt-2 inline-block rounded bg-highlight text-foreground px-2 py-0.5 font-mono text-xs font-bold">
                   ✓ Item {activeLog.consumedItem}
                 </span>
               )}
@@ -451,7 +451,7 @@ function ProducerConsumerLabPage() {
           {activeLog ? (
             activeLog.narration
           ) : (
-            <span className="text-chalk-foreground/60">
+            <span className="text-chalk-muted">
               Press "Play" or "Step" to start the simulation tick by tick.
             </span>
           )}

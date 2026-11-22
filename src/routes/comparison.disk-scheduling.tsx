@@ -874,7 +874,7 @@ function DiskSchedulingComparisonPage() {
           )}
 
           <div className="flex flex-wrap items-center gap-2 font-mono text-xs sm:ml-auto">
-            <span className="opacity-80">speed</span>
+            <span className="text-chalk-muted font-bold">speed</span>
             <div className="inline-flex rounded-md border border-chalk-foreground/40 p-0.5">
               {SPEEDS.map((s) => (
                 <button
@@ -938,7 +938,7 @@ function DiskSchedulingComparisonPage() {
             </div>
 
             {/* Generated Explanation */}
-            <div className="font-hand text-xl sm:text-2xl text-chalk-foreground/95 leading-relaxed space-y-2">
+            <div className="font-hand text-xl sm:text-2xl text-chalk-foreground leading-relaxed space-y-2">
               {verdict.explanationLines.map((line, idx) => (
                 <p key={idx}>{line}</p>
               ))}
@@ -947,20 +947,20 @@ function DiskSchedulingComparisonPage() {
             {/* Direction Sensitivity Mini-Table */}
             {directionSensitivity && (
               <div className="rounded border border-chalk-foreground/25 bg-black/20 p-3">
-                <p className="font-mono text-xs font-bold uppercase text-chalk-foreground/80 mb-2">
+                <p className="font-mono text-xs font-bold uppercase text-chalk-foreground mb-2">
                   Direction Sensitivity (Higher vs Lower comparison):
                 </p>
                 <div className="overflow-x-auto">
                   <table className="w-full font-mono text-xs text-left">
                     <thead>
-                      <tr className="border-b border-chalk-foreground/20 text-chalk-foreground/60">
+                      <tr className="border-b border-chalk-foreground/20 text-chalk-muted">
                         <th className="py-1 px-2">Algorithm</th>
                         <th className="py-1 px-2 text-right">Toward Higher (↑)</th>
                         <th className="py-1 px-2 text-right">Toward Lower (↓)</th>
                         <th className="py-1 px-2 text-right">Direction Delta</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-chalk-foreground/10 text-chalk-foreground/90">
+                    <tbody className="divide-y divide-chalk-foreground/10 text-chalk-foreground">
                       {directionSensitivity.items.map((item) => (
                         <tr key={item.algorithm}>
                           <td className="py-1 px-2 font-bold">{item.label}</td>
@@ -974,7 +974,7 @@ function DiskSchedulingComparisonPage() {
                     </tbody>
                   </table>
                 </div>
-                <p className="mt-2 text-[11px] font-mono text-chalk-foreground/70">
+                <p className="mt-2 text-xs font-mono text-chalk-muted">
                   Higher winner: <b>{directionSensitivity.higherWinner.label}</b> ({directionSensitivity.higherWinner.total} cyl) · Lower winner: <b>{directionSensitivity.lowerWinner.label}</b> ({directionSensitivity.lowerWinner.total} cyl)
                 </p>
               </div>
@@ -991,7 +991,7 @@ function DiskSchedulingComparisonPage() {
                 How is &quot;best&quot; decided?
               </button>
               {howBestOpen && (
-                <div className="mt-2 rounded bg-black/30 p-3 font-mono text-xs text-chalk-foreground/80 space-y-1 leading-relaxed">
+                <div className="mt-2 rounded bg-black/30 p-3 font-mono text-xs text-chalk-foreground space-y-1 leading-relaxed">
                   <p>1. <b>Primary metric:</b> Lowest total head movement (under current jump toggle).</p>
                   <p>2. <b>Tie-break:</b> Lower longest wait (cylinders the head moved before the last request was served).</p>
                   <p>3. <b>True tie:</b> If two or more algorithms match on both total movement and longest wait, a tie is declared without pretending one wins.</p>
@@ -1036,14 +1036,14 @@ function DiskSchedulingComparisonPage() {
                         done: total {res.totalHeadMovement} cyl
                       </span>
                     ) : (
-                      <span className="text-chalk-foreground/75">
+                      <span className="text-chalk-muted font-bold">
                         {live.movementSoFar} / {res.totalHeadMovement} cyl
                       </span>
                     )}
                   </div>
                 </div>
 
-                <p className="text-xs font-mono text-chalk-foreground/75 leading-tight">
+                <p className="text-xs font-mono text-chalk-muted leading-tight">
                   {meta.shortDesc}
                 </p>
 

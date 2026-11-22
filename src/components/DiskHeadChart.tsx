@@ -21,6 +21,7 @@ export interface DiskHeadChartProps {
   displayNames: Record<string, string>;
   hoveredRequestId?: string | null;
   onHoverRequest?: (id: string | null) => void;
+  variant?: "chalkboard" | "paper";
 }
 
 function createTextMeasurer(): (text: string) => number {
@@ -69,7 +70,9 @@ export function DiskHeadChart({
   displayNames,
   hoveredRequestId,
   onHoverRequest,
+  variant = "chalkboard",
 }: DiskHeadChartProps) {
+  const isPaper = variant === "paper";
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState<number>(760);
   const [localHoveredId, setLocalHoveredId] = useState<string | null>(null);
@@ -249,14 +252,21 @@ export function DiskHeadChart({
   const effectiveHoverId = hoveredRequestId || localHoveredId;
 
   return (
-    <div ref={containerRef} className="w-full space-y-3">
+    <div
+      ref={containerRef}
+      className={`w-full space-y-3 ${
+        isPaper ? "rounded-lg border-2 border-foreground bg-paper p-3.5 shadow-[var(--shadow-paper)]" : ""
+      }`}
+    >
       <div className="overflow-x-auto pb-2">
         <div style={{ minWidth: `${svgWidth}px` }}>
           <svg
             viewBox={`0 0 ${svgWidth} ${svgHeight}`}
             width={svgWidth}
             height={svgHeight}
-            className="w-full select-none text-chalk-foreground overflow-visible"
+            className={`w-full select-none overflow-visible ${
+              isPaper ? "text-foreground" : "text-chalk-foreground"
+            }`}
             role="img"
             aria-label="Disk head movement chart"
           >
@@ -280,9 +290,17 @@ export function DiskHeadChart({
                     y={padTop - 15 + tick.yOffset}
                     textAnchor="middle"
                     className={`font-mono ${
-                      isKeyTick ? "text-[11px] font-bold" : "text-[10px] opacity-75"
+                      isKeyTick ? "text-sm font-bold" : "text-sm font-semibold"
                     }`}
-                    fill={tick.isHead ? "var(--highlight)" : "currentColor"}
+                    fill={
+                      isPaper
+                        ? tick.isHead
+                          ? "var(--primary)"
+                          : "var(--foreground)"
+                        : tick.isHead
+                          ? "var(--highlight)"
+                          : "currentColor"
+                    }
                   >
                     {tick.label}
                   </text>
@@ -290,16 +308,25 @@ export function DiskHeadChart({
               );
             })}
 
-            {/* Top Axis Bar */}
+            {/* Top Axis Bar & Caption */}
             <line
               x1={padLeft}
               y1={padTop - 8}
               x2={padLeft + plotWidth}
               y2={padTop - 8}
               stroke="currentColor"
-              strokeOpacity={0.6}
+              strokeOpacity={0.8}
               strokeWidth={2}
             />
+            <text
+              x={padLeft + plotWidth + 10}
+              y={padTop - 4}
+              textAnchor="start"
+              className="font-mono text-sm font-bold"
+              fill={isPaper ? "var(--ink-muted)" : "var(--chalk-muted)"}
+            >
+              Cylinder →
+            </text>
 
             {/* Start Head Dot on Row 0 */}
             <circle
@@ -326,8 +353,12 @@ export function DiskHeadChart({
               const color = seg.requestId ? colors[seg.requestId] : undefined;
               const strokeColor =
                 seg.kind === "serve"
-                  ? color?.bg || "var(--highlight)"
-                  : "rgba(255, 255, 255, 0.85)";
+                  ? isPaper
+                    ? color?.ink || "var(--foreground)"
+                    : color?.bg || "var(--highlight)"
+                  : isPaper
+                    ? "var(--muted-foreground)"
+                    : "rgba(255, 255, 255, 0.85)";
 
               return (
                 <g key={`seg-${idx}`}>
@@ -464,7 +495,7 @@ export function DiskHeadChart({
                     }}
                   >
                     <title>{box.fullName || box.text}</title>
-                    {/* Dark Green Background Chip */}
+                    {/* Label Background Chip */}
                     <rect
                       x={shiftedX}
                       y={shiftedY}
@@ -472,23 +503,29 @@ export function DiskHeadChart({
                       height={box.height}
                       rx={3}
                       ry={3}
-                      fill="rgba(18, 38, 26, 0.90)"
+                      fill={isPaper ? "var(--paper)" : "rgba(18, 38, 26, 0.95)"}
                       stroke={
                         isHighlight
                           ? "var(--highlight)"
-                          : box.color || "rgba(255, 255, 255, 0.25)"
+                          : isPaper
+                            ? "var(--foreground)"
+                            : box.color || "rgba(255, 255, 255, 0.35)"
                       }
-                      strokeOpacity={isHighlight ? 1 : 0.5}
-                      strokeWidth={isHighlight ? 1.8 : 1}
+                      strokeOpacity={1}
+                      strokeWidth={isHighlight ? 2 : 1.5}
                     />
                     <text
                       x={shiftedX + box.width / 2}
-                      y={shiftedY + box.height / 2 + 3.5}
+                      y={shiftedY + box.height / 2 + 4.5}
                       textAnchor="middle"
-                      className={`font-mono ${
-                        isHighlight ? "text-[11px] font-black" : "text-[10px] font-bold"
-                      }`}
-                      fill={isHighlight ? "var(--highlight)" : box.color || "currentColor"}
+                      className="font-mono text-sm font-bold"
+                      fill={
+                        isPaper
+                          ? "var(--foreground)"
+                          : isHighlight
+                            ? "var(--highlight)"
+                            : box.color || "currentColor"
+                      }
                     >
                       {box.text}
                     </text>
@@ -530,9 +567,9 @@ export function DiskHeadChart({
                   />
                   <text
                     x={shiftedBadgeX + badge.radius}
-                    y={shiftedBadgeY + badge.radius + 3}
+                    y={shiftedBadgeY + badge.radius + 4}
                     textAnchor="middle"
-                    className="font-mono text-[9px] font-black"
+                    className="font-mono text-xs font-black"
                     fill="#0f2b1d"
                   >
                     {badge.badgeIndex}
@@ -560,8 +597,18 @@ export function DiskHeadChart({
 
       {/* Collapsed Items Legend (guaranteed fallback when items exceed maxLanes) */}
       {layout.legendItems.length > 0 && (
-        <div className="rounded border border-chalk-foreground/25 bg-black/20 p-2.5 font-mono text-xs text-chalk-foreground">
-          <div className="font-bold text-[11px] uppercase tracking-wider text-chalk-foreground/70 mb-1.5">
+        <div
+          className={`rounded border p-2.5 font-mono text-xs ${
+            isPaper
+              ? "border-foreground/30 bg-secondary/30 text-foreground"
+              : "border-chalk-muted bg-black/20 text-chalk-foreground"
+          }`}
+        >
+          <div
+            className={`font-bold text-xs uppercase tracking-wider mb-1.5 ${
+              isPaper ? "text-ink-muted" : "text-chalk-muted"
+            }`}
+          >
             Collapsed Requests (see chart badges):
           </div>
           <div className="flex flex-wrap gap-2">
@@ -580,12 +627,20 @@ export function DiskHeadChart({
                   }}
                   className={`inline-flex items-center gap-1.5 rounded px-2 py-0.5 border cursor-pointer transition-all ${
                     isHovered
-                      ? "border-highlight bg-highlight/20 text-highlight font-bold"
-                      : "border-chalk-foreground/30 bg-black/30 text-chalk-foreground/90"
+                      ? isPaper
+                        ? "border-foreground bg-highlight font-bold"
+                        : "border-highlight bg-highlight/20 text-highlight font-bold"
+                      : isPaper
+                        ? "border-foreground/30 bg-paper text-foreground"
+                        : "border-chalk-muted bg-black/30 text-chalk-foreground"
                   }`}
                   title={item.fullName}
                 >
-                  <span className="flex h-4 w-4 items-center justify-center rounded-full bg-chalk-foreground/20 text-[10px] font-bold">
+                  <span
+                    className={`flex h-4 w-4 items-center justify-center rounded-full text-xs font-bold ${
+                      isPaper ? "bg-foreground/15 text-foreground" : "bg-chalk-foreground/40 text-foreground"
+                    }`}
+                  >
                     {item.index}
                   </span>
                   <span>{item.fullName}</span>

@@ -624,7 +624,7 @@ function CpuSchedulingSimulator() {
           </Button>
 
           <div className="flex flex-wrap items-center gap-2 font-mono text-xs sm:ml-auto">
-            <span className="opacity-80">speed</span>
+            <span className="text-chalk-muted font-bold">speed</span>
             <div className="inline-flex rounded-md border border-chalk-foreground/40 p-0.5">
               {SPEEDS.map((s) => (
                 <button
@@ -653,9 +653,9 @@ function CpuSchedulingSimulator() {
         {/* Live Now Running + Ready Queue chips */}
         <div className="mt-5 flex min-h-9 flex-wrap items-center gap-x-6 gap-y-2 font-mono text-xs">
           <div className="flex items-center gap-2">
-            <span className="text-chalk-foreground/80">Now running:</span>
+            <span className="text-chalk-muted font-bold">Now running:</span>
             {!started ? (
-              <span className="rounded border border-chalk-foreground/45 px-2.5 py-0.5 text-chalk-foreground/75">
+              <span className="rounded border border-chalk-muted px-2.5 py-0.5 text-chalk-muted">
                 not started
               </span>
             ) : finished ? (
@@ -671,7 +671,7 @@ function CpuSchedulingSimulator() {
                 }}
               >
                 {result.displayNames[snapshot.runningProcessId]}
-                <span className="opacity-70">({snapshot.runningProcessId})</span>
+                <span className="text-xs">({snapshot.runningProcessId})</span>
               </span>
             ) : (
               <span className="rounded border border-dashed border-chalk-foreground/70 px-2.5 py-0.5 text-chalk-foreground">
@@ -681,9 +681,9 @@ function CpuSchedulingSimulator() {
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-chalk-foreground/80">Ready queue:</span>
+            <span className="text-chalk-muted font-bold">Ready queue:</span>
             {!started || finished ? (
-              <span className="italic text-chalk-foreground/65">empty</span>
+              <span className="italic text-chalk-muted">empty</span>
             ) : snapshot && snapshot.readyQueueIds.length > 0 ? (
               <div className="flex flex-wrap items-center gap-1.5">
                 {snapshot.readyQueueIds.map((id, i) => (
@@ -696,12 +696,12 @@ function CpuSchedulingSimulator() {
                     }}
                   >
                     {result.displayNames[id]}
-                    <span className="text-[10px] opacity-75">({id})</span>
+                    <span className="text-xs">({id})</span>
                   </span>
                 ))}
               </div>
             ) : (
-              <span className="italic text-chalk-foreground/65">empty</span>
+              <span className="italic text-chalk-muted">empty</span>
             )}
           </div>
         </div>
@@ -721,7 +721,7 @@ function CpuSchedulingSimulator() {
           className="animate-rise mt-4 min-h-8 font-hand text-2xl"
         >
           {!started && (
-            <span className="opacity-75">
+            <span className="text-chalk-muted">
               Press Play or Step to follow each scheduling decision.
             </span>
           )}

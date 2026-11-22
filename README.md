@@ -19,7 +19,7 @@ Live site: https://os-banker-s-algo.vercel.app
 - **Disk Scheduling**: watch the disk head serve requests with FCFS, SSTF, SCAN, LOOK, and circular sweeps, compare seek distances, study notes, and take the quiz.
 - **Page Replacement**: step through FIFO, LRU, and Optimal page replacement with frame tables, detect Belady's anomaly, calculate effective access time, compare hit ratios, study notes, and take the quiz.
 
-Every topic has interactive lecture notes, a step-by-step simulator, a self-grading pop quiz, and a side-by-side comparison bench (for CPU, Memory, Disk, and Paging).
+Every topic has interactive lecture notes, a step-by-step simulator, a self-grading pop quiz, a side-by-side comparison bench (for CPU, Memory, Disk, and Paging), and an infinite **Practice Mode** (`/practice`) with deterministic exam-style problems verified against dual solvers.
 
 ### 3 Labs
 - **Deadlock Lab** (`/labs/deadlock`): watch three processes deadlock in a circular wait, then test how the Banker prevents it.
@@ -32,11 +32,16 @@ Every topic has interactive lecture notes, a step-by-step simulator, a self-grad
 
 All calculations are done by plain, tested TypeScript functions, so every result matches standard textbook problems. The site runs completely in the browser as a client-side web app, with no accounts or database required.
 
+### Practice Mode (`/practice`)
+- **Deterministic Problems**: Every problem is derived from `(topic, level, subtopic, seed)` with shareable replay codes.
+- **Dual-Solver Verification Gate**: Production algorithms are verified against independent, clean-room reference solvers before emitting problems.
+- **Subtopic Selectors**: Filter by concrete algorithm (FCFS, SJF, SRTF, RR, Priority, Fixed/Dynamic Fit, SCAN, LRU, Banker's Safety/Sequence/Request) or Random.
+- **Paper Worked Solutions**: Step-by-step solutions render high-contrast paper variants of Gantt charts, stacked Memory maps, Disk head trajectories, and Frame history tables.
+
 ---
 
 ## Coming next
 
-- Practice mode with randomized exam-style problems
 - Teacher login to share custom notes and quiz sets
 - AI chatbot to answer OS homework questions
 
@@ -79,6 +84,7 @@ React, TypeScript, TanStack Start, Tailwind CSS, Vite; hosted on Vercel.
 ## Project structure
 
 - `src/lib/`: pure calculation logic for scheduling, memory, disk, paging, and Banker's algorithm
+- `src/lib/practice/`: deterministic PRNG, verification gate, reference solvers, adapters, and problem generators
 - `src/lib/labs/`: calculation logic for bounded buffer and dining philosophers labs
 - `src/routes/`: pages and routing for topics, simulators, comparisons, notes, quizzes, and labs
 - `src/components/`: chalkboard cards, navigation, controls, and shared visual components

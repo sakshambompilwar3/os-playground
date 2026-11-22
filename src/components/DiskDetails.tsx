@@ -50,7 +50,7 @@ export function DiskResultsPanel({
       {/* Algorithm Info Note Banner */}
       {algoMeta.infoNote && (
         <div className="paper-card border-primary/30 bg-primary/5 p-4 text-xs font-mono">
-          <p className="font-bold text-primary uppercase text-[11px] tracking-wider mb-1">
+          <p className="font-bold text-primary uppercase text-xs tracking-wider mb-1">
             Note on {algoMeta.label}:
           </p>
           <p className="text-muted-foreground leading-relaxed">{algoMeta.infoNote}</p>
@@ -65,7 +65,7 @@ export function DiskResultsPanel({
             {isFinished ? result.totalHeadMovement : currentRunningTotal} cylinders
           </p>
           {(result.algorithm === "c-scan" || result.algorithm === "c-look") && (
-            <p className="mt-1 font-mono text-[11px] text-muted-foreground">
+            <p className="mt-1 font-mono text-xs text-muted-foreground">
               w/ jump: {result.totalHeadMovementWithJump} · w/o jump: {result.totalHeadMovementWithoutJump}
             </p>
           )}
@@ -75,7 +75,7 @@ export function DiskResultsPanel({
           <p className="mt-1 font-mono text-2xl font-bold">
             {(isFinished ? result.averageSeekPerRequest : currentAvgSeek).toFixed(2)} cyl
           </p>
-          <p className="mt-1 font-mono text-[11px] text-muted-foreground">
+          <p className="mt-1 font-mono text-xs text-muted-foreground">
             served {isFinished ? result.servedCount : servedSoFar.length} / {result.servedCount}
           </p>
         </div>
@@ -84,7 +84,7 @@ export function DiskResultsPanel({
           <p className="mt-1 font-mono text-2xl font-bold">
             {(isFinished ? result.totalSeekTimeMs : currentSeekTime).toFixed(2)} ms
           </p>
-          <p className="mt-1 font-mono text-[11px] text-muted-foreground">
+          <p className="mt-1 font-mono text-xs text-muted-foreground">
             at {result.seekTimePerCylinderMs} ms / cylinder
           </p>
         </div>
@@ -93,7 +93,7 @@ export function DiskResultsPanel({
           <p className="mt-1 truncate font-mono text-sm font-bold" title={fullServiceOrderStr}>
             {segmentsShown.length > 0 ? `${result.startHead} → ${currentServiceOrder.join(" → ")}` : `${result.startHead}`}
           </p>
-          <p className="mt-1 font-mono text-[11px] text-muted-foreground">
+          <p className="mt-1 font-mono text-xs text-muted-foreground">
             {isFinished ? "Completed all requests" : `in progress (${servedSoFar.length}/${result.servedCount})`}
           </p>
         </div>

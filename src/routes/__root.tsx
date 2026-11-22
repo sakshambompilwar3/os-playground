@@ -25,12 +25,12 @@ function NotFoundComponent() {
   return (
     <div className="flex min-h-[70dvh] items-center justify-center px-4 py-12">
       <div className="chalkboard relative max-w-lg rounded-md px-8 py-12 text-center shadow-lg md:px-14">
-        <span className="font-mono text-xs uppercase tracking-widest text-chalk-foreground/70">
+        <span className="font-mono text-xs uppercase tracking-widest text-chalk-muted">
           Error 404 · Unmapped Address
         </span>
         <h1 className="mt-2 font-hand text-7xl font-bold md:text-8xl">404</h1>
         <p className="mt-3 font-hand text-3xl">Segmentation fault: page not found</p>
-        <p className="mt-2 text-sm text-chalk-foreground/80">
+        <p className="mt-2 text-sm text-chalk-foreground">
           The requested page or resource could not be found in memory.
         </p>
         <div className="mt-8">
@@ -52,11 +52,11 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
   return (
     <div className="flex min-h-[70dvh] items-center justify-center px-4 py-12">
       <div className="chalkboard max-w-lg rounded-md px-8 py-10 text-center shadow-lg md:px-12">
-        <span className="font-mono text-xs uppercase tracking-widest text-chalk-foreground/70">
+        <span className="font-mono text-xs uppercase tracking-widest text-chalk-muted">
           Kernel Panic · Handled Exception
         </span>
         <h1 className="mt-2 font-hand text-5xl font-bold md:text-6xl">This page didn't load</h1>
-        <p className="mt-3 text-sm text-chalk-foreground/80">
+        <p className="mt-3 text-sm text-chalk-foreground">
           Something went wrong while running this component. Reload the page or head back home.
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">

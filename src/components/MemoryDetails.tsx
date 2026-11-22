@@ -169,7 +169,7 @@ export function MemoryResultsPanel({
                       {isWaiting ? (
                         <span className="font-bold text-destructive">Waiting (not allocated)</span>
                       ) : (
-                        <span className="font-bold text-success-foreground">Allocated</span>
+                        <span className="font-bold text-success">Allocated</span>
                       )}
                     </td>
                   </tr>

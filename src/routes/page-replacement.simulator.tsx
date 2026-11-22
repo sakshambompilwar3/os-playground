@@ -335,7 +335,7 @@ function PageReplacementSimulatorPage() {
         {/* Chips preview */}
         {parsed.refs.length > 0 && !parsed.error && (
           <div className="space-y-1">
-            <span className="font-mono text-[11px] text-muted-foreground">
+            <span className="font-mono text-xs text-muted-foreground">
               Reference sequence chips ({parsed.refs.length} references):
             </span>
             <div className="flex flex-wrap gap-1.5 pt-1">
@@ -407,7 +407,7 @@ function PageReplacementSimulatorPage() {
 
           {/* Speed selector */}
           <div className="flex items-center gap-1 rounded border border-chalk-foreground/30 bg-black/20 p-1 font-mono text-xs text-chalk-foreground">
-            <span className="px-1 text-chalk-foreground/70">Speed:</span>
+            <span className="px-1 text-chalk-muted">Speed:</span>
             {SPEEDS.map((s) => (
               <button
                 key={s}
@@ -438,7 +438,7 @@ function PageReplacementSimulatorPage() {
                 {currentStep.reason}
               </p>
               {algorithm === "optimal" && (
-                <p className="font-mono text-xs text-chalk-foreground/80">
+                <p className="font-mono text-xs text-chalk-foreground">
                   Resident next uses:{" "}
                   {Object.entries(currentStep.nextUseMap)
                     .map(([p, nu]) => `${p}: ${nu === "never" ? "never" : `next at position ${Number(nu) + 1}`}`)
@@ -447,7 +447,7 @@ function PageReplacementSimulatorPage() {
               )}
             </div>
           ) : (
-            <p className="text-chalk-foreground/70">Press Play or Step to begin simulation.</p>
+            <p className="text-chalk-muted">Press Play or Step to begin simulation.</p>
           )}
         </div>
 

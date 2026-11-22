@@ -26,6 +26,7 @@ export const OS_TOPICS: OSTopic[] = [
       { num: "2.", title: "Simulator", desc: "Step through the safety check", to: "/simulator" },
       { num: "3.", title: "Requests", desc: "Grant or deny a process", to: "/request" },
       { num: "4.", title: "Pop Quiz", desc: "Test before the exam", to: "/quiz/bankers" },
+      { num: "5.", title: "Practice", desc: "Solve fresh random problems", to: "/practice/bankers?from=hub" },
     ],
   },
   {
@@ -46,6 +47,7 @@ export const OS_TOPICS: OSTopic[] = [
       { num: "2.", title: "Simulator", desc: "Watch the CPU pick the next process", to: "/cpu-scheduling/simulator" },
       { num: "3.", title: "Comparison", desc: "Which algorithm wins?", to: "/comparison/cpu-scheduling" },
       { num: "4.", title: "Pop Quiz", desc: "Test before the exam", to: "/quiz/cpu-scheduling" },
+      { num: "5.", title: "Practice", desc: "Solve fresh random problems", to: "/practice/cpu-scheduling?from=hub" },
     ],
   },
   {
@@ -68,6 +70,7 @@ export const OS_TOPICS: OSTopic[] = [
       { num: "2.", title: "Simulator", desc: "Place processes into memory", to: "/memory-allocation/simulator" },
       { num: "3.", title: "Comparison", desc: "Which fit wastes the least?", to: "/comparison/memory-allocation" },
       { num: "4.", title: "Pop Quiz", desc: "Test before the exam", to: "/quiz/memory-allocation" },
+      { num: "5.", title: "Practice", desc: "Solve fresh random problems", to: "/practice/memory-allocation?from=hub" },
     ],
   },
   {
@@ -90,6 +93,7 @@ export const OS_TOPICS: OSTopic[] = [
       { num: "2.", title: "Simulator", desc: "Watch the head serve requests", to: "/disk-scheduling/simulator" },
       { num: "3.", title: "Comparison", desc: "Which algorithm travels least?", to: "/comparison/disk-scheduling" },
       { num: "4.", title: "Pop Quiz", desc: "Test before the exam", to: "/quiz/disk-scheduling" },
+      { num: "5.", title: "Practice", desc: "Solve fresh random problems", to: "/practice/disk-scheduling?from=hub" },
     ],
   },
   {
@@ -113,6 +117,7 @@ export const OS_TOPICS: OSTopic[] = [
       { num: "2.", title: "Simulator", desc: "Watch pages enter and leave memory", to: "/page-replacement/simulator" },
       { num: "3.", title: "Comparison", desc: "FIFO vs LRU vs Optimal", to: "/comparison/page-replacement" },
       { num: "4.", title: "Pop Quiz", desc: "Test before the exam", to: "/quiz/page-replacement" },
+      { num: "5.", title: "Practice", desc: "Solve fresh random problems", to: "/practice/page-replacement?from=hub" },
     ],
   },
 ];
