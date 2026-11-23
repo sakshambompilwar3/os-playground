@@ -186,11 +186,85 @@ function DiningPhilosophersLabPage() {
           {theoryOpen ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
         </button>
         {theoryOpen && (
-          <div className="border-t border-rule/50 bg-paper/50 p-4 text-sm leading-relaxed space-y-2">
-            <p>1. Five philosophers sit at a circular table. Between each pair of thinkers lies exactly one shared fork (5 forks total).</p>
-            <p>2. A philosopher must hold both their left and right forks simultaneously to eat.</p>
-            <p>3. If every philosopher grabs their left fork first at the same time, each holds 1 fork and waits for the next—creating a <strong>circular wait</strong> deadlock.</p>
-            <p>4. Making just the last philosopher grab their right fork first breaks the symmetry and guarantees freedom from deadlock.</p>
+          <div className="border-t border-rule/50 bg-paper/50 p-5 text-sm leading-relaxed space-y-4 font-sans">
+            <div className="space-y-2">
+              <p className="font-bold text-foreground font-mono text-xs uppercase tracking-wider">
+                1. Classic Problem Formulation
+              </p>
+              <p className="text-muted-foreground text-xs leading-relaxed">
+                Formulated by Edsger Dijkstra in 1965: Five philosophers sit around a circular dining table. The philosophers alternate between two life activities: <b>thinking</b> and <b>eating</b>.
+              </p>
+              <ul className="list-disc pl-5 space-y-1 text-xs text-muted-foreground">
+                <li>Between each adjacent pair of philosophers lies exactly one chopstick / fork (<b>5 forks total</b> for 5 philosophers).</li>
+                <li>To eat from the central bowl, a philosopher must acquire <b>both adjacent forks</b> (left fork and right fork).</li>
+                <li>Forks are held exclusively: two adjacent philosophers can never eat at the exact same moment.</li>
+              </ul>
+            </div>
+
+            <div className="rounded border-2 border-destructive/30 bg-destructive/5 p-3.5 space-y-2 text-xs">
+              <p className="font-bold text-destructive font-mono uppercase">
+                2. The Naive Rule &amp; Circular Wait Deadlock
+              </p>
+              <p className="text-muted-foreground leading-relaxed">
+                Under the naive symmetric rule, every philosopher attempts to pick up their <b>left fork first</b>, and then pick up their <b>right fork second</b>.
+              </p>
+              <p className="text-muted-foreground leading-relaxed">
+                If all five philosophers become hungry at the exact same instant and sit down together, each picks up their left fork simultaneously. All five forks are now taken. Each philosopher then attempts to grab their right fork, which is held by their neighbor. Each philosopher waits indefinitely for the next philosopher to put down a fork → <b>Deadlock via Circular Wait!</b>
+              </p>
+            </div>
+
+            <div className="rounded border-2 border-foreground/20 bg-background/80 p-3.5 space-y-2.5">
+              <p className="font-bold text-foreground font-mono text-xs uppercase">
+                3. Four Classic Solutions to Prevent Deadlock
+              </p>
+              <div className="grid gap-2.5 sm:grid-cols-2 text-xs">
+                <div className="rounded border border-primary/20 bg-paper p-2.5 space-y-1">
+                  <span className="font-bold text-primary font-mono">1. Asymmetric / Resource Numbering (Site Fixed Mode)</span>
+                  <p className="text-[11px] text-muted-foreground leading-relaxed">
+                    Break symmetry by numbering forks 0..4. Odd philosophers pick left fork first then right; even philosophers pick right fork first then left (or simply make the last philosopher P4 pick right fork first). This completely breaks Circular Wait.
+                  </p>
+                </div>
+
+                <div className="rounded border border-primary/20 bg-paper p-2.5 space-y-1">
+                  <span className="font-bold text-primary font-mono">2. Limit Number of Diners</span>
+                  <p className="text-[11px] text-muted-foreground leading-relaxed">
+                    Allow at most 4 philosophers to sit at the table simultaneously (using a counting semaphore initialized to 4). By the Pigeonhole Principle, at least one philosopher is guaranteed to acquire both forks and eat.
+                  </p>
+                </div>
+
+                <div className="rounded border border-primary/20 bg-paper p-2.5 space-y-1">
+                  <span className="font-bold text-primary font-mono">3. State-Checking (Eat Only When Both Free)</span>
+                  <p className="text-[11px] text-muted-foreground leading-relaxed">
+                    A philosopher is only allowed to pick up forks if both neighboring philosophers are not currently eating. Tested inside a critical section with states THINKING, HUNGRY, and EATING.
+                  </p>
+                </div>
+
+                <div className="rounded border border-primary/20 bg-paper p-2.5 space-y-1">
+                  <span className="font-bold text-primary font-mono">4. Global Lock</span>
+                  <p className="text-[11px] text-muted-foreground leading-relaxed">
+                    Protect all five forks under a single global mutex. While this eliminates deadlock, it allows only one philosopher to eat at any given moment, destroying system concurrency.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-2 text-xs">
+              <div className="rounded border border-foreground/20 bg-paper p-3 space-y-1">
+                <span className="font-bold text-foreground font-mono uppercase">Synchronization Hazards:</span>
+                <ul className="list-disc pl-4 text-muted-foreground space-y-0.5">
+                  <li><b>Deadlock:</b> Circular dependency where all progress halts permanently.</li>
+                  <li><b>Starvation:</b> A philosopher can starve if their left and right neighbors alternate eating indefinitely (neighbor conspiracy).</li>
+                  <li><b>Livelock:</b> Philosophers repeatedly pick up one fork, observe the other is busy, put it down, and retry in lockstep without ever eating.</li>
+                </ul>
+              </div>
+
+              <div className="rounded border border-primary/30 bg-primary/5 p-3 space-y-1">
+                <span className="font-bold text-primary font-mono uppercase">Monitors in a Nutshell:</span>
+                <p className="text-[11px] text-muted-foreground leading-relaxed">
+                  Proposed by C.A.R. Hoare and Per Brinch Hansen as a higher-level synchronization construct. A <b>monitor</b> encapsulates shared state variables, condition variables (<code className="font-mono text-foreground font-bold">c.wait()</code>, <code className="font-mono text-foreground font-bold">c.signal()</code>), and procedures. The language runtime guarantees that <b>only one thread can be active inside the monitor at any moment</b>, eliminating manual mutex lock/unlock pairing errors.
+                </p>
+              </div>
+            </div>
           </div>
         )}
       </div>

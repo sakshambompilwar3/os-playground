@@ -14,6 +14,7 @@
 
 - **Learning & Textbook Content**:
   - Share learning content between the topic notes pages and any summary views through browser-safe data modules (e.g. `src/lib/topics.ts` or notes data).
+  - Topic notes derive directly from verified class material and standard syllabus textbooks (Silberschatz et al.), written in fresh words with hand-drawn SVG diagrams; no raw slide files or third-party slide images are stored.
   - Keep personal simulator scratch notes in page-session React state; do not imply durable backend storage without a connected service.
 
 - **Correctness & Explanations**:

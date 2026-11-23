@@ -101,6 +101,11 @@ function CpuSchedulingNotes() {
             </Link>
           )}
         </div>
+        <div className="mt-8 border-t border-rule/50 pt-4">
+          <p className="text-xs text-muted-foreground font-mono">
+            Based on class material and the syllabus textbooks.
+          </p>
+        </div>
       </div>
     </div>
   );

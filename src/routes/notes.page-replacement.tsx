@@ -10,13 +10,13 @@ export const Route = createFileRoute("/notes/page-replacement")({
       {
         name: "description",
         content:
-          "Visual lecture notes on virtual memory, demand paging, FIFO, LRU, Optimal page replacement, Belady's anomaly, and effective access time.",
+          "Comprehensive visual lecture notes on virtual memory, demand paging, FIFO, LRU, Optimal page replacement, Belady's anomaly, and effective access time.",
       },
       { property: "og:title", content: "Page Replacement Notes | OS Playground" },
       {
         property: "og:description",
         content:
-          "Visual lecture notes on virtual memory, demand paging, FIFO, LRU, Optimal page replacement, Belady's anomaly, and effective access time.",
+          "Comprehensive visual lecture notes on virtual memory, demand paging, FIFO, LRU, Optimal page replacement, Belady's anomaly, and effective access time.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -82,6 +82,8 @@ function PageReplacementNotes() {
             </p>
           ))}
 
+          {card.extra}
+
           {card.takeaway && (
             <div className="mt-6 rounded border-2 border-foreground/20 bg-background/70 p-3">
               <p className="font-hand text-xl text-primary font-bold">
@@ -102,13 +104,27 @@ function PageReplacementNotes() {
           >
             ← prev
           </button>
-          <button
-            disabled={open === cards.length - 1}
-            onClick={() => setOpen((o) => Math.min(cards.length - 1, o + 1))}
-            className="press paper-card bg-highlight px-4 py-2 text-sm font-bold text-foreground disabled:opacity-40"
-          >
-            next →
-          </button>
+          {open < cards.length - 1 ? (
+            <button
+              onClick={() => setOpen((o) => Math.min(cards.length - 1, o + 1))}
+              className="press paper-card bg-highlight px-4 py-2 text-sm font-bold text-foreground"
+            >
+              next →
+            </button>
+          ) : (
+            <Link
+              to="/page-replacement/simulator"
+              className="press paper-card bg-highlight px-4 py-2 text-sm font-bold text-foreground"
+            >
+              Try it in the simulator →
+            </Link>
+          )}
+        </div>
+
+        <div className="mt-8 border-t border-rule/50 pt-4">
+          <p className="text-xs text-muted-foreground font-mono">
+            Based on class material and the syllabus textbooks.
+          </p>
         </div>
       </div>
     </div>

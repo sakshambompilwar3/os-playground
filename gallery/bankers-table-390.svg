@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 200" width="390" height="200">
+    <rect width="390" height="200" fill="#faf8f2"/>
+    <text x="20" y="28" font-family="sans-serif" font-size="14" font-weight="bold" fill="#101a28">Banker's Algorithm Resource Matrices</text>
+    <rect x="20" y="40" width="350" height="140" fill="#ffffff" stroke="#101a28" stroke-width="2" rx="4"/>
+    <text x="35" y="75" font-family="monospace" font-size="14" font-weight="bold" fill="#101a28">Process   Allocation (A B C)   Max (A B C)   Need (A B C)</text>
+    <text x="35" y="105" font-family="monospace" font-size="14" fill="#101a28">P0        0  1  0              7  5  3       7  4  3</text>
+    <text x="35" y="130" font-family="monospace" font-size="14" fill="#101a28">P1        2  0  0              3  2  2       1  2  2</text>
+    <text x="35" y="155" font-family="monospace" font-size="14" fill="#101a28">P2        3  0  2              9  0  2       6  0  0</text>
+  </svg>
