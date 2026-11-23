@@ -133,21 +133,21 @@ describe("CPU Scheduling Simulator UI", () => {
     expect(screen.getByText(/Netflix is ready \(AT=0\)/i)).toBeInTheDocument();
   });
 
-  it("renders CPU scheduling Learn page with 12 sections and visual diagrams", async () => {
+  it("renders CPU scheduling Learn page with 11 sections and visual diagrams", async () => {
     const router = createTestRouter("/notes/cpu-scheduling");
     await router.load();
     render(<RouterProvider router={router} />);
     expect(screen.getByRole("heading", { name: /The notes/i })).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /1\. What is CPU Scheduling\?/i }),
+      screen.getByRole("button", { name: /1\. Background: Multiprogramming & Burst Cycles/i }),
     ).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /2\. Key Terms & Formulas/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /4\. Key Terms & Formulas/i })).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /11\. Worked Example Step-by-Step/i }),
+      screen.getByRole("button", { name: /11\. Summary Table & Exam Tips/i }),
     ).toBeInTheDocument();
 
-    // Switching to section 2 renders the timeline section
-    fireEvent.click(screen.getByRole("button", { name: /2\. Key Terms & Formulas/i }));
+    // Switching to section 4 renders the timeline section
+    fireEvent.click(screen.getByRole("button", { name: /4\. Key Terms & Formulas/i }));
     expect(screen.getByText(/Process Lifecycle Timeline/i)).toBeInTheDocument();
   });
 

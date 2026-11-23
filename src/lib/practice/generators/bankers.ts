@@ -330,13 +330,13 @@ export function generateBankersCandidate(
     const rStat = prodOutput.requestOutcome.status;
     let rExplanation = "";
     if (rStat === "exceeds-need") {
-      rExplanation = `Request exceeds process P${requestParam.pid}'s declared Need. Error!`;
+      rExplanation = `Request exceeds process P${requestParam.pid}'s declared Need (Check 1 failed). Error: process has exceeded its maximum claim!`;
     } else if (rStat === "wait") {
-      rExplanation = `Not enough resources available immediately. Process P${requestParam.pid} must wait.`;
+      rExplanation = `Not enough resources available immediately (Check 2 failed). Process P${requestParam.pid} must wait.`;
     } else if (rStat === "unsafe") {
-      rExplanation = "Resources are available, but granting the request leads to an UNSAFE state. Process must wait.";
+      rExplanation = `Request passes Check 1 (Request ≤ Need) and Check 2 (Request ≤ Available), but trial allocation leads to an UNSAFE state (no complete safe sequence exists). The request cannot be granted immediately and process P${requestParam.pid} must wait.`;
     } else {
-      rExplanation = "Request is <= Need, <= Available, and the resulting state is SAFE. The request can be granted immediately!";
+      rExplanation = `Request passes Check 1 (Request ≤ Need) and Check 2 (Request ≤ Available), and the resulting state is SAFE. The request can be granted immediately!`;
     }
 
     solutionSteps.push({

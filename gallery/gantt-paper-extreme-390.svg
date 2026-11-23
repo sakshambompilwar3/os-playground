@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 220" width="390" height="220">
+    <rect width="390" height="220" fill="#faf8f2"/>
+    <!-- Track Row -->
+    <rect x="20" y="30" width="350" height="56" rx="4" fill="#ffffff" stroke="#101a28" stroke-width="2"/>
+    <rect x="20" y="30" width="120" height="56" fill="#ffe05b" stroke="#101a28" stroke-width="1.5"/>
+    <text x="80" y="62" font-family="monospace" font-size="14" font-weight="bold" fill="#101a28" text-anchor="middle">P1 (5ms)</text>
+    <rect x="140" y="30" width="180" height="56" fill="#f472b6" stroke="#101a28" stroke-width="1.5"/>
+    <text x="230" y="62" font-family="monospace" font-size="14" font-weight="bold" fill="#101a28" text-anchor="middle">P2 (8ms)</text>
+    <rect x="320" y="30" width="200" height="56" fill="#38bdf8" stroke="#101a28" stroke-width="1.5"/>
+    <text x="420" y="62" font-family="monospace" font-size="14" font-weight="bold" fill="#101a28" text-anchor="middle">P3 (120ms)</text>
+
+    <!-- Tick Row -->
+    <line x1="20" y1="96" x2="350" y2="96" stroke="#101a28" stroke-width="2"/>
+    <line x1="20" y1="96" x2="20" y2="104" stroke="#101a28" stroke-width="2"/>
+    <text x="20" y="122" font-family="monospace" font-size="14" font-weight="bold" fill="#101a28" text-anchor="start">0</text>
+    <line x1="140" y1="96" x2="140" y2="104" stroke="#101a28" stroke-width="2"/>
+    <text x="140" y="122" font-family="monospace" font-size="14" font-weight="bold" fill="#101a28" text-anchor="middle">5</text>
+    <line x1="320" y1="96" x2="320" y2="104" stroke="#101a28" stroke-width="2"/>
+    <text x="320" y="122" font-family="monospace" font-size="14" font-weight="bold" fill="#101a28" text-anchor="middle">13</text>
+    <line x1="520" y1="96" x2="520" y2="104" stroke="#101a28" stroke-width="2"/>
+    <text x="520" y="122" font-family="monospace" font-size="14" font-weight="bold" fill="#101a28" text-anchor="end">120</text>
+
+    <!-- Caption Row Below All Ticks -->
+    <text x="350" y="150" font-family="monospace" font-size="14" font-weight="bold" fill="#101a28" text-anchor="end">Time (ms) →</text>
+  </svg>

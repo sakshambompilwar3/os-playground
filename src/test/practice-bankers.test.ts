@@ -64,7 +64,8 @@ describe("Practice Mode - Banker's Algorithm (Phase 4)", () => {
       expect(req1Prod.requestGranted).toBe(true);
       expect(req1Ref.requestGranted).toBe(true);
 
-      // Request (3, 3, 0) by P4 -> cannot (not enough available: 3 > 2 for resource B)
+      // Request (3, 3, 0) by P4 from Load-example state:
+      // Passes Check 1 (3,3,0 <= 4,3,1) and Check 2 (3,3,0 <= 3,3,2), but trial state has Available (0,0,2) which is UNSAFE.
       const req2Prod = runBankersProductionSolver({
         available: availAnchor,
         max: maxAnchor,
@@ -75,6 +76,8 @@ describe("Practice Mode - Banker's Algorithm (Phase 4)", () => {
         pid: 4,
         vector: [3, 3, 0],
       });
+      expect(req2Prod.requestStatus).toBe("unsafe");
+      expect(req2Ref.requestStatus).toBe("unsafe");
       expect(req2Prod.requestGranted).toBe(false);
       expect(req2Ref.requestGranted).toBe(false);
     });

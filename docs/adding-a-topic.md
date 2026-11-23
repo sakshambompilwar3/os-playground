@@ -56,7 +56,7 @@ Add the topic entry to `OS_TOPICS`:
 1. **Topic Hub**: `src/routes/<topic>.index.tsx`
 2. **Interactive Simulator**: `src/routes/<topic>.simulator.tsx`
 3. **Side-by-Side Comparison Bench**: `src/routes/comparison.<topic>.tsx`
-4. **Visual Lecture Notes**: `src/routes/notes.<topic>.tsx`
+4. **Visual Lecture Notes**: `src/routes/notes.<topic>.tsx` (derived directly from class syllabus material and standard textbooks in fresh student-friendly words, using hand-drawn SVG diagrams with accessible labels; no slide images stored)
 5. **Pop Quiz**: `src/routes/quiz.<topic>.tsx`
 
 ---

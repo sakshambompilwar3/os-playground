@@ -101,19 +101,19 @@ describe("PageReplacementComparisonPage UI", () => {
 describe("PageReplacementNotes UI", () => {
   const NotesComponent = PageReplacementNotesRoute.options.component!;
 
-  it("renders all 11 sections and allows switching between sections", () => {
+  it("renders all 13 sections and allows switching between sections", () => {
     render(<NotesComponent />);
 
     expect(screen.getByText("The notes")).toBeTruthy();
-    expect(screen.getAllByText("1. Virtual Memory & Demand Paging").length).toBeGreaterThan(0);
-    expect(screen.getByText("11. Exam Tips & Common Traps")).toBeTruthy();
+    expect(screen.getAllByText("1. Background & Rationale for Virtual Memory").length).toBeGreaterThan(0);
+    expect(screen.getByText("13. Summary Table & Exam Tips")).toBeTruthy();
 
-    // Click section 4: FIFO
-    fireEvent.click(screen.getByRole("button", { name: "4. First-In, First-Out (FIFO)" }));
+    // Click section 8: Page Replacement Algorithms
+    fireEvent.click(screen.getByRole("button", { name: "8. Page Replacement Algorithms & Approximations" }));
     expect(screen.getAllByText(/Belady's Anomaly/).length).toBeGreaterThanOrEqual(1);
 
-    // Click section 8: Effective Access Time
-    fireEvent.click(screen.getByRole("button", { name: "8. Effective Access Time (EAT)" }));
+    // Click section 11: Effective Access Time
+    fireEvent.click(screen.getByRole("button", { name: "11. Effective Access Time (EAT)" }));
     expect(screen.getByText(/8,199.8 ns/)).toBeTruthy();
   });
 });

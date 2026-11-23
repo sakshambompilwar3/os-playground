@@ -144,21 +144,22 @@ describe("MemoryAllocationComparisonPage UI", () => {
 describe("MemoryAllocationNotes UI", () => {
   const NotesComponent = MemoryNotesRoute.options.component!;
 
-  it("renders 9 cards and allows switching between sections", () => {
+  it("renders 14 sections and allows switching between sections", () => {
     render(<NotesComponent />);
 
     expect(screen.getByText("The notes")).toBeTruthy();
-    expect(screen.getAllByText("1. What is Memory Allocation?").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("2. Fixed (Static) Partitioning").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("4. Fragmentation: Internal vs. External").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("7. Worked Example (Textbook Benchmark)").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("8. Strategy Summary").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("1. Background: Logical vs Physical & Hardware Protection").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("2. What is Contiguous Memory Allocation?").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("3. Fixed (Static) Partitioning").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("5. Internal vs External Fragmentation").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("12. Complete Worked Example: Textbook Benchmark").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("14. Summary Table & Exam Tips").length).toBeGreaterThan(0);
 
     // Click on Worked Example in the sidebar
-    const workedExampleBtn = screen.getByRole("button", { name: "7. Worked Example (Textbook Benchmark)" });
+    const workedExampleBtn = screen.getByRole("button", { name: "12. Complete Worked Example: Textbook Benchmark" });
     fireEvent.click(workedExampleBtn);
-    expect(screen.getByText("Best Fit Step-by-Step (All 4 placed!)")).toBeTruthy();
-    expect(screen.getByText("Contrast: Why First Fit Fails on this Input")).toBeTruthy();
+    expect(screen.getByText("2. Best Fit Trace:")).toBeTruthy();
+    expect(screen.getByText("Result: All 4 allocated successfully!")).toBeTruthy();
   });
 });
 
