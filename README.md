@@ -2,7 +2,7 @@
 
 Learn Operating Systems by playing with them: simulators, notes and quizzes for the OS syllabus.
 
-Live site: https://os-banker-s-algo.vercel.app
+Live site: https://os-lab-playground.vercel.app
 ---
 
 ## What is inside
