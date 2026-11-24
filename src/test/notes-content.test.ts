@@ -62,6 +62,24 @@ describe("Notes Content & Accessibility Verification", () => {
           }
         }
       });
+
+      if (name === "Disk Scheduling Notes") {
+        it("contains the verified benchmark numbers: 640, 236, 331, 386, 299, 322", () => {
+          const fullContent = DISK_SCHEDULING_NOTES.map((n) => {
+            let extraText = "";
+            if (n.extra && isValidElement(n.extra)) {
+              const { container } = render(n.extra);
+              extraText = container.textContent ?? "";
+            }
+            return `${n.t} ${n.b} ${extraText}`;
+          }).join(" ");
+
+          const requiredNumbers = ["640", "236", "331", "386", "299", "322"];
+          for (const num of requiredNumbers) {
+            expect(fullContent).toContain(num);
+          }
+        });
+      }
     });
   }
 });

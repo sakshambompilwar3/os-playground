@@ -56,7 +56,7 @@ Add the topic entry to `OS_TOPICS`:
 1. **Topic Hub**: `src/routes/<topic>.index.tsx`
 2. **Interactive Simulator**: `src/routes/<topic>.simulator.tsx`
 3. **Side-by-Side Comparison Bench**: `src/routes/comparison.<topic>.tsx`
-4. **Visual Lecture Notes**: `src/routes/notes.<topic>.tsx` (derived directly from class syllabus material and standard textbooks in fresh student-friendly words, using hand-drawn SVG diagrams with accessible labels; no slide images stored)
+4. **Visual Lecture Notes**: `src/routes/notes.<topic>.tsx` (derived directly from class syllabus material and standard textbooks in fresh student-friendly words, using hand-drawn SVG diagrams with accessible labels; no slide images stored). For example, Disk Scheduling notes follow verified class notes where available (including the rotational/transfer timing formulas and FCFS/SSTF/SCAN/C-SCAN examples), while LOOK and C-LOOK originate from standard syllabus textbooks (Silberschatz et al.).
 5. **Pop Quiz**: `src/routes/quiz.<topic>.tsx`
 
 ---
