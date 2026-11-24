@@ -135,33 +135,37 @@ describe("Disk Scheduling Hub & Availability", () => {
 describe("Disk Scheduling Notes (Learn)", () => {
   const NotesComp = DiskNotesRoute.options.component!;
 
-  it("renders all 13 sub-topic sections and diagrams", () => {
+  it("renders all 10 sub-topic sections and diagrams", () => {
     render(<NotesComp />);
 
     expect(screen.getByText(/Disk Scheduling Hub/)).toBeTruthy();
     expect(screen.getByText("The notes")).toBeTruthy();
 
     // Check first section title
-    expect(screen.getAllByText("1. Disk Structure & Geometry").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("1. Disk Structure & Why Scheduling Matters").length).toBeGreaterThan(0);
     expect(screen.getByText(/A traditional hard disk drive/)).toBeTruthy();
 
-    // Navigate to section 2: Disk Access Time
-    fireEvent.click(screen.getByRole("button", { name: "2. Disk Access Time" }));
-    expect(screen.getByText(/Seek Time \+ Rotational Latency \+ Transfer Time/)).toBeTruthy();
+    // Navigate to section 2: The Six Algorithms in this Unit
+    fireEvent.click(screen.getByRole("button", { name: "2. The Six Algorithms in this Unit" }));
+    expect(screen.getByText(/Head Trajectory Patterns of the Six Algorithms/)).toBeTruthy();
 
-    // Navigate to section 11: Worked Example
-    fireEvent.click(screen.getByRole("button", { name: "11. Worked Benchmark Example" }));
-    expect(screen.getByText("640 cyl")).toBeTruthy();
-    expect(screen.getAllByText("236 cyl").length).toBe(2);
+    // Navigate to section 3: FCFS
+    fireEvent.click(screen.getByRole("button", { name: "3. First-Come, First-Served (FCFS)" }));
+    expect(screen.getByText(/640 cylinders/)).toBeTruthy();
 
-    // Navigate to section 12: Summary table
-    fireEvent.click(screen.getByRole("button", { name: "12. Summary Comparison of All Six" }));
-    expect(screen.getByText("Elevator sweep to physical end")).toBeTruthy();
+    // Navigate to section 4: SSTF
+    fireEvent.click(screen.getByRole("button", { name: "4. Shortest Seek Time First (SSTF)" }));
+    expect(screen.getByText(/236 cylinders/)).toBeTruthy();
 
-    // Navigate to section 13: Exam tips
-    fireEvent.click(screen.getByRole("button", { name: "13. Exam Tips & Common Traps" }));
-    expect(screen.getByText("Top 5 Common Mistakes on Exams:")).toBeTruthy();
+    // Navigate to section 8: Why Direction Matters
+    fireEvent.click(screen.getByRole("button", { name: "8. Why Direction Matters" }));
+    expect(screen.getByText(/Direction Sensitivity/)).toBeTruthy();
+
+    // Navigate to section 10: Summary table and exam tips
+    fireEvent.click(screen.getByRole("button", { name: "10. Summary Table & Exam Tips" }));
+    expect(screen.getByText(/Exam Traps & Mental Checkpoints:/)).toBeTruthy();
     expect(screen.getByText("Try it in the simulator →")).toBeTruthy();
+    expect(screen.getByText("Based on class notes and the syllabus textbooks.")).toBeTruthy();
   });
 });
 

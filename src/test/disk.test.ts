@@ -541,3 +541,158 @@ describe("Disk Scheduling - 250+ Randomized Invariant Tests", () => {
     });
   });
 });
+
+describe("Disk Scheduling - Class Notes Verified Scenarios", () => {
+  function makeRequests(cylinders: number[]): DiskRequestInput[] {
+    return cylinders.map((c, i) => ({ id: `R${i + 1}`, name: `R${i + 1}`, cylinder: c }));
+  }
+
+  it("Scenario 1: Queue [98, 183, 41, 122, 14, 124, 65, 67], head 53", () => {
+    const reqs = makeRequests([98, 183, 41, 122, 14, 124, 65, 67]);
+
+    // SCAN toward higher: 331
+    const scanRes = simulateDiskScheduling(200, 53, reqs, "scan", "higher", true);
+    expect(scanRes.totalHeadMovement).toBe(331);
+
+    // C-SCAN toward higher: 386 with jump, 187 without jump
+    const cScanWithJump = simulateDiskScheduling(200, 53, reqs, "c-scan", "higher", true);
+    expect(cScanWithJump.totalHeadMovement).toBe(386);
+
+    const cScanWithoutJump = simulateDiskScheduling(200, 53, reqs, "c-scan", "higher", false);
+    expect(cScanWithoutJump.totalHeadMovement).toBe(187);
+
+    // SSTF: When 65 is chosen at head 53 (as in hand calculation order [65, 67, 41, 14, 98, 122, 124, 183]):
+    // (67 - 53) + (67 - 14) + (183 - 14) = 14 + 53 + 169 = 236 cylinders
+    const reqsSSTF = makeRequests([98, 183, 65, 67, 41, 122, 14, 124]);
+    const sstfRes = simulateDiskScheduling(200, 53, reqsSSTF, "sstf", "higher", true);
+    expect(sstfRes.totalHeadMovement).toBe(236);
+    expect(getServedCylinders(sstfRes.segments)).toEqual([65, 67, 41, 14, 98, 122, 124, 183]);
+  });
+
+  it("Scenario 2: Queue [98, 183, 37, 122, 14, 124, 65, 67], head 53", () => {
+    const reqs = makeRequests([98, 183, 37, 122, 14, 124, 65, 67]);
+    const sstfRes = simulateDiskScheduling(200, 53, reqs, "sstf", "higher", true);
+
+    expect(sstfRes.totalHeadMovement).toBe(236);
+    expect(getServedCylinders(sstfRes.segments)).toEqual([65, 67, 37, 14, 98, 122, 124, 183]);
+
+    // Assert that at head 67 the chosen request is 37 (distance 30), not 98 (distance 31)
+    const stepLeaving67 = sstfRes.steps.find((s) => s.segment?.from === 67);
+    expect(stepLeaving67).toBeDefined();
+    const servedAfter67 = stepLeaving67?.segment?.to;
+    expect(servedAfter67).toBe(37);
+    expect(Math.abs(37 - 67)).toBe(30);
+    expect(Math.abs(98 - 67)).toBe(31);
+    expect(Math.abs(37 - 67)).toBeLessThan(Math.abs(98 - 67));
+  });
+
+  it("Scenario 3: Queue [176, 79, 34, 60, 92, 11, 41, 114], head 50", () => {
+    const reqs = makeRequests([176, 79, 34, 60, 92, 11, 41, 114]);
+
+    // SSTF order [41, 34, 11, 60, 79, 92, 114, 176], total 204
+    const sstfRes = simulateDiskScheduling(200, 50, reqs, "sstf", "higher", true);
+    expect(sstfRes.totalHeadMovement).toBe(204);
+    expect(getServedCylinders(sstfRes.segments)).toEqual([41, 34, 11, 60, 79, 92, 114, 176]);
+
+    // FCFS total 510 (avg 63.75)
+    const fcfsRes = simulateDiskScheduling(200, 50, reqs, "fcfs", "higher", true);
+    expect(fcfsRes.totalHeadMovement).toBe(510);
+    expect(fcfsRes.averageSeekPerRequest).toBe(63.75);
+  });
+
+  it("Scenario 4: Queue [82, 170, 43, 140, 24, 16, 190], head 50", () => {
+    const reqs = makeRequests([82, 170, 43, 140, 24, 16, 190]);
+
+    // FCFS: 642
+    const fcfs = simulateDiskScheduling(200, 50, reqs, "fcfs", "higher", true);
+    expect(fcfs.totalHeadMovement).toBe(642);
+
+    // SSTF: 208 (order [43, 24, 16, 82, 140, 170, 190])
+    const sstf = simulateDiskScheduling(200, 50, reqs, "sstf", "higher", true);
+    expect(sstf.totalHeadMovement).toBe(208);
+    expect(getServedCylinders(sstf.segments)).toEqual([43, 24, 16, 82, 140, 170, 190]);
+
+    // Toward higher:
+    // SCAN: 332
+    const scanHigher = simulateDiskScheduling(200, 50, reqs, "scan", "higher", true);
+    expect(scanHigher.totalHeadMovement).toBe(332);
+
+    // C-SCAN: 391 (192 without jump)
+    const cScanHigherJump = simulateDiskScheduling(200, 50, reqs, "c-scan", "higher", true);
+    expect(cScanHigherJump.totalHeadMovement).toBe(391);
+    const cScanHigherNoJump = simulateDiskScheduling(200, 50, reqs, "c-scan", "higher", false);
+    expect(cScanHigherNoJump.totalHeadMovement).toBe(192);
+
+    // LOOK: 314
+    const lookHigher = simulateDiskScheduling(200, 50, reqs, "look", "higher", true);
+    expect(lookHigher.totalHeadMovement).toBe(314);
+
+    // C-LOOK: 341 (167 without jump)
+    const cLookHigherJump = simulateDiskScheduling(200, 50, reqs, "c-look", "higher", true);
+    expect(cLookHigherJump.totalHeadMovement).toBe(341);
+    const cLookHigherNoJump = simulateDiskScheduling(200, 50, reqs, "c-look", "higher", false);
+    expect(cLookHigherNoJump.totalHeadMovement).toBe(167);
+
+    // Toward lower:
+    // SCAN: 240
+    const scanLower = simulateDiskScheduling(200, 50, reqs, "scan", "lower", true);
+    expect(scanLower.totalHeadMovement).toBe(240);
+
+    // C-SCAN: 366 (167 without jump)
+    const cScanLowerJump = simulateDiskScheduling(200, 50, reqs, "c-scan", "lower", true);
+    expect(cScanLowerJump.totalHeadMovement).toBe(366);
+    const cScanLowerNoJump = simulateDiskScheduling(200, 50, reqs, "c-scan", "lower", false);
+    expect(cScanLowerNoJump.totalHeadMovement).toBe(167);
+
+    // LOOK: 208
+    const lookLower = simulateDiskScheduling(200, 50, reqs, "look", "lower", true);
+    expect(lookLower.totalHeadMovement).toBe(208);
+
+    // C-LOOK: 316 (142 without jump)
+    const cLookLowerJump = simulateDiskScheduling(200, 50, reqs, "c-look", "lower", true);
+    expect(cLookLowerJump.totalHeadMovement).toBe(316);
+    const cLookLowerNoJump = simulateDiskScheduling(200, 50, reqs, "c-look", "lower", false);
+    expect(cLookLowerNoJump.totalHeadMovement).toBe(142);
+  });
+
+  it("Scenario 5: Comparison verdict for head 50 queue [82, 170, 43, 140, 24, 16, 190]", () => {
+    const reqs = makeRequests([82, 170, 43, 140, 24, 16, 190]);
+    const algos: DiskAlgorithm[] = ["fcfs", "sstf", "scan", "c-scan", "look", "c-look"];
+
+    // Toward higher: winner is SSTF (208) with ranking SSTF 208, LOOK 314, SCAN 332, C-LOOK 341, C-SCAN 391, FCFS 642
+    const resultsHigher = algos.map((algo) =>
+      simulateDiskScheduling(200, 50, reqs, algo, "higher", true),
+    );
+    const verdictHigher = pickBest(resultsHigher);
+    expect(verdictHigher.isTie).toBe(false);
+    expect(verdictHigher.winner).toBe("sstf");
+    expect(
+      verdictHigher.ranked.map((r) => ({ algo: r.algorithm, dist: r.totalHeadMovement })),
+    ).toEqual([
+      { algo: "sstf", dist: 208 },
+      { algo: "look", dist: 314 },
+      { algo: "scan", dist: 332 },
+      { algo: "c-look", dist: 341 },
+      { algo: "c-scan", dist: 391 },
+      { algo: "fcfs", dist: 642 },
+    ]);
+
+    // Toward lower: SSTF and LOOK both total 208 with identical order and longest wait (208) -> tie between SSTF and LOOK
+    const resultsLower = algos.map((algo) =>
+      simulateDiskScheduling(200, 50, reqs, algo, "lower", true),
+    );
+    const verdictLower = pickBest(resultsLower);
+    expect(verdictLower.isTie).toBe(true);
+    expect(verdictLower.winner).toBeNull();
+    expect(verdictLower.tiedAlgorithms).toContain("sstf");
+    expect(verdictLower.tiedAlgorithms).toContain("look");
+
+    const sstfLower = resultsLower.find((r) => r.algorithm === "sstf")!;
+    const lookLower = resultsLower.find((r) => r.algorithm === "look")!;
+    expect(sstfLower.totalHeadMovement).toBe(208);
+    expect(lookLower.totalHeadMovement).toBe(208);
+    expect(getServedCylinders(sstfLower.segments)).toEqual(getServedCylinders(lookLower.segments));
+    expect(computeLongestWait(sstfLower)).toBe(208);
+    expect(computeLongestWait(lookLower)).toBe(208);
+  });
+});
